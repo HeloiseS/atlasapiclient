@@ -1,0 +1,2 @@
+class ATLASAPIClientError(Exception):
+    pass
