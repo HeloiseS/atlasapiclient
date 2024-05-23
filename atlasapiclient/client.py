@@ -1,3 +1,24 @@
+
+"""
+:Description: This module contains the classes to interact with the ATLAS API.
+:Author: Heloise Stevance
+:Date of Creation: 2024-05-22
+:Last Update: 2024-05-22
+
+Classes
+--------
+- APIClient: Parent class for the ATLAS API pipelines.
+- RequestVRAScores: To download the data from the VRA table.
+- RequestVRAToDoList: To download the data from the VRA To Do List.
+- RequestCustomListsTable: To download the data from the Custom Lists Table.
+- RequestSingleSourceData: To download the data for a single source.
+- RequestMultipleSourceData: To download the data for multiple sources.
+
+Functions
+----------
+- fetch_vra_dataframe: Convenience function to get the VRA table in a dataframe in one line.
+
+"""
 import os
 import yaml
 import requests
@@ -16,17 +37,20 @@ class APIClient(object):
     Contains recurrent class attributes and encapsulates the check for error 200
     whenever we get the response from the server.
     """
-    # TODO: should have API_CONFIG_FILE as a class attribute
+
     # this dictionary reflects the lists on the ATLAS transient server (url above)
     dict_list_id = dict_list_id
 
     def __init__(self,
-                 api_config_file: str
-                 ):
+                 api_config_file: str = None
+                ):
         """
         :param api_config_file: path to the yaml file containing the API token and base URL
         """
         # INITIALISE MAIN ATTRIBUTES
+        if api_config_file is None:
+            api_config_file = API_CONFIG_FILE
+
         self.request = None
         self.response = None
         self.url = None
@@ -81,7 +105,7 @@ class RequestVRAScores(APIClient):
     To Download the data from the VRA table
     """
     def __init__(self,
-                 api_config_file: str,
+                 api_config_file: str = None,
                  payload: dict = {},
                  get_response: bool = False
                  ):
@@ -108,7 +132,7 @@ class RequestVRAScores(APIClient):
 class RequestVRAToDoList(APIClient):
     # TODO: need to test this - frankly dunno how
     def __init__(self,
-                 api_config_file: str,
+                 api_config_file: str = None,
                  payload: dict = {},
                  get_response: bool = False
                  ):
@@ -133,7 +157,7 @@ class RequestCustomListsTable(APIClient):
     To Download the data from the VRA table
     """
     def __init__(self,
-                 api_config_file: str,
+                 api_config_file: str = None,
                  payload: dict = {},
                  get_response: bool = False
                  ):
@@ -155,11 +179,11 @@ class RequestCustomListsTable(APIClient):
         elif get_response:
             self.get_response()
 
+
 class RequestSingleSourceData(APIClient):
     def __init__(self,
-                 api_config_file,
+                 api_config_file: str = None,
                  atlas_id: str = None,
-                 datethreshold: str = None,
                  mjdthreshold: float = None,
                  url: str = 'objects/',
                  get_response: bool = True
@@ -173,11 +197,9 @@ class RequestSingleSourceData(APIClient):
         assert isinstance(int(atlas_id), int), "atlas_id must be a valid integer (in a string)"
 
         self.atlas_id = atlas_id
-        self.datethreshold = datethreshold
         self.mjdthreshold = mjdthreshold
         self.url = self.apiURL+url
         self.payload = {'objects': self.atlas_id,
-                        'datethreshold': self.datethreshold,
                         'mjd': self.mjdthreshold
                         }
 
@@ -193,9 +215,8 @@ class RequestSingleSourceData(APIClient):
 
 class RequestMultipleSourceData(APIClient):
     def __init__(self,
-                 api_config_file: str,
+                 api_config_file: str = None,
                  array_ids: np.array = None,
-                 datethreshold: str = None,
                  mjdthreshold = None,
                  url: str ='objects/'
                  ):
@@ -206,11 +227,6 @@ class RequestMultipleSourceData(APIClient):
         assert isinstance(array_ids, np.ndarray), "array_ids must be a numpy array"         # check is a numpy array
         assert len(array_ids) > 0, "array_ids must not be empty"                            # check is not empty
         self.array_ids = array_ids
-
-        # DATE THRESHOLD - CHECK VALIDITY AND ASSIGN
-        assert datethreshold is None or isinstance(datethreshold, str), ("datethreshold "   # check that datethreshold is either None or a string
-                                                                         "must be a string")
-        self.datethreshold = datethreshold
 
         # MJD THRESHOLD AND URL - ASSIGN
         self.mjdthreshold = mjdthreshold
@@ -227,7 +243,6 @@ class RequestMultipleSourceData(APIClient):
         for chunk in chunks:
             array_ids_str = ','.join(map(str, chunk))
             self.payload = {'objects': array_ids_str,
-                            'datethreshold': self.datethreshold,
                             'mjd': self.mjdthreshold
                            }
 
@@ -242,7 +257,6 @@ class RequestMultipleSourceData(APIClient):
         for chunk in tqdm(chunks):
             array_ids_str = ','.join(map(str, chunk))
             self.payload = {'objects': array_ids_str,
-                            'datethreshold': self.datethreshold,
                             'mjd': self.mjdthreshold
                            }
 

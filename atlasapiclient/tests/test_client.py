@@ -9,9 +9,14 @@ from atlasapiclient.exceptions import ATLASAPIClientError
 import atlasapiclient as atlasapi
 from atlasapiclient.utils import API_CONFIG_FILE
 
+
 class TestAPIClient():
     def test_instanciate_with_my_config(self):
         atlas_base = atlasapi.client.APIClient(API_CONFIG_FILE)
+
+    # add test for when don't give teh config file
+    def test_instanciate_without_config(self):
+        atlas_base = atlasapi.client.APIClient()
 
 
 class TestRequestVRAScores():
