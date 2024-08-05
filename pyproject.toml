@@ -16,19 +16,19 @@ keywords = ["astronomy", "ATLAS API"]
 license = {text = "BSD-3-Clause"}                                                                                            
 dependencies = [                                                                                                             
     "numpy", 
-    "pandas",
-    "pytest",                                                                                                                
+    "pandas",                                                                                                            
     "requests",                                                                                                              
     "tqdm",                                                                                                                  
-    "yaml",                                                                                                                  
+    "pyyaml",                                                                                                                  
     'importlib-metadata; python_version>"3.9"',                                                                              
 ]                                                                                                                            
-dynamic = ["version"]                                                                                                        
+# dynamic = ["version"]                                                                                                        
                                                                                                                              
 # See some of the stuff I have in the hoki .toml file                                                                        
                                                                                                                              
                                                                                                                              
-#[project.optional-dependencies]                                                                                             
+[project.optional-dependencies]
+test = ["pytest"]                                                                                             
 #pdf = ["ReportLab>=1.2", "RXP"]                                                                                             
 #rest = ["docutils>=0.3", "pack ==1.1, ==1.3"]                                                                               
                                                                                                                              
