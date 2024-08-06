@@ -9,12 +9,14 @@ from atlasapiclient.exceptions import ATLASAPIClientError
 import atlasapiclient as atlasapi
 from atlasapiclient.utils import API_CONFIG_FILE
 
-
+# TODO: This is more an integration test than a unit test. Mock the requests
 class TestAPIClient():
     def test_instanciate_with_my_config(self):
         atlas_base = atlasapi.client.APIClient(API_CONFIG_FILE)
 
     # add test for when don't give teh config file
+    # NOTE: This test fails without a config file as it just uses the default
+    # config file which is not present in this repository. 
     def test_instanciate_without_config(self):
         atlas_base = atlasapi.client.APIClient()
 
