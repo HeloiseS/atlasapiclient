@@ -89,6 +89,9 @@ ipython_config.py
 
 # MY CONFIG FILE WITH MY TOKEN
 api_config_MINE.yaml
+api_config_dev.yaml
+api_config_staging.yaml
+api_config_prod.yaml
 
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
