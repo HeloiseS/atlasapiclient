@@ -20,6 +20,7 @@ class TestAPIClient():
     def test_instanciate_without_config(self):
         atlas_base = atlasapi.client.APIClient()
 
+OBJECT_ID = '1000506771295744900'
 
 class TestRequestVRAScores():
 
@@ -29,13 +30,15 @@ class TestRequestVRAScores():
     # TODO: I need to include a datethreshold so that I ask the server to look at all the data in vra scores
     def test_get_response_method(self):
         request_vra = atlasapi.client.RequestVRAScores(api_config_file=API_CONFIG_FILE,
-                                                payload={'objectid':'1132507360113744500'}
+                                                # payload={'objectid':'1132507360113744500'}
+                                                payload={'objectid':OBJECT_ID}
                                                 )
         request_vra.get_response()
 
     def test_get_response_on_instanciation(self):
         request_vra = atlasapi.client.RequestVRAScores(api_config_file=API_CONFIG_FILE,
-                                                payload={'objectid':'1132507360113744500'},
+                                                # payload={'objectid':'1132507360113744500'},
+                                                payload={'objectid':OBJECT_ID},
                                                 get_response=True
                                                 )
 
@@ -65,7 +68,8 @@ class TestRequestCustomListsTable():
 
 
 class TestRequestSingleSourceData():
-    atlas_id = '1103337110432157700'
+    # atlas_id = '1103337110432157700'
+    atlas_id = '1000240741164042800'
     def test_instanciate_with_my_config(self):
         request_single_source = atlasapi.client.RequestSingleSourceData(atlas_id=self.atlas_id,
                                                                  api_config_file=API_CONFIG_FILE,
@@ -81,13 +85,14 @@ class TestRequestSingleSourceData():
 
 
 class TestRequestMultipleSourceData():
-    array_ids = np.array([1103337110432157700, 1063637771185950900])
+    # array_ids = np.array([1103337110432157700, 1063637771185950900])
+    array_ids = np.array([1000315271160844000, 1000240741164042800])
     def test_instanciate_with_my_config(self):
 
         request_multiple_sources = atlasapi.client.RequestMultipleSourceData(array_ids=self.array_ids,
                                                                       api_config_file=API_CONFIG_FILE,
                                                                       )
-
+    # NOTE: This fails with an internal server error, not what we want
     def test_chunk_get_response_quiet(self):
         request_data = atlasapi.client.RequestMultipleSourceData(api_config_file=API_CONFIG_FILE,
                                                           array_ids=self.array_ids,
