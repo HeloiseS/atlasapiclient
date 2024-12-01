@@ -21,13 +21,15 @@ Functions
 """
 import os
 import yaml
-import requests
-import pandas as pd
 import json
+from functools import cached_property
+
+import requests
 import numpy as np
 from tqdm import tqdm
+import pandas as pd
 
-from atlasapiclient.exceptions import ATLASAPIClientError
+from atlasapiclient.exceptions import ATLASAPIClientError, St3ph3nSaysNo
 from atlasapiclient.utils import dict_list_id, API_CONFIG_FILE
 
 
@@ -74,6 +76,9 @@ class APIClient(object):
         """
 
         # We must set the request just before we get the response in case the payload was defined after instanciation
+        # TODO: This makes the request and stores the response immediately, but 
+        # storing it into a variable called request. The thing returned is a 
+        # response, and contains the data we want.
         self.request = requests.post(self.url,
                                      self.payload,
                                      headers=self.headers
@@ -120,6 +125,8 @@ class RequestVRAScores(APIClient):
         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
         self.url = self.apiURL + 'vrascoreslist/'
         self.payload = payload
+        
+        # TODO: If get_response is True, we're making two identical requests??
         self.request = requests.post(self.url, self.payload, headers=self.headers)
         if get_response and len(payload)==0:
             raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
@@ -292,6 +299,231 @@ def fetch_vra_dataframe(datethreshold: str = None,
                                    payload={'datethreshold': datethreshold},
                                    get_response=True
                                     )
+    vra_df = pd.DataFrame(request_vra.response)
+
+    return vra_df
+
+#################
+# Imported from st3ph3n 
+#################
+
+
+class WriteToVRAScores(APIClient):
+    """
+    Object to write to the VRA Scores table
+    """
+    def __init__(self,
+                 api_config_file: str,
+                 payload: dict = {},
+                 get_response: bool = False):
+        """
+
+        :param api_config_file: path to the yaml file containing the API token and base URL
+        :param payload: dictionary containing the payload to send to the server. Default: empty dictionary
+        :param get_response: if True, will get the response on instanciation
+
+        :raises: St3ph3nSaysNo: if get_response is True and payload is empty
+
+        Examples
+        --------
+        payload = {'datethreshold': "2024-02-22"} # ADD A DATE THRESHOLD
+        payload = {'objectid': '1132507360113744500'}
+        'objectid' -> ONLY ONE AT A TIME FOR NOW
+        'preal'
+        'pgal'
+        'pfast'
+        'debug'
+        """
+        super().__init__(api_config_file)
+
+        self.url = self.apiURL + 'vrascores/'                               # THIS IS THE 'WRITE' URL for our Django API
+
+        self.payload = payload
+
+        if get_response and len(payload)==0:
+            raise St3ph3nSaysNo("If you want to get the response on instanciation you must specify a payload")
+
+        elif get_response:
+            self.get_response()
+
+
+class WriteToVRARank(APIClient):
+    """
+    Object to write to the VRA Rank Table
+    """
+    def __init__(self,
+                 api_config_file: str,
+                 payload: dict = {},
+                 get_response: bool = False):
+        # TODO: finish docstring
+        """
+
+        Examples
+        --------
+        payload = {'objectid': '1132507360113744500'}
+        payload = {'rank': 1.3}
+        """
+        super().__init__(api_config_file)
+
+        self.url = self.apiURL + 'vrarank/'
+
+        self.payload = payload
+
+        if get_response and len(payload)==0:
+            raise St3ph3nSaysNo("If you want to get the response on instanciation you must specify a payload")
+
+        elif get_response:
+            self.get_response()
+
+
+# 2024-06-24 KWS Added WriteToToDo
+class WriteToToDo(APIClient):
+    """
+    Object to write to the VRA Rank Table
+    """
+    def __init__(self,
+                 api_config_file: str,
+                 payload: dict = {},
+                 get_response: bool = False):
+        # TODO: finish docstring
+        """
+
+        Examples
+        --------
+        payload = {'objectid': '1132507360113744500'}
+        """
+        super().__init__(api_config_file)
+
+        self.url = self.apiURL + 'vratodo/'
+
+        self.payload = payload
+
+        if get_response and len(payload)==0:
+            raise St3ph3nSaysNo("If you want to get the response on instanciation you must specify a payload")
+
+        elif get_response:
+            self.get_response()
+
+
+
+class WriteToCustomList(APIClient):
+    def __init__(self,
+                 api_config_file: str,
+                 array_ids: np.array = None,
+                 list_name: str = None,
+                 get_response: bool = False
+                 ):
+        super().__init__(api_config_file)
+        self.url = self.apiURL + 'objectgroups/'
+        self.array_ids = array_ids
+        self.object_group_id = self.dict_list_id[list_name][0] # object group id is the number of the custom list
+
+        # if self.array_ids smaller than 100 we can just create the payload and use get_response from ATLASAPIBase
+        # if self.array_ids is larger than 100 we need to call chunk_get_response(_quiet)
+        if self.array_ids.shape[0] > 100:
+            self.chunk_get_response_quiet()
+        else:
+            self.payload = {'objectid': ','.join(map(str, self.array_ids)),
+                            'objectgroupid': self.object_group_id
+                           }
+
+        if get_response: self.get_response()
+
+    def chunk_get_response_quiet(self):
+        # Split array_ids into chunks of 100
+        chunks = [self.array_ids[i:i + 100] for i in range(0, len(self.array_ids), 100)]
+
+        # Iterate over each chunk and make separate requests
+        for chunk in chunks:
+            array_ids_str = ','.join(map(str, chunk))
+            self.payload = {'objectid': array_ids_str,
+                            'objectgroupid': self.object_group_id
+                           }
+
+            _response = self.get_response(inplace=False)
+            self.response.extend(_response)
+
+
+class RemoveFromCustomList(APIClient):
+    def __init__(self,
+                 api_config_file: str,
+                 array_ids: np.array = None,
+                 list_name: str = None,
+                 get_response: bool = False
+                 ):
+        super().__init__(api_config_file)
+        self.url = self.apiURL + 'objectgroupsdelete/'
+        self.array_ids = array_ids
+        self.object_group_id = self.dict_list_id[list_name][0] # object group id is the number of the custom list
+
+        # if self.array_ids smaller than 100 we can just create the payload and use get_response from ATLASAPIBase
+        # if self.array_ids is larger than 100 we need to call chunk_get_response(_quiet)
+        if self.array_ids.shape[0] > 100:
+            self.chunk_get_response_quiet()
+        else:
+            self.payload = {'objectid': ','.join(map(str, self.array_ids)),
+                            'objectgroupid': self.object_group_id
+                           }
+
+
+    def chunk_get_response_quiet(self):
+        # Split array_ids into chunks of 100
+        chunks = [self.array_ids[i:i + 100] for i in range(0, len(self.array_ids), 100)]
+
+        # Iterate over each chunk and make separate requests
+        for chunk in chunks:
+            array_ids_str = ','.join(map(str, chunk))
+            self.payload = {'objectid': array_ids_str,
+                            'objectgroupid': self.object_group_id
+                           }
+
+            _response = self.get_response(inplace=False)
+            self.response.extend(_response)
+
+### CONVENIENCE FUNCTIONS AND CLASSES ###
+
+class DwnldFullObjList(APIClient):
+    def __init__(self,
+                 api_config_file: str,
+                 list_name: str,
+                 get_response: bool = True
+                 ):
+        super().__init__(api_config_file)
+        self.list_name = list_name
+        self.url = self.apiURL + 'objectlist/'
+        self.payload = {'objectlistid': self.dict_list_id[self.list_name][0],
+                        'getcustomlist': self.dict_list_id[self.list_name][1]}
+
+        if get_response: self.get_response()
+
+    @cached_property
+    def atlas_id_list_str(self):
+        return [str(x['id']) for x in self.response]
+
+    @cached_property
+    def atlas_id_list_int(self):
+        return [int(x['id']) for x in self.response]
+
+
+def fetch_vra_dataframe(datethreshold: str = None,
+                        ):
+    # TODO: TEST THIS FUCNTION
+    """
+    Convenience function to get the VRA table in a dataframe in one line.
+    Instantiates RequestVRAScores and returns the response as a dataframe.
+
+    :param datethreshold: string in the format "YYYY-MM-DD" to filter the VRA table by date. Will return all dates after
+    :return: vra_df: pandas dataframe containing the VRA table
+    :raises: St3ph3nSaysNo: if datethreshold is None
+    """
+    if datethreshold is None:
+        raise St3ph3nSaysNo("You need to provide a date threshold otherwise it'll take forever")
+
+    request_vra = RequestVRAScores(
+        api_config_file=API_CONFIG_FILE,
+        payload={'datethreshold': datethreshold},
+        get_response=True
+    )
     vra_df = pd.DataFrame(request_vra.response)
 
     return vra_df
