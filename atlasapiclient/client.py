@@ -180,6 +180,34 @@ class RequestCustomListsTable(APIClient):
             self.get_response()
 
 
+class RequestMainListsTable(APIClient):
+    """
+    To Download the data from the VRA table
+    """
+    def __init__(self,
+                 api_config_file: str = None,
+                 payload: dict = {},
+                 get_response: bool = False
+                 ):
+        """
+
+        Examples
+        --------
+        payload = {'objectid': '1132507360113744500,1151301851092728500'}
+        paylod = {'objectgroupid': 73}
+        """
+        super().__init__(api_config_file)
+        # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
+        self.url = self.apiURL + 'objectlist/'
+        self.payload = payload
+        self.request = requests.post(self.url, self.payload, headers=self.headers)
+        if get_response and len(payload)==0:
+            raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
+
+        elif get_response:
+            self.get_response()
+
+
 class RequestSingleSourceData(APIClient):
     def __init__(self,
                  api_config_file: str = None,
