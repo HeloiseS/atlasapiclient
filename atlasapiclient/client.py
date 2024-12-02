@@ -23,6 +23,7 @@ import os
 import yaml
 import json
 from functools import cached_property
+from abc import ABC
 
 import requests
 import numpy as np
@@ -33,7 +34,7 @@ from atlasapiclient.exceptions import ATLASAPIClientError, St3ph3nSaysNo
 from atlasapiclient.utils import dict_list_id, API_CONFIG_FILE
 
 
-class APIClient(object):
+class APIClient(ABC):
     """
     Parent class for the ATLAS API pipelines.
     Contains recurrent class attributes and encapsulates the check for error 200
@@ -187,7 +188,20 @@ class RequestCustomListsTable(APIClient):
             self.get_response()
 
 
-class RequestSingleSourceData(APIClient):
+class RequestSourceData(APIClient, ABC):
+    def parse_atlas_id(self, atlas_id: str) -> int:
+        """
+        Check that the atlas_id input is valid - it must have 19 digits and be an integer
+        :param atlas_id: string containing the atlas_id
+        """
+        assert len(atlas_id) == 19, "atlas_id must have 19 digits"
+        try:
+            atlas_id = int(atlas_id)
+        except ValueError:
+            raise ATLASAPIClientError("atlas_id must be a valid integer (in a string)")
+        return atlas_id
+
+class RequestSingleSourceData(RequestSourceData):
     def __init__(self,
                  api_config_file: str = None,
                  atlas_id: str = None,
@@ -199,11 +213,7 @@ class RequestSingleSourceData(APIClient):
         super().__init__(api_config_file)
         assert atlas_id is not None, "You need to provide an atlas_id"
 
-        # Check that the atlas_id input is valid - it must have 19 digits and be an integer
-        assert len(atlas_id) == 19, "atlas_id must have 19 digits"
-        assert isinstance(int(atlas_id), int), "atlas_id must be a valid integer (in a string)"
-
-        self.atlas_id = atlas_id
+        self.atlas_id = self.parse_atlas_id(atlas_id)
         self.mjdthreshold = mjdthreshold
         self.url = self.apiURL+url
         self.payload = {'objects': self.atlas_id,
@@ -220,7 +230,7 @@ class RequestSingleSourceData(APIClient):
             json.dump(self.response[0], outfile)
 
 
-class RequestMultipleSourceData(APIClient):
+class RequestMultipleSourceData(RequestSourceData):
     def __init__(self,
                  api_config_file: str = None,
                  array_ids: np.array = None,
@@ -231,9 +241,12 @@ class RequestMultipleSourceData(APIClient):
 
         # ATLAS_ID ARRAY - CHECK VALIDITY AND ASSIGN
         assert array_ids is not None, "You need to provide an array of object IDs"          # Check not None
+        # TODO: Checking that the array is a numpy array might not be necessary, 
+        # we can convert pretty easily beforehand. Also we don't seem to be using
+        # any numpy features here, the ints are all converted to strings anyway?
         assert isinstance(array_ids, np.ndarray), "array_ids must be a numpy array"         # check is a numpy array
         assert len(array_ids) > 0, "array_ids must not be empty"                            # check is not empty
-        self.array_ids = array_ids
+        self.array_ids = np.array([self.parse_atlas_id(x) for x in array_ids])         # check each element is valid
 
         # MJD THRESHOLD AND URL - ASSIGN
         self.mjdthreshold = mjdthreshold
@@ -280,28 +293,28 @@ class RequestMultipleSourceData(APIClient):
 
 
 
-### CONVENIENCE FUNCTIONS AND CLASSES ###
-# TODO: put this in a separate module?
-def fetch_vra_dataframe(datethreshold: str = None,
-                        ):
-    """
-    Convenience function to get the VRA table in a dataframe in one line.
-    Instantiates RequestVRAScores and returns the response as a dataframe.
+# ### CONVENIENCE FUNCTIONS AND CLASSES ###
+# # TODO: put this in a separate module?
+# def fetch_vra_dataframe(datethreshold: str = None,
+#                         ):
+#     """
+#     Convenience function to get the VRA table in a dataframe in one line.
+#     Instantiates RequestVRAScores and returns the response as a dataframe.
 
-    :param datethreshold: string in the format "YYYY-MM-DD" to filter the VRA table by date. Will return all dates after
-    :return: vra_df: pandas dataframe containing the VRA table
-    :raises: St3ph3nSaysNo: if datethreshold is None
-    """
-    if datethreshold is None:
-        raise ATLASAPIClientError("You need to provide a date threshold otherwise it'll take forever")
+#     :param datethreshold: string in the format "YYYY-MM-DD" to filter the VRA table by date. Will return all dates after
+#     :return: vra_df: pandas dataframe containing the VRA table
+#     :raises: St3ph3nSaysNo: if datethreshold is None
+#     """
+#     if datethreshold is None:
+#         raise ATLASAPIClientError("You need to provide a date threshold otherwise it'll take forever")
 
-    request_vra = RequestVRAScores(api_config_file=API_CONFIG_FILE,
-                                   payload={'datethreshold': datethreshold},
-                                   get_response=True
-                                    )
-    vra_df = pd.DataFrame(request_vra.response)
+#     request_vra = RequestVRAScores(api_config_file=API_CONFIG_FILE,
+#                                    payload={'datethreshold': datethreshold},
+#                                    get_response=True
+#                                     )
+#     vra_df = pd.DataFrame(request_vra.response)
 
-    return vra_df
+#     return vra_df
 
 #################
 # Imported from st3ph3n 
@@ -505,25 +518,25 @@ class DwnldFullObjList(APIClient):
         return [int(x['id']) for x in self.response]
 
 
-def fetch_vra_dataframe(datethreshold: str = None,
-                        ):
-    # TODO: TEST THIS FUCNTION
-    """
-    Convenience function to get the VRA table in a dataframe in one line.
-    Instantiates RequestVRAScores and returns the response as a dataframe.
+# def fetch_vra_dataframe(datethreshold: str = None,
+#                         ):
+#     # TODO: TEST THIS FUCNTION
+#     """
+#     Convenience function to get the VRA table in a dataframe in one line.
+#     Instantiates RequestVRAScores and returns the response as a dataframe.
 
-    :param datethreshold: string in the format "YYYY-MM-DD" to filter the VRA table by date. Will return all dates after
-    :return: vra_df: pandas dataframe containing the VRA table
-    :raises: St3ph3nSaysNo: if datethreshold is None
-    """
-    if datethreshold is None:
-        raise St3ph3nSaysNo("You need to provide a date threshold otherwise it'll take forever")
+#     :param datethreshold: string in the format "YYYY-MM-DD" to filter the VRA table by date. Will return all dates after
+#     :return: vra_df: pandas dataframe containing the VRA table
+#     :raises: St3ph3nSaysNo: if datethreshold is None
+#     """
+#     if datethreshold is None:
+#         raise St3ph3nSaysNo("You need to provide a date threshold otherwise it'll take forever")
 
-    request_vra = RequestVRAScores(
-        api_config_file=API_CONFIG_FILE,
-        payload={'datethreshold': datethreshold},
-        get_response=True
-    )
-    vra_df = pd.DataFrame(request_vra.response)
+#     request_vra = RequestVRAScores(
+#         api_config_file=API_CONFIG_FILE,
+#         payload={'datethreshold': datethreshold},
+#         get_response=True
+#     )
+#     vra_df = pd.DataFrame(request_vra.response)
 
-    return vra_df
+#     return vra_df
