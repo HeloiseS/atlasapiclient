@@ -4,8 +4,7 @@ build-backend = "setuptools.build_meta"
                                                                                                                              
 [project]                                                                                                                    
 name = "atlasapiclient"                                                                                                             
-version = "v0.1.0"                                                                                                           
-                                                                                                                             
+version = "v0.1.0"                                                                                                                                                                                                                                
 authors = [                                                                                                                  
     {name = "Heloise Stevance", email = "hfstevance@gmail.com"},                                                             
 ]                                                                                                                            
@@ -26,7 +25,13 @@ dependencies = [
                                                                                                                              
 # See some of the stuff I have in the hoki .toml file                                                                        
                                                                                                                              
-                                                                                                                             
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow",
+    "integration: mark tests as requiring additional infrastructure",
+    "serial",
+]
+
 [project.optional-dependencies]
 test = ["pytest"]                                                                                             
 #pdf = ["ReportLab>=1.2", "RXP"]                                                                                             

@@ -1,18 +1,19 @@
 """
 These tests only work if you have a token for the ATLAS api. 
 """
-import pytest
-import os
 import pkg_resources
+
+import pytest
 import numpy as np
 from atlasapiclient.exceptions import St3ph3nSaysNo
-import atlasapiclient as atlasapi
+import atlasapiclient.client as atlasapi
+from atlasapiclient.utils import API_CONFIG_FILE
 
 # NOTE: These are integration tests require data from the ST3PH3N API
-data_path = pkg_resources.resource_filename('st3ph3n', 'data')
-API_CONFIG_FILE = atlasapi.utils.API_CONFIG_FILE
+# data_path = pkg_resources.resource_filename('st3ph3n', 'data')
+# API_CONFIG_FILE = API_CONFIG_FILE
 
-
+@pytest.mark.integration
 class TestWriteToVRAScores():
     def test_instanciate_with_my_config(self):
         writeto_vra = atlasapi.WriteToVRAScores(api_config_file = API_CONFIG_FILE)
@@ -54,6 +55,7 @@ class TestWriteToVRAScores():
                                                     get_response=True
                                                     )
 
+@pytest.mark.integration
 class TestWriteToVRARank():
     def test_instanciate_with_my_config(self):
         writeto_vra = atlasapi.WriteToVRARank(api_config_file = API_CONFIG_FILE)
@@ -72,6 +74,7 @@ class TestWriteToVRARank():
         assert  writeto_rank.request.status_code == 201, "Data wasn't written properly"
 
 
+@pytest.mark.integration
 class TestWriteRemoveCustomList():
     def test_write_to_custom_list(self):
         writeto_vra = atlasapi.WriteToCustomList(api_config_file = API_CONFIG_FILE,

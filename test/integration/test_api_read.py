@@ -2,14 +2,14 @@
 These tests only work if you have a token for the ATLAS api.
 """
 import pytest
-import os
-import pkg_resources
 import numpy as np
+
 from atlasapiclient.exceptions import ATLASAPIClientError
 import atlasapiclient as atlasapi
 from atlasapiclient.utils import API_CONFIG_FILE
 
-# NOTE: These are more integration tests than unit tests
+
+@pytest.mark.integration
 class TestAPIClient():
     def test_instanciate_with_my_config(self):
         atlas_base = atlasapi.client.APIClient(API_CONFIG_FILE)
@@ -22,6 +22,7 @@ class TestAPIClient():
 
 OBJECT_ID = '1000506771295744900'
 
+@pytest.mark.integration
 class TestRequestVRAScores():
 
     def test_instanciate_with_my_config(self):
@@ -48,6 +49,7 @@ class TestRequestVRAScores():
                                                     get_response=True
                                                     )
 
+@pytest.mark.integration
 class TestRequestCustomListsTable():
     def test_instanciate_with_my_config(self):
         request_custom_lists = atlasapi.client.RequestCustomListsTable(api_config_file = API_CONFIG_FILE)
@@ -66,7 +68,7 @@ class TestRequestCustomListsTable():
         request_custom_lists.get_response()
         assert request_custom_lists.request.status_code == 200, "Data wasn't read properly"
 
-
+@pytest.mark.integration
 class TestRequestSingleSourceData():
     # atlas_id = '1103337110432157700'
     atlas_id = '1000240741164042800'
@@ -83,7 +85,7 @@ class TestRequestSingleSourceData():
         request_single_source.get_response()
 
 
-
+@pytest.mark.integration
 class TestRequestMultipleSourceData():
     # array_ids = np.array([1103337110432157700, 1063637771185950900])
     array_ids = np.array([1000315271160844000, 1000240741164042800])
