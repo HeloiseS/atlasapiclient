@@ -246,7 +246,7 @@ class RequestMultipleSourceData(RequestSourceData):
         # any numpy features here, the ints are all converted to strings anyway?
         assert isinstance(array_ids, np.ndarray), "array_ids must be a numpy array"         # check is a numpy array
         assert len(array_ids) > 0, "array_ids must not be empty"                            # check is not empty
-        self.array_ids = np.array([self.parse_atlas_id(x) for x in array_ids])         # check each element is valid
+        self.array_ids = np.array([self.parse_atlas_id(str(x)) for x in array_ids])         # check each element is valid
 
         # MJD THRESHOLD AND URL - ASSIGN
         self.mjdthreshold = mjdthreshold
