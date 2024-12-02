@@ -9,7 +9,7 @@ from atlasapiclient.exceptions import ATLASAPIClientError
 import atlasapiclient as atlasapi
 from atlasapiclient.utils import API_CONFIG_FILE
 
-# TODO: This is more an integration test than a unit test. Mock the requests
+# NOTE: These are more integration tests than unit tests
 class TestAPIClient():
     def test_instanciate_with_my_config(self):
         atlas_base = atlasapi.client.APIClient(API_CONFIG_FILE)

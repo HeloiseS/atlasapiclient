@@ -8,9 +8,9 @@ import numpy as np
 
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
-    RequestSingleSourceData, RequestMultipleSourceData, fetch_vra_dataframe
+    RequestSingleSourceData, RequestMultipleSourceData
 )
-from atlasapiclient.exceptions import ATLASAPIClientError, St3ph3nSaysNo
+from atlasapiclient.exceptions import ATLASAPIClientError
 from atlasapiclient.utils import config_path
 import atlasapiclient.client
 import atlasapiclient.utils
@@ -255,23 +255,23 @@ class TestRequestMultipleSourceData:
     # save_response_to_json method 
 
 
-class TestFetchVRADataFrame:
-    # TODO: revisit this test. 
-    @pytest.fixture()
-    def mock_vra_scores(self, monkeypatch):
-        def mock_init(self, api_config_file, payload, get_response):
-            self.response = [{'col1': 'val1', 'col2': 'val2'}]
+# class TestFetchVRADataFrame:
+#     # TODO: revisit this test. 
+#     @pytest.fixture()
+#     def mock_vra_scores(self, monkeypatch):
+#         def mock_init(self, api_config_file, payload, get_response):
+#             self.response = [{'col1': 'val1', 'col2': 'val2'}]
 
-        monkeypatch.setattr(RequestVRAScores, '__init__', mock_init)
+#         monkeypatch.setattr(RequestVRAScores, '__init__', mock_init)
 
-    def test_fetch_vra_dataframe(self, mock_vra_scores):
-        df = fetch_vra_dataframe(datethreshold='2024-01-01')
-        assert not df.empty
-        assert list(df.columns) == ['col1', 'col2']
+#     def test_fetch_vra_dataframe(self, mock_vra_scores):
+#         df = fetch_vra_dataframe(datethreshold='2024-01-01')
+#         assert not df.empty
+#         assert list(df.columns) == ['col1', 'col2']
 
-    def test_fetch_vra_dataframe_error(self):
-        with pytest.raises(St3ph3nSaysNo):
-            fetch_vra_dataframe(datethreshold=None)
+#     def test_fetch_vra_dataframe_error(self):
+#         with pytest.raises(St3ph3nSaysNo):
+#             fetch_vra_dataframe(datethreshold=None)
 
 
 class MockResponse:
