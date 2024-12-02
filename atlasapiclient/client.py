@@ -230,7 +230,7 @@ class RequestSourceData(APIClient, ABC):
         return atlas_id
 
 
-class RequestSingleSourceData(APIClient):
+class RequestSingleSourceData(RequestSourceData):
     def __init__(self,
                  api_config_file: str = None,
                  atlas_id: str = None,
