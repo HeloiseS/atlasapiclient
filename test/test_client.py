@@ -215,7 +215,7 @@ class TestRequestSingleSourceData:
         # wrapping in the isinstance check. These a separate validation checks 
         # (that we should definitely do!) but we should separate them. As above 
         # we should raise an AtlasAPIClientError
-        with pytest.raises(AssertionError):
+        with pytest.raises(ATLASAPIClientError):
             RequestSingleSourceData(api_config_file=config_file, atlas_id='123456789012345678a')
 
 
