@@ -516,6 +516,37 @@ class DwnldFullObjList(APIClient):
     @cached_property
     def atlas_id_list_int(self):
         return [int(x['id']) for x in self.response]
+    
+
+class WriteObjectDetectionListNumber(APIClient):
+    def __init__(self,
+                 api_config_file: str,
+                 payload: dict = {},
+                 get_response: bool = False):
+        """
+        Parameters
+        ----------
+        api_config_file : str
+            path to the yaml file containing the API token and base URL
+        payload : dict
+            dictionary containing the payload to send to the server.
+            Must contain the keys 'objectid' (the ATLAS ID) and 'objectlist'
+            (which list object should be in, e.g. 4 for eyeball list).
+            Default: empty dictionary
+        get_response : bool
+            if True, will get the response on instanciation
+
+        Examples
+        --------
+        payload = {'objectid': atlas_id,
+                        'objectlist': list_number
+                        }
+        """
+        super().__init__(api_config_file)
+        self.url = self.apiURL + 'objectdetectionlist/'
+        self.payload = payload
+
+        if get_response: self.get_response()
 
 
 # def fetch_vra_dataframe(datethreshold: str = None,
