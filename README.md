@@ -20,7 +20,12 @@ git clone git@github.com:HeloiseS/atlasapiclient.git
 The client requires a config\_file that contains the url and your token for the ATLAS API.
 In the directory `atlasapiclient/config_files` you will find the `api_config_template.yaml` file.
 1) Copy it in the same directory to a file named `api_config_MINE.yaml`
-2) Update your token. The URL should be find. 
+```
+cd atlasapiclient/config_files
+cp api_config_template.yaml api_config_MINE.yaml
+```
+2) Update your token. 
+3) Update the url to "https://psweb.mp.qub.ac.uk/sne/atlas4/api/"
 
 #### How do I get a token?
 For now you ask Ken. One day we'll have an automated loging system. 
