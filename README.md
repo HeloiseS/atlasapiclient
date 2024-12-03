@@ -62,6 +62,7 @@ You can then get the data just as you would for a single object.
 
 ## Data Structure
 The ATLAS API gives you back _everything_ (or nearly). The schema can be explored on this page:
+[ATLAS Json Schema](https://psweb.mp.qub.ac.uk/misc/api/atlas/)
 
 Here is a couple of handy recipes...
 
