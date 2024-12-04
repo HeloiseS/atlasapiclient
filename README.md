@@ -1,8 +1,8 @@
 # ATLAS API Client
 --- 
 
-This is a Python client to facilitate the use of the ATLAS API.
-Some general usecases are shown below - feel free to reach out to request additional documentation or features. 
+This  Python client facilitates the use of the ATLAS API.
+Some general use cases are shown below - feel free to reach out to request additional documentation or features. 
 
 ## Installation
 
@@ -17,18 +17,19 @@ git clone git@github.com:HeloiseS/atlasapiclient.git
 ```
 
 ### Configuration
-The client requires a config\_file that contains the url and your token for the ATLAS API.
+The client requires a config ile that contains the base url of the ATLAS transient web servers and your token for the ATLAS API.
 In the directory `atlasapiclient/config_files` you will find the `api_config_template.yaml` file.
-1) Copy it in the same directory to a file named `api_config_MINE.yaml`
+1) Copy it **in the same directory** to a file named `api_config_MINE.yaml`. **YES - THE NAME MATTERS**
 ```
 cd atlasapiclient/config_files
 cp api_config_template.yaml api_config_MINE.yaml
 ```
-2) Update your token. 
+2) Update your token (if you don't have a token see below)
 3) Update the url to "https://psweb.mp.qub.ac.uk/sne/atlas4/api/"
 
 #### How do I get a token?
-For now you ask Ken. One day we'll have an automated loging system. 
+For now, you ask Ken, the wizard in charge the ATLAS transient servers. 
+Email: k.w.smith@qub.ac.uk 
 
 # User Cheat Sheet
 ## Cone Search
@@ -48,7 +49,7 @@ client = atlaspaiclient.RequestSingleSourceData(atlas_id=atlas_id, get_response=
 Note: Here we don't parse the config file because we __assume you have named yours  `api_config_MINE.yaml`__. 
 The path to that file is encoded in the `API_CONFIG_FILE` variable in the `atlasapiclient/utils.py` file and parsed by default to the classes. 
 
-If you feel fancy and want to name your config file differently you have to keep track of it's location and parse it with the argument `api_config_file`.
+If you feel fancy and want to name your config file differently you have to keep track of its location and parse it with the argument `api_config_file`.
 
 Your data can be found in the `client.response` attribute. Note that it is a `list` so if you only have one object you 
 want to do `client.response[0]` to get the JSON data.
@@ -99,7 +100,10 @@ client.response[0]['tns_crossmatches']
 # FAQ
 * **Can I query by TNS/ZTF name?**: 
     No. Do a cone search.
-  * **WHY?**: Because it's too low on our priority list and we're in the trenches already. If it's a really big deal for you and you might have working hours to help us with this, get in touch.  
+  * **WHY?**: Because it's too low on our priority list and we don't have the time. 
+  If it's a really big deal for you and you might have working hours to help us with this, get in touch.  
 * **Can I do a cone search?** :
    Not yet. Poke us if we've not done it by February 2025.
-* **Why does the API return so much data**?: Because it'd take forever to refactor and it's low on the priority list. If it's a big deal for you talk to us, it might bump us further up the to-do list.
+* **Why does the API return so much data**?: 
+Because it'd take forever to refactor and it's low on the priority list. 
+If it's a big deal for you talk to us, it might bump it further up the to-do list.
