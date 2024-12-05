@@ -1,5 +1,7 @@
 # Following this page:
 # https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
+name: Publish Python 🐍 distribution 📦 to PyPI and TestPyPI
+on: push
 jobs:
   build:
     name: Build distribution 📦
@@ -24,6 +26,7 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
+      
   publish-to-pypi:
     name: >-
       Publish Python 🐍 distribution 📦 to PyPI
@@ -33,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/<package-name>  # Replace <package-name> with your PyPI project name
+      url: https://pypi.org/p/atlasapiclient 
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
@@ -44,6 +47,7 @@ jobs:
         path: dist/
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+
   github-release:
     name: >-
       Sign the Python 🐍 distribution 📦 with Sigstore
@@ -51,11 +55,9 @@ jobs:
     needs:
     - publish-to-pypi
     runs-on: ubuntu-latest
-
     permissions:
       contents: write  # IMPORTANT: mandatory for making GitHub Releases
       id-token: write  # IMPORTANT: mandatory for sigstore
-
     steps:
     - name: Download all the dists
       uses: actions/download-artifact@v4
@@ -96,7 +98,7 @@ jobs:
 
     environment:
       name: testpypi
-      url: https://test.pypi.org/p/<package-name>
+      url: https://test.pypi.org/p/atlasapiclient
 
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
