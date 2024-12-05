@@ -8,27 +8,19 @@ jobs:
       # Checkout and build the docs with sphinx
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e . '.[docs]'
       - name: Build HTML
         uses: ammaraskar/sphinx-action@7.4.7
         with: 
           docs-folder: "docs/"
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
             name: html-docs
             path: docs/build/html/
         # Deploys to the gh-pages branch if the commit was made to main, the 
         # gh-pages then takes over serving the html
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
