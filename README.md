@@ -33,7 +33,22 @@ Email: k.w.smith@qub.ac.uk
 
 # User Cheat Sheet
 ## Cone Search
-__*Next update*__
+
+The cone search requires **four parameters**: 
+* RA
+* Dec
+* Search radius in **arcseconds**
+* Request type: All, Nearest or Count (case insensitive)
+```
+from atlasapiclient import client as atlaspaiclient
+
+
+client = atlaspaiclient.ConeSearch(payload={'ra': 150, 
+                                            'dec': 60, 
+                                            'radius': 60, 
+                                            'requestType': 'nearest'}, 
+                                    get_response=True)
+```
 
 ## Get data for one or more ATLAS\_IDs
 
