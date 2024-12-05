@@ -34,7 +34,7 @@ markers = [
 
 [project.optional-dependencies]
 test = ["pytest"]  
-docs = ["sphinx==7.4.7", "sphinx_rtd_theme==3.0.1"]                                                                                           
+docs = ["sphinx==7.4.7", "sphinx_rtd_theme==3.0.2"]                                                                                           
                                                                              
                                                                                                                              
 #[project.scripts]                                                                                                           
