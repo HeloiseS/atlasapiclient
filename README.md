@@ -8,7 +8,7 @@ Some general use cases are shown below - feel free to reach out to request addit
 
 ### Pypi
 ```
-UPCOMING
+pip install --user atlasapiclient
 ```
 
 ### Clone Github
