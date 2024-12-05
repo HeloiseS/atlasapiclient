@@ -8,7 +8,7 @@ import numpy as np
 
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
-    RequestSingleSourceData, RequestMultipleSourceData
+    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch
 )
 from atlasapiclient.exceptions import ATLASAPIClientError
 from atlasapiclient.utils import config_path
@@ -120,7 +120,7 @@ class TestConeSearch:
     def test_constructor(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
         payload = {'ra': 150,'dec': 60, 'radius': 60, 'requestType': 'nearest'}
-        client = atlasapiclient.client.ConeSearch(api_config_file=config_file, payload=payload)
+        client = ConeSearch(api_config_file=config_file, payload=payload)
         assert client.payload == payload
 
         client.get_response()
