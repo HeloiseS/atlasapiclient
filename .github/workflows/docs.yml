@@ -1,11 +1,6 @@
+# Github action to build docs and, if on main, deploy to the gh-pages branch
 name: docs
-
-on:
-  push:
-    branches: [ "main", "development" ]
-  pull_request:
-    branches: [ "main", "development" ]
-
+on: [push, pull_request]
 jobs:
   sphinx:
     runs-on: ubuntu-latest
