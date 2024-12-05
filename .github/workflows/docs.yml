@@ -7,7 +7,6 @@ jobs:
     steps:
       # Checkout and build the docs with sphinx
       - name: Checkout
-        if: github.repository == 'jackleland/atlasapiclient'
         uses: actions/checkout@v4
       - name: Build HTML
         uses: ammaraskar/sphinx-action@7.4.7
