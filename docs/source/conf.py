@@ -14,6 +14,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
 
+import atlasapiclient
 from atlasapiclient import __version__
 
 # -- General configuration ---------------------------------------------------
@@ -23,11 +24,11 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
 ]
+# The full version, including alpha/beta/rc tags
+release = __version__
 
 templates_path = ['_templates']
 exclude_patterns = []
-
-
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

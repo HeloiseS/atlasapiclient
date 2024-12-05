@@ -6,12 +6,13 @@
 ATLAS API Client documentation
 ==============================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+This is the documentation for the ATLAS API Client package. This provides a
+convenient way to interact with the ATLAS Transient Server REST-API via Python.
 
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Contents
+
+   API Reference <api-reference>
 
