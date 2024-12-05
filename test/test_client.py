@@ -116,6 +116,16 @@ class TestAPIClient():
             client.get_response()
             
 
+class TestConeSearch:
+    def test_constructor(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        payload = {'ra': 150,'dec': 60, 'radius': 60, 'requestType': 'nearest'}
+        client = atlasapiclient.client.ConeSearch(api_config_file=config_file, payload=payload)
+        assert client.payload == payload
+
+        client.get_response()
+        assert client.response == {'key': 'value'}
+
 
 class TestRequestVRAScores:
     def test_constructor(self, monkeypatch, config_file):

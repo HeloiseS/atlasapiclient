@@ -23,8 +23,30 @@ class TestAPIClient():
 OBJECT_ID = '1000506771295744900'
 
 @pytest.mark.integration
-class TestRequestVRAScores():
+class TestConeSearch():
+    def test_instanciate_with_my_config(self):
+        cone_search = atlasapi.client.ConeSearch(api_config_file = API_CONFIG_FILE)
 
+    def test_get_response(self):
+        cone_search = atlasapi.client.ConeSearch(api_config_file=API_CONFIG_FILE,
+                                        payload={'ra':150, 'dec':60, 'radius':5, 'requestType': 'nearest'}
+                                        )
+        cone_search.get_response()
+
+    def test_get_response_on_instanciation(self):
+        cone_search = atlasapi.client.ConeSearch(api_config_file=API_CONFIG_FILE,
+                                        payload={'ra':150, 'dec':60, 'radius':5, 'requestType': 'nearest'},
+                                        get_response=True
+                                        )
+
+    def test_get_response_on_instanciation_empty_payload(self):
+        with pytest.raises(ATLASAPIClientError):
+            cone_search = atlasapi.client.ConeSearch(api_config_file=API_CONFIG_FILE,
+                                            get_response=True
+                                            )
+
+@pytest.mark.integration
+class TestRequestVRAScores():
     def test_instanciate_with_my_config(self):
         request_vra = atlasapi.client.RequestVRAScores(api_config_file = API_CONFIG_FILE)
 

@@ -106,6 +106,36 @@ class APIClient(ABC):
             # an error code to be returned to the server
 
 
+class ConeSearch(APIClient):
+    """
+    To Download the data from the VRA table
+    """
+
+    def __init__(self,
+                 api_config_file: str = None,
+                 payload: dict = {},
+                 get_response: bool = False
+                 ):
+        """
+        Cone Search for ATLAS. The Payload must contain RA, DEC, search radius in arcseconds and request type ('all', 'count' or 'nearest')
+
+        Examples
+        --------
+        payload = {'ra': 150.0, 'dec': 34.0, 'radius': 1,  'requestType': 'nearest'}
+        """
+        super().__init__(api_config_file)
+
+        self.url = self.apiURL + 'cone/'
+        self.payload = payload
+
+
+        # self.request = requests.post(self.url, self.payload, headers=self.headers)
+        if get_response and len(payload) == 0:
+            raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
+
+        elif get_response:
+            self.get_response()
+
 class RequestVRAScores(APIClient):
     """
     To Download the data from the VRA table
