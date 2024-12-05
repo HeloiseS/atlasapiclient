@@ -4,9 +4,11 @@ build-backend = "setuptools.build_meta"
                                                                                                                              
 [project]                                                                                                                    
 name = "atlasapiclient"                                                                                                             
-version = "v0.1.0"                                                                                                                                                                                                                                
+version = "v0.2.0"
 authors = [                                                                                                                  
-    {name = "Heloise Stevance", email = "hfstevance@gmail.com"},                                                             
+    {name = "Heloise Stevance", email = "hfstevance@gmail.com"},
+    {name = "Jack Leland", email= "jack.leland@dtc.ox.ac.uk"},
+    {name = "Ken Smith", email= "ken.w.smith@gmail.com"},
 ]                                                                                                                            
 description = "API Client utility package for the ATLAS Transient Server"                                                                                        
 readme = "README.md"                                                                                                        
