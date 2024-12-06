@@ -6,9 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     # The permissions are required to deploy to the gh-pages branch by the 
     # gh-actions official action, might not be necssary for our use-case
-    # permissions:
-    #   pages: write      # to deploy to Pages
-    #   id-token: write   # to verify the deployment originates from an appropriate source
+    permissions:
+      contents: write
     steps:
       # Checkout and build the docs with sphinx
       - name: Checkout
