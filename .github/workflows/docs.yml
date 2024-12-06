@@ -4,9 +4,11 @@ on: [push, pull_request]
 jobs:
   sphinx:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
+    # The permissions are required to deploy to the gh-pages branch by the 
+    # gh-actions official action, might not be necssary for our use-case
+    # permissions:
+    #   pages: write      # to deploy to Pages
+    #   id-token: write   # to verify the deployment originates from an appropriate source
     steps:
       # Checkout and build the docs with sphinx
       - name: Checkout
