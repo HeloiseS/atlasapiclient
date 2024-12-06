@@ -12,7 +12,7 @@ authors = [
 ]                                                                                                                            
 description = "API Client utility package for the ATLAS Transient Server"                                                                                        
 readme = "README.md"                                                                                                        
-requires-python = ">=3.9"                                                                                                    
+requires-python = ">=3.8"                                                                                                    
 keywords = ["astronomy", "ATLAS API"]                                                                                        
 license = {text = "BSD-3-Clause"}                                                                                            
 dependencies = [                                                                                                             
@@ -21,7 +21,7 @@ dependencies = [
     "requests",                                                                                                              
     "tqdm",                                                                                                                  
     "pyyaml",                                                                                                                  
-    'importlib-metadata; python_version>"3.9"',                                                                              
+    'importlib-metadata; python_version<"3.9"',                                                                              
 ]                                                                                                                            
 # dynamic = ["version"]                                                                                                        
                                                                                                                              

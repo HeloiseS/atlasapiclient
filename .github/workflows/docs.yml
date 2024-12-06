@@ -4,6 +4,10 @@ on: [push, pull_request]
 jobs:
   sphinx:
     runs-on: ubuntu-latest
+    # The permissions are required to deploy to the gh-pages branch by the 
+    # gh-actions official action, might not be necssary for our use-case
+    permissions:
+      contents: write
     steps:
       # Checkout and build the docs with sphinx
       - name: Checkout
@@ -22,8 +26,6 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
-        permissions:
-          contents: write
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: docs/build/html
