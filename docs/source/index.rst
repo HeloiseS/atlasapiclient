@@ -12,10 +12,12 @@ convenient way to interact with the ATLAS Transient Server REST-API via Python.
 .. toctree::
    :maxdepth: 1
    :caption: Contents
-   about
-   recipes
-
    API Reference <api-reference>
+
+
+
+
+
 
 
 Set-up
@@ -27,11 +29,13 @@ Download the code
 You can either use pip
 
 .. code-block:: bash
+
    pip install --user atlasapiclient
 
 or clone the repository from github:
 
 .. code-block:: bash
+
    git clone git@github.com:HeloiseS/atlasapiclient.git
 
 
@@ -43,6 +47,7 @@ In the directory `atlasapiclient/config_files` you will find the `api_config_tem
 * 1) Copy it **in the same directory** to a file named `api_config_MINE.yaml`. **YES - THE NAME MATTERS**
 
 .. code-block:: bash
+
    cd atlasapiclient/config_files
    cp api_config_template.yaml api_config_MINE.yaml
 
@@ -69,6 +74,7 @@ The cone search requires **four parameters**:
 * Request type: All, Nearest or Count (case insensitive)
 
 .. code-block:: python
+
     from atlasapiclient import client as atlaspaiclient
 
     client = atlaspaiclient.ConeSearch(payload={'ra': 150,
@@ -85,6 +91,7 @@ Get a Single object data
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
+
         from atlasapiclient import client as atlaspaiclient
 
         atlas_id = '1121846241331952000'
@@ -106,6 +113,7 @@ If you want to query the ATLAS API for multiple objects you're going to encounte
 To handle this, there is a class to chunk stuff for you:
 
 .. code-block:: python
+
    from atlasapiclient import client as atlaspaiclient
 
    client = RequestMultipleSourceData(atlas_ids=MY_LIST_OF_IDS, mjdthreshold = LOWER_MJD_THRESHOLD)
@@ -127,6 +135,7 @@ Getting the lightcurves
 The detections and non-detections are in separate dictionaries with different columns names so we put them in two separate dictionaries.
 
 .. code-block:: python
+
    import pandas as pd
    detections = pd.DataFrame(client.response[0]['lc'])
    non_detections = pd.DataFrame(client.response[0]['lcnondets'])
@@ -141,6 +150,7 @@ The first crossmatch (if any) is a merged entry which cherry picks the best info
 The following entries are the individual crossmatches.
 
 .. code-block:: python
+
    summary_crossmatch = client.response[0]['sherlock_crossmatches'][0]
 
 
@@ -149,5 +159,6 @@ Is that ATLAS\_ID object in TNS?
 You can check the crossmatches using:
 
 .. code-block:: python
+
    client.response[0]['tns_crossmatches']
 
