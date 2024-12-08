@@ -1,3 +1,42 @@
+Set-up
+============
+
+First you need to install the package, you can either use pip
+
+.. code-block:: bash
+
+   pip install --user atlasapiclient
+
+or clone the repository from github:
+
+.. code-block:: bash
+
+   git clone git@github.com:HeloiseS/atlasapiclient.git
+
+
+Config file
+-------------------------
+The client requires a config ile that contains the base url of the ATLAS transient web servers and your token for the ATLAS API.
+In the directory `atlasapiclient/config_files` you will find the `api_config_template.yaml` file.
+
+* 1) Copy it **in the same directory** to a file named `api_config_MINE.yaml`.
+
+.. code-block:: bash
+
+   cd atlasapiclient/config_files
+   cp api_config_template.yaml api_config_MINE.yaml
+
+.. warning::
+   The name of that file matters immensly. **Unless you know what you're doing DON'T CHANGE IT**
+
+* 2) Update your token (if you don't have a token see below)
+* 3) Update the url to "https://psweb.mp.qub.ac.uk/sne/atlas4/api/"
+
+.. note::
+   **How do I get a token?**
+   For now, you ask Ken, the wizard in charge the ATLAS transient servers. Email: k.w.smith@qub.ac.uk
+
+
 Quick Recipes
 =================
 
@@ -5,12 +44,14 @@ Cone Search
 -----------------------
 
 The cone search requires **four parameters**:
+
 * RA
 * Dec
 * Search radius in **arcseconds**
 * Request type: All, Nearest or Count (case insensitive)
 
 .. code-block:: python
+
     from atlasapiclient import client as atlaspaiclient
 
     client = atlaspaiclient.ConeSearch(payload={'ra': 150,
@@ -27,6 +68,7 @@ Get a Single object data
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
+
         from atlasapiclient import client as atlaspaiclient
 
         atlas_id = '1121846241331952000'
@@ -48,6 +90,7 @@ If you want to query the ATLAS API for multiple objects you're going to encounte
 To handle this, there is a class to chunk stuff for you:
 
 .. code-block:: python
+
    from atlasapiclient import client as atlaspaiclient
 
    client = RequestMultipleSourceData(atlas_ids=MY_LIST_OF_IDS, mjdthreshold = LOWER_MJD_THRESHOLD)
@@ -69,6 +112,7 @@ Getting the lightcurves
 The detections and non-detections are in separate dictionaries with different columns names so we put them in two separate dictionaries.
 
 .. code-block:: python
+
    import pandas as pd
    detections = pd.DataFrame(client.response[0]['lc'])
    non_detections = pd.DataFrame(client.response[0]['lcnondets'])
@@ -83,6 +127,7 @@ The first crossmatch (if any) is a merged entry which cherry picks the best info
 The following entries are the individual crossmatches.
 
 .. code-block:: python
+
    summary_crossmatch = client.response[0]['sherlock_crossmatches'][0]
 
 
@@ -91,5 +136,5 @@ Is that ATLAS\_ID object in TNS?
 You can check the crossmatches using:
 
 .. code-block:: python
-   client.response[0]['tns_crossmatches']
 
+   client.response[0]['tns_crossmatches']
