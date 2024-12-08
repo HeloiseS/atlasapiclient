@@ -1,8 +1,8 @@
 Quick Recipes
-===========
+=================
 
 Cone Search
---------------
+-----------------------
 
 The cone search requires **four parameters**:
 * RA
@@ -19,11 +19,12 @@ The cone search requires **four parameters**:
                                                 'requestType': 'nearest'},
                                         get_response=True)
 
+
 Get data for one or more ATLAS\_IDs
--------------------------------------
+----------------------------------------
 
 Get a Single object data
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
         from atlasapiclient import client as atlaspaiclient
@@ -41,7 +42,8 @@ want to do `client.response[0]` to get the JSON data.
 
 
 Get Multiple objects
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+
 If you want to query the ATLAS API for multiple objects you're going to encounter the rate limit, which is 100 per query.
 To handle this, there is a class to chunk stuff for you:
 
@@ -53,15 +55,17 @@ To handle this, there is a class to chunk stuff for you:
 
 You can then get the data just as you would for a single object.
 
+
 Data Structure
-------------------
+--------------------
+
 The ATLAS API gives you back _everything_ (or nearly). The schema can be explored on this page:
 [ATLAS Json Schema](https://psweb.mp.qub.ac.uk/misc/api/atlas/)
 
 Here is a couple of handy recipes...
 
 Getting the lightcurves
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 The detections and non-detections are in separate dictionaries with different columns names so we put them in two separate dictionaries.
 
 .. code-block:: python
@@ -74,7 +78,7 @@ If concatenate them together we recommend ordering by `mjd` .
 [Should the JsonData object from atlasvras actually live in this package so people cna use it?]
 
 Getting the Sherlock crossmatches
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The first crossmatch (if any) is a merged entry which cherry picks the best information from all catalogues (so if a galaxy has info in 3 catalogues it will be cross matched 3 times and the info from these catalogues will appear as separate entries in our list of dictionaries - the first entry in the list will be the combination of all the best info in those 3 entries)
 The following entries are the individual crossmatches.
 
@@ -83,7 +87,9 @@ The following entries are the individual crossmatches.
 
 
 Is that ATLAS\_ID object in TNS?
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 You can check the crossmatches using:
+
 .. code-block:: python
    client.response[0]['tns_crossmatches']
+

@@ -1,5 +1,5 @@
 ATLAS API Client
-==============
+===============
 
 The Asteroid Terrestrial-impact Last Alert System (ATLAS)  [BLA] + [LINK]
 
@@ -10,7 +10,7 @@ Data Rights
 [STEPHEN]
 
 Citation
---------
+----------
 DOI and latex block
 
 
