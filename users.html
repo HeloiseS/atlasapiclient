@@ -199,8 +199,9 @@ To handle this, there is a class to chunk stuff for you:</p>
 </section>
 <section id="data-structure">
 <h1>Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading"></a></h1>
-<p>The ATLAS API gives you back <em>everything</em> (or nearly). The schema can be explored on this page:</p>
-<p>Here is a couple of handy recipes…</p>
+<p>The ATLAS API gives you back <em>everything</em> (or nearly). You can check out the json`schema`_ if you want to navigate
+the key structure and what they mean. <strong>If anything is not clear please add an issue to the GH</strong>.
+Here is a couple of handy recipes…</p>
 <p>The detections and non-detections are in separate dictionaries with different columns names so we put them in two separate dictionaries.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="n">detections</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lc&#39;</span><span class="p">])</span>
