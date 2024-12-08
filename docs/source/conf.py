@@ -6,7 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-
+project = 'ATLAS API Client'
+copyright = '2024, Heloise Stevance'
+author = 'Heloise Stevance'
 
 import os
 import sys
@@ -14,15 +16,6 @@ sys.path.insert(0, os.path.abspath('../../'))
 
 import atlasapiclient
 from atlasapiclient import __version__
-import sphinx_rtd_theme
-
-html_theme = 'sphinx_rtd_theme'
-
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-
-project = 'ATLAS API Client'
-copyright = '2024, Heloise Stevance'
-author = 'Heloise Stevance'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
