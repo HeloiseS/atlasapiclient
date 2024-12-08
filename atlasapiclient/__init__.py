@@ -16,4 +16,3 @@ except Exception:
     __version__ = "unknown"
 
 from . import client, exceptions, utils
-

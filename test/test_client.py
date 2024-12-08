@@ -8,7 +8,7 @@ import numpy as np
 
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
-    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch
+    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, GetATLASIDsFromWebServerList
 )
 from atlasapiclient.exceptions import ATLASAPIClientError
 from atlasapiclient.utils import config_path
@@ -265,23 +265,14 @@ class TestRequestMultipleSourceData:
     # save_response_to_json method 
 
 
-# class TestFetchVRADataFrame:
-#     # TODO: revisit this test. 
-#     @pytest.fixture()
-#     def mock_vra_scores(self, monkeypatch):
-#         def mock_init(self, api_config_file, payload, get_response):
-#             self.response = [{'col1': 'val1', 'col2': 'val2'}]
-
-#         monkeypatch.setattr(RequestVRAScores, '__init__', mock_init)
-
-#     def test_fetch_vra_dataframe(self, mock_vra_scores):
-#         df = fetch_vra_dataframe(datethreshold='2024-01-01')
-#         assert not df.empty
-#         assert list(df.columns) == ['col1', 'col2']
-
-#     def test_fetch_vra_dataframe_error(self):
-#         with pytest.raises(St3ph3nSaysNo):
-#             fetch_vra_dataframe(datethreshold=None)
+class TestGetATLASIDsFromWebServerList:
+    def test_constructor(self, config_file):
+        #GetATLASIDsFromWebServerList(api_config_file=config_file,
+        #                            list_name='eyeball',
+        #                           get_response=True
+        #                          )
+        pass
+    # TODO: add test for list that doesn't exist (have the constructor through a useful error
 
 
 class MockResponse:

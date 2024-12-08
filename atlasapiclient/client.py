@@ -552,9 +552,8 @@ class RemoveFromCustomList(APIClient):
             _response = self.get_response(inplace=False)
             self.response.extend(_response)
 
-### CONVENIENCE FUNCTIONS AND CLASSES ###
-
-class DwnldFullObjList(APIClient):
+class GetATLASIDsFromWebServerList(APIClient):
+    # TODO: add the tests for this
     def __init__(self,
                  api_config_file: str,
                  list_name: str,
