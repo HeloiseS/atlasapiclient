@@ -101,7 +101,13 @@ convenient way to interact with the ATLAS Transient Server REST-API via Python.<
 <section id="download-the-code">
 <h2>Download the code<a class="headerlink" href="#download-the-code" title="Link to this heading"></a></h2>
 <p>You can either use pip</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>atlasapiclient
+</pre></div>
+</div>
 <p>or clone the repository from github:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:HeloiseS/atlasapiclient.git
+</pre></div>
+</div>
 </section>
 <section id="config-file">
 <h2>Config file<a class="headerlink" href="#config-file" title="Link to this heading"></a></h2>
@@ -113,6 +119,10 @@ In the directory <cite>atlasapiclient/config_files</cite> you will find the <cit
 </ol>
 </li>
 </ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>atlasapiclient/config_files
+cp<span class="w"> </span>api_config_template.yaml<span class="w"> </span>api_config_MINE.yaml
+</pre></div>
+</div>
 <ul class="simple">
 <li><ol class="arabic simple" start="2">
 <li><p>Update your token (if you don’t have a token see below)</p></li>
@@ -139,11 +149,26 @@ Email: <a class="reference external" href="mailto:k&#46;w&#46;smith&#37;&#52;&#4
 * Dec
 * Search radius in <strong>arcseconds</strong>
 * Request type: All, Nearest or Count (case insensitive)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlaspaiclient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlaspaiclient</span><span class="o">.</span><span class="n">ConeSearch</span><span class="p">(</span><span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+                                            <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+                                            <span class="s1">&#39;radius&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+                                            <span class="s1">&#39;requestType&#39;</span><span class="p">:</span> <span class="s1">&#39;nearest&#39;</span><span class="p">},</span>
+                                    <span class="n">get_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="get-data-for-one-or-more-atlas-ids">
 <h2>Get data for one or more ATLAS_IDs<a class="headerlink" href="#get-data-for-one-or-more-atlas-ids" title="Link to this heading"></a></h2>
 <section id="get-a-single-object-data">
 <h3>Get a Single object data<a class="headerlink" href="#get-a-single-object-data" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlaspaiclient</span>
+
+<span class="n">atlas_id</span> <span class="o">=</span> <span class="s1">&#39;1121846241331952000&#39;</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlaspaiclient</span><span class="o">.</span><span class="n">RequestSingleSourceData</span><span class="p">(</span><span class="n">atlas_id</span><span class="o">=</span><span class="n">atlas_id</span><span class="p">,</span> <span class="n">get_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Note: Here we don’t parse the config file because we __assume you have named yours  <a href="#id1"><span class="problematic" id="id2">`api_config_MINE.yaml`__</span></a>.
 The path to that file is encoded in the <cite>API_CONFIG_FILE</cite> variable in the <cite>atlasapiclient/utils.py</cite> file and parsed by default to the classes.</p>
 <p>If you feel fancy and want to name your config file differently you have to keep track of its location and parse it with the argument <cite>api_config_file</cite>.</p>
@@ -154,6 +179,12 @@ want to do <cite>client.response[0]</cite> to get the JSON data.</p>
 <h3>Get Multiple objects<a class="headerlink" href="#get-multiple-objects" title="Link to this heading"></a></h3>
 <p>If you want to query the ATLAS API for multiple objects you’re going to encounter the rate limit, which is 100 per query.
 To handle this, there is a class to chunk stuff for you:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlaspaiclient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">RequestMultipleSourceData</span><span class="p">(</span><span class="n">atlas_ids</span><span class="o">=</span><span class="n">MY_LIST_OF_IDS</span><span class="p">,</span> <span class="n">mjdthreshold</span> <span class="o">=</span> <span class="n">LOWER_MJD_THRESHOLD</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">chunk_get_response</span><span class="p">()</span> <span class="c1"># Chunks the list of IDs into a bunch of payloads and colates the responses.</span>
+</pre></div>
+</div>
 <p>You can then get the data just as you would for a single object.</p>
 </section>
 </section>
@@ -165,6 +196,11 @@ To handle this, there is a class to chunk stuff for you:</p>
 <section id="getting-the-lightcurves">
 <h3>Getting the lightcurves<a class="headerlink" href="#getting-the-lightcurves" title="Link to this heading"></a></h3>
 <p>The detections and non-detections are in separate dictionaries with different columns names so we put them in two separate dictionaries.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">detections</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lc&#39;</span><span class="p">])</span>
+<span class="n">non_detections</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lcnondets&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
 <p>If concatenate them together we recommend ordering by <cite>mjd</cite> .</p>
 <p>[Should the JsonData object from atlasvras actually live in this package so people cna use it?]</p>
 </section>
@@ -172,10 +208,16 @@ To handle this, there is a class to chunk stuff for you:</p>
 <h3>Getting the Sherlock crossmatches<a class="headerlink" href="#getting-the-sherlock-crossmatches" title="Link to this heading"></a></h3>
 <p>The first crossmatch (if any) is a merged entry which cherry picks the best information from all catalogues (so if a galaxy has info in 3 catalogues it will be cross matched 3 times and the info from these catalogues will appear as separate entries in our list of dictionaries - the first entry in the list will be the combination of all the best info in those 3 entries)
 The following entries are the individual crossmatches.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary_crossmatch</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;sherlock_crossmatches&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
 </section>
 <section id="is-that-atlas-id-object-in-tns">
 <h3>Is that ATLAS_ID object in TNS?<a class="headerlink" href="#is-that-atlas-id-object-in-tns" title="Link to this heading"></a></h3>
 <p>You can check the crossmatches using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tns_crossmatches&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>
