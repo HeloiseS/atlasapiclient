@@ -74,7 +74,7 @@ Get a Single object data
         atlas_id = '1121846241331952000'
         client = atlaspaiclient.RequestSingleSourceData(atlas_id=atlas_id, get_response=True)
 
-Note: Here we don't parse the config file because we __assume you have named yours  `api_config_MINE.yaml`__.
+Note: Here we don't parse the config file because we assume you have named yours  `api_config_MINE.yaml`.
 The path to that file is encoded in the `API_CONFIG_FILE` variable in the `atlasapiclient/utils.py` file and parsed by default to the classes.
 
 If you feel fancy and want to name your config file differently you have to keep track of its location and parse it with the argument `api_config_file`.
@@ -99,11 +99,11 @@ To handle this, there is a class to chunk stuff for you:
 You can then get the data just as you would for a single object.
 
 
-Data Structure
---------------------
+Json Data structure and handling
+=============================
 
-The ATLAS API gives you back _everything_ (or nearly). The schema can be explored on this page:
-[ATLAS Json Schema](https://psweb.mp.qub.ac.uk/misc/api/atlas/)
+The ATLAS API gives you back *everything* (or nearly). The schema can be explored on this page:
+.. _ATLAS Json Schema: https://psweb.mp.qub.ac.uk/misc/api/atlas/
 
 Here is a couple of handy recipes...
 
