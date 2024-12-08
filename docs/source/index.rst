@@ -10,8 +10,12 @@ This is the documentation for the ATLAS API Client package. This provides a
 convenient way to interact with the ATLAS Transient Server REST-API via Python.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Contents
+
+   About <about>
+   Dev <dev>
+
    API Reference <api-reference>
 
 
