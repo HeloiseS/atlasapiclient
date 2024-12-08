@@ -99,8 +99,8 @@ To handle this, there is a class to chunk stuff for you:
 You can then get the data just as you would for a single object.
 
 
-Json Data structure and handling
-=============================
+Data Structure
+==============
 
 The ATLAS API gives you back *everything* (or nearly). The schema can be explored on this page:
 

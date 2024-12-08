@@ -1,9 +1,33 @@
-ATLAS API Client
-===============
+The ATLAS Sky Survey
+--------------------------
+.. _Asteroid Terrestrial-impact Last Alert System: https://atlas.fallingstar.com/
+.. _Forced Photometry Server: https://fallingstar-data.com/forcedphot/
 
-The Asteroid Terrestrial-impact Last Alert System (ATLAS)  [BLA] + [LINK]
+The `Asteroid Terrestrial-impact Last Alert System`_ (ATLAS)  is an all sky
+survey whose main goal is to discover and track near earth objects.
+As part of its normal operations, ATLAS also discovers many other
+forms of transient astrophysical events such as supernovae, variable stars,
+tidal disruption events, which are handled by the Transient sky survey team
+at Queen's University Belfast and Oxford University.
 
-Transient Server, Belfast, etc.
+ATLAS is composed of four telescopes, two in Hawaii and one in South Africa and another in Chile.
+
+
+Who is this code for?
+---------------------------
+
+This package is a convenient way to interact with the API of the **Transient Web Server in Belfast**.
+It is used primarily to automate processes relating to data stream management, either internally
+(with the ATLAS Virtual Research Assistant) or externally by allowing collaborators to access the alerts and
+trigger automated follow-up.
+
+If you need to do a Cone Search or check out the data stored in your custom list, this is what you need.
+
+.. note::
+    If all you want is forced photometry given an RA and Dec check out the `Forced Photometry Server`_
+
+
+
 
 Data Rights
 ------------

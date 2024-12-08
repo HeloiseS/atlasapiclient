@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ATLAS API Client &mdash; ATLAS API Client 0.2.0 documentation</title>
+  <title>The ATLAS Sky Survey &mdash; ATLAS API Client 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -45,18 +45,17 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General info</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ATLAS API Client</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#data-rights">Data Rights</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#faq">FAQ</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The ATLAS Sky Survey</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#who-is-this-code-for">Who is this code for?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#data-rights">Data Rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#citation">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#faq">FAQ</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">For Users</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="users.html">Set-up</a></li>
 <li class="toctree-l1"><a class="reference internal" href="users.html#quick-recipes">Quick Recipes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="users.html#json-data-structure-and-handling">Json Data structure and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html#data-structure">Data Structure</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">For Devs</span></p>
 <ul>
@@ -81,7 +80,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">ATLAS API Client</li>
+      <li class="breadcrumb-item active">The ATLAS Sky Survey</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/about.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -91,20 +90,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="atlas-api-client">
-<h1>ATLAS API Client<a class="headerlink" href="#atlas-api-client" title="Link to this heading"></a></h1>
-<p>The Asteroid Terrestrial-impact Last Alert System (ATLAS)  [BLA] + [LINK]</p>
-<p>Transient Server, Belfast, etc.</p>
+  <section id="the-atlas-sky-survey">
+<h1>The ATLAS Sky Survey<a class="headerlink" href="#the-atlas-sky-survey" title="Link to this heading"></a></h1>
+<p>The <a class="reference external" href="https://atlas.fallingstar.com/">Asteroid Terrestrial-impact Last Alert System</a> (ATLAS)  is an all sky
+survey whose main goal is to discover and track near earth objects.
+As part of its normal operations, ATLAS also discovers many other
+forms of transient astrophysical events such as supernovae, variable stars,
+tidal disruption events, which are handled by the Transient sky survey team
+at Queen’s University Belfast and Oxford University.</p>
+<p>ATLAS is composed of four telescopes, two in Hawaii and one in South Africa and another in Chile.</p>
+</section>
+<section id="who-is-this-code-for">
+<h1>Who is this code for?<a class="headerlink" href="#who-is-this-code-for" title="Link to this heading"></a></h1>
+<p>This package is a convenient way to interact with the API of the <strong>Transient Web Server in Belfast</strong>.
+It is used primarily to automate processes relating to data stream management, either internally
+(with the ATLAS Virtual Research Assistant) or externally by allowing collaborators to access the alerts and
+trigger automated follow-up.</p>
+<p>If you need to do a Cone Search or check out the data stored in your custom list, this is what you need.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If all you want is forced photometry given an RA and Dec check out the <a class="reference external" href="https://fallingstar-data.com/forcedphot/">Forced Photometry Server</a></p>
+</div>
+</section>
 <section id="data-rights">
-<h2>Data Rights<a class="headerlink" href="#data-rights" title="Link to this heading"></a></h2>
+<h1>Data Rights<a class="headerlink" href="#data-rights" title="Link to this heading"></a></h1>
 <p>[STEPHEN]</p>
 </section>
 <section id="citation">
-<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h2>
+<h1>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h1>
 <p>DOI and latex block</p>
 </section>
 <section id="faq">
-<h2>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h2>
+<h1>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p><strong>Can I query by TNS/ZTF name?:</strong> No. Do a cone search.</p></li>
 </ul>
@@ -113,7 +130,6 @@
 <li><p><strong>Can I do a cone search? :</strong> Not yet. Poke us if we’ve not done it by February 2025.</p></li>
 <li><p><strong>Why does the API return so much data?:</strong> Because it’d take forever to refactor and it’s low on the priority list. If it’s a big deal for you talk to us, it might bump it further up the to-do list.</p></li>
 </ul>
-</section>
 </section>
 
 
