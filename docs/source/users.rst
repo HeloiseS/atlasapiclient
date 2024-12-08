@@ -102,10 +102,11 @@ You can then get the data just as you would for a single object.
 Data Structure
 ==============
 
-The ATLAS API gives you back *everything* (or nearly). The schema can be explored on this page:
+.. _schema: https://psweb.mp.qub.ac.uk/misc/api/atlas/
 
-.. _ATLAS Json Schema: https://psweb.mp.qub.ac.uk/misc/api/atlas/
 
+The ATLAS API gives you back *everything* (or nearly). You can check out the json`schema`_ if you want to navigate
+the key structure and what they mean. **If anything is not clear please add an issue to the GH**.
 Here is a couple of handy recipes...
 
 Getting the lightcurves
