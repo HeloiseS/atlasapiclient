@@ -17,9 +17,9 @@
       <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="ATLAS API Client documentation" href="index.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,69 +41,69 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-atlasapiclient.client">The client module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.APIClient"><code class="docutils literal notranslate"><span class="pre">APIClient</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.APIClient.dict_list_id"><code class="docutils literal notranslate"><span class="pre">APIClient.dict_list_id</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.APIClient.get_response"><code class="docutils literal notranslate"><span class="pre">APIClient.get_response()</span></code></a></li>
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">ATLAS API Client Reference</a><ul>
+<li><a class="reference internal" href="#module-atlasapiclient.client">The client module</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.APIClient"><code class="docutils literal notranslate"><span class="pre">APIClient</span></code></a><ul>
+<li><a class="reference internal" href="#atlasapiclient.client.APIClient.dict_list_id"><code class="docutils literal notranslate"><span class="pre">APIClient.dict_list_id</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.APIClient.get_response"><code class="docutils literal notranslate"><span class="pre">APIClient.get_response()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.ConeSearch"><code class="docutils literal notranslate"><span class="pre">ConeSearch</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.GetATLASIDsFromWebServerList"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_int"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList.atlas_id_list_int</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_str"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList.atlas_id_list_str</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.ConeSearch"><code class="docutils literal notranslate"><span class="pre">ConeSearch</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.GetATLASIDsFromWebServerList"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList</span></code></a><ul>
+<li><a class="reference internal" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_int"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList.atlas_id_list_int</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_str"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList.atlas_id_list_str</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.RemoveFromCustomList"><code class="docutils literal notranslate"><span class="pre">RemoveFromCustomList</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.RemoveFromCustomList.chunk_get_response_quiet"><code class="docutils literal notranslate"><span class="pre">RemoveFromCustomList.chunk_get_response_quiet()</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RemoveFromCustomList"><code class="docutils literal notranslate"><span class="pre">RemoveFromCustomList</span></code></a><ul>
+<li><a class="reference internal" href="#atlasapiclient.client.RemoveFromCustomList.chunk_get_response_quiet"><code class="docutils literal notranslate"><span class="pre">RemoveFromCustomList.chunk_get_response_quiet()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.RequestCustomListsTable"><code class="docutils literal notranslate"><span class="pre">RequestCustomListsTable</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.RequestMainListsTable"><code class="docutils literal notranslate"><span class="pre">RequestMainListsTable</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.RequestMultipleSourceData"><code class="docutils literal notranslate"><span class="pre">RequestMultipleSourceData</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.RequestMultipleSourceData.chunk_get_response"><code class="docutils literal notranslate"><span class="pre">RequestMultipleSourceData.chunk_get_response()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.RequestMultipleSourceData.chunk_get_response_quiet"><code class="docutils literal notranslate"><span class="pre">RequestMultipleSourceData.chunk_get_response_quiet()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.RequestMultipleSourceData.save_response_to_json"><code class="docutils literal notranslate"><span class="pre">RequestMultipleSourceData.save_response_to_json()</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestCustomListsTable"><code class="docutils literal notranslate"><span class="pre">RequestCustomListsTable</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestMainListsTable"><code class="docutils literal notranslate"><span class="pre">RequestMainListsTable</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestMultipleSourceData"><code class="docutils literal notranslate"><span class="pre">RequestMultipleSourceData</span></code></a><ul>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestMultipleSourceData.chunk_get_response"><code class="docutils literal notranslate"><span class="pre">RequestMultipleSourceData.chunk_get_response()</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestMultipleSourceData.chunk_get_response_quiet"><code class="docutils literal notranslate"><span class="pre">RequestMultipleSourceData.chunk_get_response_quiet()</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestMultipleSourceData.save_response_to_json"><code class="docutils literal notranslate"><span class="pre">RequestMultipleSourceData.save_response_to_json()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.RequestSingleSourceData"><code class="docutils literal notranslate"><span class="pre">RequestSingleSourceData</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.RequestSingleSourceData.save_response_to_json"><code class="docutils literal notranslate"><span class="pre">RequestSingleSourceData.save_response_to_json()</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestSingleSourceData"><code class="docutils literal notranslate"><span class="pre">RequestSingleSourceData</span></code></a><ul>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestSingleSourceData.save_response_to_json"><code class="docutils literal notranslate"><span class="pre">RequestSingleSourceData.save_response_to_json()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.RequestSourceData"><code class="docutils literal notranslate"><span class="pre">RequestSourceData</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.RequestSourceData.parse_atlas_id"><code class="docutils literal notranslate"><span class="pre">RequestSourceData.parse_atlas_id()</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestSourceData"><code class="docutils literal notranslate"><span class="pre">RequestSourceData</span></code></a><ul>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestSourceData.parse_atlas_id"><code class="docutils literal notranslate"><span class="pre">RequestSourceData.parse_atlas_id()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.RequestVRAScores"><code class="docutils literal notranslate"><span class="pre">RequestVRAScores</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.RequestVRAToDoList"><code class="docutils literal notranslate"><span class="pre">RequestVRAToDoList</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.WriteObjectDetectionListNumber"><code class="docutils literal notranslate"><span class="pre">WriteObjectDetectionListNumber</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.WriteToCustomList"><code class="docutils literal notranslate"><span class="pre">WriteToCustomList</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#atlasapiclient.client.WriteToCustomList.chunk_get_response_quiet"><code class="docutils literal notranslate"><span class="pre">WriteToCustomList.chunk_get_response_quiet()</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestVRAScores"><code class="docutils literal notranslate"><span class="pre">RequestVRAScores</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.RequestVRAToDoList"><code class="docutils literal notranslate"><span class="pre">RequestVRAToDoList</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.WriteObjectDetectionListNumber"><code class="docutils literal notranslate"><span class="pre">WriteObjectDetectionListNumber</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.WriteToCustomList"><code class="docutils literal notranslate"><span class="pre">WriteToCustomList</span></code></a><ul>
+<li><a class="reference internal" href="#atlasapiclient.client.WriteToCustomList.chunk_get_response_quiet"><code class="docutils literal notranslate"><span class="pre">WriteToCustomList.chunk_get_response_quiet()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.WriteToToDo"><code class="docutils literal notranslate"><span class="pre">WriteToToDo</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.WriteToVRARank"><code class="docutils literal notranslate"><span class="pre">WriteToVRARank</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.client.WriteToVRAScores"><code class="docutils literal notranslate"><span class="pre">WriteToVRAScores</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.WriteToToDo"><code class="docutils literal notranslate"><span class="pre">WriteToToDo</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.WriteToVRARank"><code class="docutils literal notranslate"><span class="pre">WriteToVRARank</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.client.WriteToVRAScores"><code class="docutils literal notranslate"><span class="pre">WriteToVRAScores</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-atlasapiclient.exceptions">The exceptions module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.exceptions.ATLASAPIClientAuthError"><code class="docutils literal notranslate"><span class="pre">ATLASAPIClientAuthError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.exceptions.ATLASAPIClientConfigError"><code class="docutils literal notranslate"><span class="pre">ATLASAPIClientConfigError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.exceptions.ATLASAPIClientError"><code class="docutils literal notranslate"><span class="pre">ATLASAPIClientError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.exceptions.ATLASAPIClientRequestError"><code class="docutils literal notranslate"><span class="pre">ATLASAPIClientRequestError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.exceptions.St3ph3nAPIError"><code class="docutils literal notranslate"><span class="pre">St3ph3nAPIError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.exceptions.St3ph3nKeyError"><code class="docutils literal notranslate"><span class="pre">St3ph3nKeyError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#atlasapiclient.exceptions.St3ph3nSaysNo"><code class="docutils literal notranslate"><span class="pre">St3ph3nSaysNo</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-atlasapiclient.exceptions">The exceptions module</a><ul>
+<li><a class="reference internal" href="#atlasapiclient.exceptions.ATLASAPIClientAuthError"><code class="docutils literal notranslate"><span class="pre">ATLASAPIClientAuthError</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.exceptions.ATLASAPIClientConfigError"><code class="docutils literal notranslate"><span class="pre">ATLASAPIClientConfigError</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.exceptions.ATLASAPIClientError"><code class="docutils literal notranslate"><span class="pre">ATLASAPIClientError</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.exceptions.ATLASAPIClientRequestError"><code class="docutils literal notranslate"><span class="pre">ATLASAPIClientRequestError</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.exceptions.St3ph3nAPIError"><code class="docutils literal notranslate"><span class="pre">St3ph3nAPIError</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.exceptions.St3ph3nKeyError"><code class="docutils literal notranslate"><span class="pre">St3ph3nKeyError</span></code></a></li>
+<li><a class="reference internal" href="#atlasapiclient.exceptions.St3ph3nSaysNo"><code class="docutils literal notranslate"><span class="pre">St3ph3nSaysNo</span></code></a></li>
 </ul>
 </li>
 </ul>
-
+</li>
+</ul>
+</div>
         </div>
       </div>
     </nav>
@@ -376,9 +376,7 @@ because we decided they shouldn’t be allowed</p>
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="ATLAS API Client documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
+          <footer>
 
   <hr/>
 
