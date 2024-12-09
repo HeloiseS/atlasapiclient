@@ -337,25 +337,8 @@ class GetATLASIDsFromWebServerList(APIClient):
     def atlas_id_list_int(self):
         return [int(x['id']) for x in self.response]
             
-            
-class RequestSourceData(APIClient, ABC):
-    def parse_atlas_id(self, atlas_id: str) -> int:
-        """Abstract Class for the RequestSingleSourceData and RequestMultipleSourceData classes
 
-        Parameters
-        ------------
-        atlas_id: str
-            The ATLAS ID as a string
-        """
-        assert len(atlas_id) == 19, "atlas_id must have 19 digits"
-        try:
-            atlas_id = int(atlas_id)
-        except ValueError:
-            raise ATLASAPIClientError("atlas_id must be a valid integer (in a string)")
-        return atlas_id
-
-
-class RequestSingleSourceData(RequestSourceData):
+class RequestSingleSourceData(APIClient):
     def __init__(self,
                  atlas_id: str = None,
                  mjdthreshold: float = None,
