@@ -38,6 +38,11 @@ class APIClient(ABC):
                  api_config_file: str = None
                 ):
         """Abstract Class - Parent class for the ATLAS API pipelines.
+        
+        Constructor for the APIClient class. It opens the yaml file containing 
+        the API token and base URL and sets some class attributes for later use. 
+        This is overriden by the child classes which call individual API 
+        endpoints.
 
         Parameters
         ------------
@@ -78,6 +83,23 @@ class APIClient(ABC):
         self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
         self.apiURL = config['base_url']  # Set the base of the url (the same for all requests)
         # -> directs to the ATLAS transient web server
+    
+    def parse_atlas_id(self, atlas_id: str) -> int:
+        """
+        Check that the atlas_id input is valid - it must have 19 digits and be 
+        an integer
+        
+        :param atlas_id: string containing the atlas_id
+        :return: int representing the atlas_id
+        
+        :raises: ATLASAPIClientError: if the atlas_id is not a valid integer
+        """
+        assert len(atlas_id) == 19, "atlas_id must have 19 digits"
+        try:
+            atlas_id = int(atlas_id)
+        except ValueError:
+            raise ATLASAPIClientError("atlas_id must be a valid integer (in a string)")
+        return atlas_id
 
     def get_response(self,
                      inplace: bool = True
@@ -315,25 +337,8 @@ class GetATLASIDsFromWebServerList(APIClient):
     def atlas_id_list_int(self):
         return [int(x['id']) for x in self.response]
             
-            
-class RequestSourceData(APIClient, ABC):
-    def parse_atlas_id(self, atlas_id: str) -> int:
-        """Abstract Class for the RequestSingleSourceData and RequestMultipleSourceData classes
 
-        Parameters
-        ------------
-        atlas_id: str
-            The ATLAS ID as a string
-        """
-        assert len(atlas_id) == 19, "atlas_id must have 19 digits"
-        try:
-            atlas_id = int(atlas_id)
-        except ValueError:
-            raise ATLASAPIClientError("atlas_id must be a valid integer (in a string)")
-        return atlas_id
-
-
-class RequestSingleSourceData(RequestSourceData):
+class RequestSingleSourceData(APIClient):
     def __init__(self,
                  atlas_id: str = None,
                  mjdthreshold: float = None,
@@ -386,7 +391,7 @@ class RequestSingleSourceData(RequestSourceData):
             json.dump(self.response[0], outfile)
 
 
-class RequestMultipleSourceData(RequestSourceData):
+class RequestMultipleSourceData(APIClient):
     def __init__(self,
                  array_ids: np.array = None,
                  mjdthreshold = None,
