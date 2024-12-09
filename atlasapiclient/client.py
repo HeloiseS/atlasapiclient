@@ -46,9 +46,22 @@ class APIClient(ABC):
 
     def __init__(self,
                  api_config_file: str = None
-                ):
+                ) -> None:
         """
-        :param api_config_file: path to the yaml file containing the API token and base URL
+        Constructor for the APIClient class. It opens the yaml file containing 
+        the API token and base URL and sets some class attributes for later use. 
+        This is overriden by the child classes which call individual API 
+        endpoints.
+        
+        Parameters
+        ----------
+        api_config_file: str 
+            Path to the yaml file containing the API token and base URL
+            
+        Returns
+        -------
+        None   
+        
         """
         # INITIALISE MAIN ATTRIBUTES
         if api_config_file is None:
@@ -67,13 +80,34 @@ class APIClient(ABC):
         self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
         self.apiURL = config['base_url']  # Set the base of the url (the same for all requests)
         # -> directs to the ATLAS transient web server
+    
+    def parse_atlas_id(self, atlas_id: str) -> int:
+        """
+        Check that the atlas_id input is valid - it must have 19 digits and be 
+        an integer
+        
+        :param atlas_id: string containing the atlas_id
+        :return: int representing the atlas_id
+        
+        :raises: ATLASAPIClientError: if the atlas_id is not a valid integer
+        """
+        assert len(atlas_id) == 19, "atlas_id must have 19 digits"
+        try:
+            atlas_id = int(atlas_id)
+        except ValueError:
+            raise ATLASAPIClientError("atlas_id must be a valid integer (in a string)")
+        return atlas_id
 
     def get_response(self,
                      inplace: bool = True
                      ):
         """
-        Get the response from the server.
-        :param inplace: if True, sets self.response to the response from the server. If False, returns the response.
+        Send our request and get the response from the server.
+        
+        :param inplace: Boolean flag to return the response or store it in the 
+                        object
+        :return: response: the response from the server (if inplace is False)
+        :raises: ATLASAPIClientError: if the response is None
         """
 
         # We must set the request just before we get the response in case the payload was defined after instanciation
@@ -244,23 +278,8 @@ class RequestMainListsTable(APIClient):
 
         elif get_response:
             self.get_response()
-            
-            
-class RequestSourceData(APIClient, ABC):
-    def parse_atlas_id(self, atlas_id: str) -> int:
-        """
-        Check that the atlas_id input is valid - it must have 19 digits and be an integer
-        :param atlas_id: string containing the atlas_id
-        """
-        assert len(atlas_id) == 19, "atlas_id must have 19 digits"
-        try:
-            atlas_id = int(atlas_id)
-        except ValueError:
-            raise ATLASAPIClientError("atlas_id must be a valid integer (in a string)")
-        return atlas_id
 
-
-class RequestSingleSourceData(RequestSourceData):
+class RequestSingleSourceData(APIClient):
     def __init__(self,
                  api_config_file: str = None,
                  atlas_id: str = None,
@@ -289,7 +308,7 @@ class RequestSingleSourceData(RequestSourceData):
             json.dump(self.response[0], outfile)
 
 
-class RequestMultipleSourceData(RequestSourceData):
+class RequestMultipleSourceData(APIClient):
     def __init__(self,
                  api_config_file: str = None,
                  array_ids: np.array = None,
