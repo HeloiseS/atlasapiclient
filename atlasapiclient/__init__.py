@@ -1,4 +1,6 @@
-# Roundabout way 
+# Roundabout way
+from . import client, exceptions, utils
+
 try:
     import importlib.metadata as impmd
 except (ModuleNotFoundError, ImportError):
@@ -15,5 +17,4 @@ try:
 except Exception:
     __version__ = "unknown"
 
-from . import client, exceptions, utils
 
