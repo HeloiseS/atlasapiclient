@@ -5,9 +5,9 @@ import pkg_resources
 
 import pytest
 import numpy as np
-from atlasapiclient.exceptions import St3ph3nSaysNo
 import atlasapiclient.client as atlasapi
 from atlasapiclient.utils import API_CONFIG_FILE
+from atlasapiclient.exceptions import ATLASAPIClientError
 
 # NOTE: These are integration tests require data from the ST3PH3N API
 # data_path = pkg_resources.resource_filename('st3ph3n', 'data')
@@ -43,13 +43,13 @@ class TestWriteToVRAScores():
                                                 )
 
     def test_send_something_from_instanciation_empty_payload(self):
-        with pytest.raises(St3ph3nSaysNo):
+        with pytest.raises(ATLASAPIClientError):
             writeto_vra = atlasapi.WriteToVRAScores(api_config_file = API_CONFIG_FILE,
                                                     get_response=True
                                                     )
 
     def test_payload_is_bad(self):
-        with pytest.raises(atlasapi.exceptions.ATLASAPIClientError):
+        with pytest.raises(ATLASAPIClientError):
             writeto_vra = atlasapi.WriteToVRAScores(api_config_file = API_CONFIG_FILE,
                                                     payload = '113250736',
                                                     get_response=True

@@ -1,9 +1,9 @@
 
 """
 :Description: This module contains the classes to interact with the ATLAS API.
-:Author: Heloise Stevance
+:Author: Heloise Stevance, Jack Leland
 :Date of Creation: 2024-05-22
-:Last Update: 2024-05-22
+:Last Update: 2024-12-09
 
 Classes
 --------
@@ -13,11 +13,6 @@ Classes
 - RequestCustomListsTable: To download the data from the Custom Lists Table.
 - RequestSingleSourceData: To download the data for a single source.
 - RequestMultipleSourceData: To download the data for multiple sources.
-
-Functions
-----------
-- fetch_vra_dataframe: Convenience function to get the VRA table in a dataframe in one line.
-
 """
 import os
 import yaml
@@ -27,28 +22,44 @@ from abc import ABC
 
 import requests
 import numpy as np
+from pkg_resources import non_empty_lines
 from tqdm import tqdm
 import pandas as pd
 
-from atlasapiclient.exceptions import ATLASAPIClientError, St3ph3nSaysNo
+from atlasapiclient.exceptions import ATLASAPIClientError
 from atlasapiclient.utils import dict_list_id, API_CONFIG_FILE
 
 
 class APIClient(ABC):
-    """
-    Parent class for the ATLAS API pipelines.
-    Contains recurrent class attributes and encapsulates the check for error 200
-    whenever we get the response from the server.
-    """
-
     # this dictionary reflects the lists on the ATLAS transient server (url above)
     dict_list_id = dict_list_id
 
     def __init__(self,
                  api_config_file: str = None
                 ):
-        """
-        :param api_config_file: path to the yaml file containing the API token and base URL
+        """Abstract Class - Parent class for the ATLAS API pipelines.
+
+        Parameters
+        ------------
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
+
+        Attributes
+        -----------
+        request: requests.post
+            The request.post object that will contain the response and the status code.
+            # TODO: maybe doesn't have to be a public attribute?
+
+        response: list
+            The response we get from the request.post method (a list of json responses).
+
+        url: str
+            The end point of the API we're trying to access. This is provided by the children classes
+            which have the end points hard coded so I don't need to remember them.
+
+        payload: dict
+            The payload we send to the server. This is provided by users when they
+            instanciate the children classes.
         """
         # INITIALISE MAIN ATTRIBUTES
         if api_config_file is None:
@@ -71,9 +82,12 @@ class APIClient(ABC):
     def get_response(self,
                      inplace: bool = True
                      ):
-        """
-        Get the response from the server.
-        :param inplace: if True, sets self.response to the response from the server. If False, returns the response.
+        """Get the response from the server.
+
+        Parameters
+        ------------
+        inplace: bool
+            If True, sets self.response to the response from the server. If False, it ALSO returns the response.
         """
 
         # We must set the request just before we get the response in case the payload was defined after instanciation
@@ -106,21 +120,29 @@ class APIClient(ABC):
             # an error code to be returned to the server
 
 
-class ConeSearch(APIClient):
-    """
-    To Download the data from the VRA table
-    """
+###################################################
+#                                          READ UTILITIES                                          #
+###################################################
 
+class ConeSearch(APIClient):
     def __init__(self,
-                 api_config_file: str = None,
                  payload: dict = {},
-                 get_response: bool = False
+                 get_response: bool = False,
+                 api_config_file: str = None,
                  ):
-        """
-        Cone Search for ATLAS. The Payload must contain RA, DEC, search radius in arcseconds and request type ('all', 'count' or 'nearest')
+        """READ - Cone Search in ATLAS Transient Web Server
+
+        Parameters
+        ------------
+        payload: dict
+            The Payload must contain RA, DEC, search radius in arcseconds and request type ('all', 'count' or 'nearest')
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
 
         Examples
-        --------
+        ----------
         payload = {'ra': 150.0, 'dec': 34.0, 'radius': 1,  'requestType': 'nearest'}
         """
         super().__init__(api_config_file)
@@ -137,20 +159,25 @@ class ConeSearch(APIClient):
             self.get_response()
 
 class RequestVRAScores(APIClient):
-    """
-    To Download the data from the VRA table
-    """
     def __init__(self,
-                 api_config_file: str = None,
                  payload: dict = {},
-                 get_response: bool = False
+                 get_response: bool = False,
+                 api_config_file: str = None,
                  ):
-        """
+        """READ -  tcs\_vra\_scores table
+
+        Parameters
+        ------------
+        payload: dict
+            The Payload can contain a date threshold
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
 
         Examples
         --------
-        payload = {'datethreshold': "2024-02-22"} # ADD A DATE THRESHOLD
-        payload = {'objectid': '1132507360113744500,1151301851092728500'}
+        payload = {'datethreshold': "2024-02-22"}
         """
         super().__init__(api_config_file)
         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
@@ -168,13 +195,24 @@ class RequestVRAScores(APIClient):
 
 
 class RequestVRAToDoList(APIClient):
-    # TODO: need to test this - frankly dunno how
     def __init__(self,
-                 api_config_file: str = None,
                  payload: dict = {},
-                 get_response: bool = False
+                 get_response: bool = False,
+                 api_config_file: str = None,
                  ):
-        """
+        """READ - tcs\_vra\_to\_do\_list table
+
+        Parameters
+        ------------
+        payload: dict
+            The Payload can contain a date threshold
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
+
+        Examples
+        ----------
         payload = {'datethreshold': "2024-02-22"} # ADD A DATE THRESHOLD
         """
         super().__init__(api_config_file)
@@ -191,15 +229,21 @@ class RequestVRAToDoList(APIClient):
 
 
 class RequestCustomListsTable(APIClient):
-    """
-    To Download the data from the VRA table
-    """
     def __init__(self,
-                 api_config_file: str = None,
                  payload: dict = {},
-                 get_response: bool = False
+                 get_response: bool = False,
+                 api_config_file: str = None,
                  ):
-        """
+        """READ - Check which custom lists objects are in or return all objects in a given custom list
+
+        Parameters
+        ------------
+        payload: dict
+            The Payload can contain a date threshold
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
 
         Examples
         --------
@@ -218,39 +262,68 @@ class RequestCustomListsTable(APIClient):
             self.get_response()
 
 
-class RequestMainListsTable(APIClient):
-    """
-    To Download the data from the VRA table
-    """
+class GetATLASIDsFromWebServerList(APIClient):
+    # TODO: add the tests for this
     def __init__(self,
+                 list_name: str,
+                 get_response: bool = True,
                  api_config_file: str = None,
-                 payload: dict = {},
-                 get_response: bool = False
                  ):
-        """
+        """READ - Get all the ATLAS\_IDs from a given list on the ATLAS Transient Web Server
 
-        Examples
-        --------
-        payload = {'objectid': '1132507360113744500,1151301851092728500'}
-        paylod = {'objectgroupid': 73}
+
+        Parameters
+        ------------
+        list_name: str
+           The name of the list you want (NOT THE NUMBER). Common options are:
+           'follow_up', 'good', 'possible', 'eyeball', 'attic', 'cv', 'mdwarf', 'pm_stars', 'mookodi'.
+           To check the full list of options you can do:
+           ```
+           from atlasapiclient.utils import dict_list_id
+            print(dict_list_id.keys())
+           ```
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
+
+        Notes
+        -------
+        If your custom list does not exist in the dict_list_id, you can't use this at the moment.
+        You should start an issue on the github so I cna add it for you.
+
+        Attributes
+        ------------
+        atlas_id_list_str: list
+            List of ATLAS IDs as strings
+        atlas_id_list_int: list
+            List of ATLAS IDs as integers
         """
         super().__init__(api_config_file)
-        # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
+        self.list_name = list_name
         self.url = self.apiURL + 'objectlist/'
-        self.payload = payload
-        self.request = requests.post(self.url, self.payload, headers=self.headers)
-        if get_response and len(payload)==0:
-            raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
+        self.payload = {'objectlistid': self.dict_list_id[self.list_name][0],
+                        'getcustomlist': self.dict_list_id[self.list_name][1]}
 
-        elif get_response:
-            self.get_response()
+        if get_response: self.get_response()
+
+    @cached_property
+    def atlas_id_list_str(self):
+        return [str(x['id']) for x in self.response]
+
+    @cached_property
+    def atlas_id_list_int(self):
+        return [int(x['id']) for x in self.response]
             
             
 class RequestSourceData(APIClient, ABC):
     def parse_atlas_id(self, atlas_id: str) -> int:
-        """
-        Check that the atlas_id input is valid - it must have 19 digits and be an integer
-        :param atlas_id: string containing the atlas_id
+        """Abstract Class for the RequestSingleSourceData and RequestMultipleSourceData classes
+
+        Parameters
+        ------------
+        atlas_id: str
+            The ATLAS ID as a string
         """
         assert len(atlas_id) == 19, "atlas_id must have 19 digits"
         try:
@@ -262,19 +335,32 @@ class RequestSourceData(APIClient, ABC):
 
 class RequestSingleSourceData(RequestSourceData):
     def __init__(self,
-                 api_config_file: str = None,
                  atlas_id: str = None,
                  mjdthreshold: float = None,
-                 url: str = 'objects/',
-                 get_response: bool = True
+                 get_response: bool = True,
+                 api_config_file: str = None,
                  ):
+        """READ - Get the data for a single source from the ATLAS Transient Web Server
+
+        Parameters
+        ----------
+        atlas_id: str
+            The ATLAS ID as a string
+        mjdthreshold:
+            The Lower MJD threshold (we don't have a higher one yet)
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file:
+           By default will use you api_config_MINE.yaml file.
+        """
 
         super().__init__(api_config_file)
         assert atlas_id is not None, "You need to provide an atlas_id"
 
         self.atlas_id = self.parse_atlas_id(atlas_id)
         self.mjdthreshold = mjdthreshold
-        self.url = self.apiURL+url
+        self.url=  "objects/"
+        self.url = self.apiURL+self.url
         self.payload = {'objects': self.atlas_id,
                         'mjd': self.mjdthreshold
                         }
@@ -282,6 +368,17 @@ class RequestSingleSourceData(RequestSourceData):
         if get_response: self.get_response()
 
     def save_response_to_json(self, output_dir=None):
+        """Saves the response to a text file name [ATLAS\_ID].json
+
+        Parameters
+        ----------
+        output_dir: str
+            The directory where the file will be saved
+
+        Returns
+        -------
+        None
+        """
         assert output_dir is not None, "You need to provide an output directory"
         assert self.response is not None, "You need to run get_response() before saving"
 
@@ -291,11 +388,22 @@ class RequestSingleSourceData(RequestSourceData):
 
 class RequestMultipleSourceData(RequestSourceData):
     def __init__(self,
-                 api_config_file: str = None,
                  array_ids: np.array = None,
                  mjdthreshold = None,
-                 url: str ='objects/'
+                 api_config_file: str = None,
                  ):
+        """READ - Request data for multiple sources. Contains a convenience
+        method to chunk the request in groups of 100 so don't get timed out by the server.
+
+        Parameters
+        ----------
+        array_ids:
+            The ATLAS\_IDs. Can be an array a list or a tuple.
+        mjdthreshold;
+            The Lower MJD threshold (we don't have a higher one yet)
+        api_config_file:
+            By default will use you api_config_MINE.yaml file.
+        """
         super().__init__(api_config_file)
 
         # ATLAS_ID ARRAY - CHECK VALIDITY AND ASSIGN
@@ -309,12 +417,24 @@ class RequestMultipleSourceData(RequestSourceData):
 
         # MJD THRESHOLD AND URL - ASSIGN
         self.mjdthreshold = mjdthreshold
-        self.url = self.apiURL + url
+        self.url=  "objects/"
+        self.url = self.apiURL + self.url
 
         # INITIALIZE RESPONSE
         self.response = []
 
     def chunk_get_response_quiet(self):
+        """Chunks the request in groups of 100 so don't get timed out by the server.
+        Does not print out a progress bar.
+
+        Notes
+        ------
+        This is typically used in production to avoid spamming the logs.
+
+        Returns
+        -------
+        None
+        """
         # Split array_ids into chunks of 100
         chunks = [self.array_ids[i:i + 100] for i in range(0, len(self.array_ids), 100)]
 
@@ -329,6 +449,13 @@ class RequestMultipleSourceData(RequestSourceData):
             self.response.extend(_response)
 
     def chunk_get_response(self):
+        """Chunks the request in groups of 100 so don't get timed out by the server.
+        Prints out a progress bar.
+
+        Notes
+        ------
+        This is typically used in human scripts and notebooks to see how long it'll take.
+        """
         # Split array_ids into chunks of 100
         chunks = [self.array_ids[i:i + 100] for i in range(0, len(self.array_ids), 100)]
 
@@ -343,6 +470,18 @@ class RequestMultipleSourceData(RequestSourceData):
             self.response.extend(_response)
 
     def save_response_to_json(self, output_dir=None):
+        """Saves the response to INDIVIDUAL text files with the name [ATLAS\_ID].json.
+        One for EACH object.
+
+        Parameters
+        ----------
+        output_dir:str
+            The directory where the files will be saved
+
+        Returns
+        -------
+        None
+        """
         assert output_dir is not None, "You need to provide an output directory"
         assert self.response is not None, "You need to run get_response() before saving"
 
@@ -352,59 +491,38 @@ class RequestMultipleSourceData(RequestSourceData):
 
 
 
-# ### CONVENIENCE FUNCTIONS AND CLASSES ###
-# # TODO: put this in a separate module?
-# def fetch_vra_dataframe(datethreshold: str = None,
-#                         ):
-#     """
-#     Convenience function to get the VRA table in a dataframe in one line.
-#     Instantiates RequestVRAScores and returns the response as a dataframe.
-
-#     :param datethreshold: string in the format "YYYY-MM-DD" to filter the VRA table by date. Will return all dates after
-#     :return: vra_df: pandas dataframe containing the VRA table
-#     :raises: St3ph3nSaysNo: if datethreshold is None
-#     """
-#     if datethreshold is None:
-#         raise ATLASAPIClientError("You need to provide a date threshold otherwise it'll take forever")
-
-#     request_vra = RequestVRAScores(api_config_file=API_CONFIG_FILE,
-#                                    payload={'datethreshold': datethreshold},
-#                                    get_response=True
-#                                     )
-#     vra_df = pd.DataFrame(request_vra.response)
-
-#     return vra_df
-
-#################
-# Imported from st3ph3n 
-#################
-
+###################################################
+#                                          WRITE UTILITIES                                          #
+###################################################
 
 class WriteToVRAScores(APIClient):
-    """
-    Object to write to the VRA Scores table
-    """
     def __init__(self,
-                 api_config_file: str,
                  payload: dict = {},
-                 get_response: bool = False):
-        """
+                 get_response: bool = False,
+                 api_config_file: str = None,
+                 ):
+        """WRITE - Write to the tcs\_vra\_scores table
 
-        :param api_config_file: path to the yaml file containing the API token and base URL
-        :param payload: dictionary containing the payload to send to the server. Default: empty dictionary
-        :param get_response: if True, will get the response on instanciation
+        Notes
+        -------
+        At present you can only write ONE ROW AT A TIME
 
-        :raises: St3ph3nSaysNo: if get_response is True and payload is empty
-
-        Examples
-        --------
-        payload = {'datethreshold': "2024-02-22"} # ADD A DATE THRESHOLD
-        payload = {'objectid': '1132507360113744500'}
-        'objectid' -> ONLY ONE AT A TIME FOR NOW
-        'preal'
-        'pgal'
-        'pfast'
-        'debug'
+        Parameters
+        ------------
+        payload: dict
+            This payload can contain the following keys:
+            - 'objectid': the ATLAS ID
+            - 'preal': the real probability
+            - 'pgal': the galactic probability
+            - 'pfast': the fast probability
+            - 'rank': the rank
+            - 'rank_alt1': an alternative rank
+            - 'rank_alt2': another alternative rank
+            - 'debug': 1 if you want to test the API
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
         """
         super().__init__(api_config_file)
 
@@ -413,25 +531,30 @@ class WriteToVRAScores(APIClient):
         self.payload = payload
 
         if get_response and len(payload)==0:
-            raise St3ph3nSaysNo("If you want to get the response on instanciation you must specify a payload")
+            raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
 
         elif get_response:
             self.get_response()
 
 
 class WriteToVRARank(APIClient):
-    """
-    Object to write to the VRA Rank Table
-    """
     def __init__(self,
-                 api_config_file: str,
                  payload: dict = {},
-                 get_response: bool = False):
-        # TODO: finish docstring
-        """
+                 get_response: bool = False,
+                 api_config_file: str = None,
+                 ):
+
+        """WRITE - Write to the VRA Rank Table
+
+        Parameters
+        ------------
+        payload: dict
+            This payload contains the following keys:
+                - 'objectid'
+                - 'rank'
 
         Examples
-        --------
+        -----------
         payload = {'objectid': '1132507360113744500'}
         payload = {'rank': 1.3}
         """
@@ -442,7 +565,7 @@ class WriteToVRARank(APIClient):
         self.payload = payload
 
         if get_response and len(payload)==0:
-            raise St3ph3nSaysNo("If you want to get the response on instanciation you must specify a payload")
+            raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
 
         elif get_response:
             self.get_response()
@@ -450,18 +573,24 @@ class WriteToVRARank(APIClient):
 
 # 2024-06-24 KWS Added WriteToToDo
 class WriteToToDo(APIClient):
-    """
-    Object to write to the VRA Rank Table
-    """
     def __init__(self,
-                 api_config_file: str,
                  payload: dict = {},
-                 get_response: bool = False):
-        # TODO: finish docstring
-        """
+                 get_response: bool = False,
+                 api_config_file: str = None,
+                 ):
+        """WRITE - Write to the tcs\_vra\_todo table
+
+        Parameters
+        ------------
+        payload: dict
+            This payload only contains the 'objectid' key.
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
 
         Examples
-        --------
+        ----------
         payload = {'objectid': '1132507360113744500'}
         """
         super().__init__(api_config_file)
@@ -471,7 +600,7 @@ class WriteToToDo(APIClient):
         self.payload = payload
 
         if get_response and len(payload)==0:
-            raise St3ph3nSaysNo("If you want to get the response on instanciation you must specify a payload")
+            raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
 
         elif get_response:
             self.get_response()
@@ -480,11 +609,24 @@ class WriteToToDo(APIClient):
 
 class WriteToCustomList(APIClient):
     def __init__(self,
-                 api_config_file: str,
                  array_ids: np.array = None,
                  list_name: str = None,
-                 get_response: bool = False
+                 get_response: bool = False,
+                 api_config_file: str = None,
                  ):
+        """WRITE - Add an ATLAS\_ID to a custom list on the ATLAS Transient Web Server
+
+        Parameters
+        ------------
+        array_ids: np.array, list, tuple
+            The ATLAS IDs. Can be an array a list or a tuple.
+        list_name: str
+            The name of the list you want (NOT THE NUMBER). e.g.  'mookodi'.
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
+        """
         super().__init__(api_config_file)
         self.url = self.apiURL + 'objectgroups/'
         self.array_ids = array_ids
@@ -502,6 +644,7 @@ class WriteToCustomList(APIClient):
         if get_response: self.get_response()
 
     def chunk_get_response_quiet(self):
+        """Chunks the request in groups of 100 so don't get timed out by the server. No progress bar."""
         # Split array_ids into chunks of 100
         chunks = [self.array_ids[i:i + 100] for i in range(0, len(self.array_ids), 100)]
 
@@ -518,11 +661,24 @@ class WriteToCustomList(APIClient):
 
 class RemoveFromCustomList(APIClient):
     def __init__(self,
-                 api_config_file: str,
                  array_ids: np.array = None,
                  list_name: str = None,
-                 get_response: bool = False
+                 get_response: bool = False,
+                 api_config_file: str = None,
                  ):
+        """WRITE - Remove  ATLAS\_IDs from a custom list
+
+        Parameters
+        ------------
+        array_ids: np.array, list, tuple
+            The ATLAS IDs. Can be an array a list or a tuple.
+        list_name: str
+            The name of the list you want (NOT THE NUMBER). e.g.  'mookodi'.
+        get_response: bool
+            If True, will get the response on instanciation
+        api_config_file: str
+            By default will use you api_config_MINE.yaml file.
+        """
         super().__init__(api_config_file)
         self.url = self.apiURL + 'objectgroupsdelete/'
         self.array_ids = array_ids
@@ -539,6 +695,7 @@ class RemoveFromCustomList(APIClient):
 
 
     def chunk_get_response_quiet(self):
+        """Chunks the request in groups of 100 so don't get timed out by the server. No progress bar."""
         # Split array_ids into chunks of 100
         chunks = [self.array_ids[i:i + 100] for i in range(0, len(self.array_ids), 100)]
 
@@ -552,45 +709,21 @@ class RemoveFromCustomList(APIClient):
             _response = self.get_response(inplace=False)
             self.response.extend(_response)
 
-class GetATLASIDsFromWebServerList(APIClient):
-    # TODO: add the tests for this
-    def __init__(self,
-                 api_config_file: str,
-                 list_name: str,
-                 get_response: bool = True
-                 ):
-        super().__init__(api_config_file)
-        self.list_name = list_name
-        self.url = self.apiURL + 'objectlist/'
-        self.payload = {'objectlistid': self.dict_list_id[self.list_name][0],
-                        'getcustomlist': self.dict_list_id[self.list_name][1]}
-
-        if get_response: self.get_response()
-
-    @cached_property
-    def atlas_id_list_str(self):
-        return [str(x['id']) for x in self.response]
-
-    @cached_property
-    def atlas_id_list_int(self):
-        return [int(x['id']) for x in self.response]
-    
-
 class WriteObjectDetectionListNumber(APIClient):
     def __init__(self,
-                 api_config_file: str,
                  payload: dict = {},
-                 get_response: bool = False):
-        """
+                 get_response: bool = False,
+                 api_config_file: str = None,
+                 ):
+        """WRITE - Modify which list an ATLAS\_ID is in.
+
         Parameters
         ----------
         api_config_file : str
             path to the yaml file containing the API token and base URL
         payload : dict
-            dictionary containing the payload to send to the server.
-            Must contain the keys 'objectid' (the ATLAS ID) and 'objectlist'
-            (which list object should be in, e.g. 4 for eyeball list).
-            Default: empty dictionary
+            The payload must contain the 'objectid' and the target 'objectlist' integer.
+            In this case you need to know the list number (e.g. 4), not use the list name (e.g. 'eyeball')
         get_response : bool
             if True, will get the response on instanciation
 
@@ -607,25 +740,30 @@ class WriteObjectDetectionListNumber(APIClient):
         if get_response: self.get_response()
 
 
-# def fetch_vra_dataframe(datethreshold: str = None,
-#                         ):
-#     # TODO: TEST THIS FUCNTION
+
+# class RequestMainListsTable(APIClient):
 #     """
-#     Convenience function to get the VRA table in a dataframe in one line.
-#     Instantiates RequestVRAScores and returns the response as a dataframe.
-
-#     :param datethreshold: string in the format "YYYY-MM-DD" to filter the VRA table by date. Will return all dates after
-#     :return: vra_df: pandas dataframe containing the VRA table
-#     :raises: St3ph3nSaysNo: if datethreshold is None
+#     To Download the data from the VRA table
 #     """
-#     if datethreshold is None:
-#         raise St3ph3nSaysNo("You need to provide a date threshold otherwise it'll take forever")
-
-#     request_vra = RequestVRAScores(
-#         api_config_file=API_CONFIG_FILE,
-#         payload={'datethreshold': datethreshold},
-#         get_response=True
-#     )
-#     vra_df = pd.DataFrame(request_vra.response)
-
-#     return vra_df
+#     def __init__(self,
+#                  api_config_file: str = None,
+#                  payload: dict = {},
+#                  get_response: bool = False
+#                  ):
+#         """
+#
+#         Examples
+#         --------
+#         payload = {'objectid': '1132507360113744500,1151301851092728500'}
+#         paylod = {'objectgroupid': 73}
+#         """
+#         super().__init__(api_config_file)
+#         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
+#         self.url = self.apiURL + 'objectlist/'
+#         self.payload = payload
+#         self.request = requests.post(self.url, self.payload, headers=self.headers)
+#         if get_response and len(payload)==0:
+#             raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
+#
+#         elif get_response:
+#             self.get_response()
