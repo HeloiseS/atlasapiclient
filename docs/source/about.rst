@@ -33,9 +33,13 @@ Data Rights
 ------------
 [STEPHEN]
 
-Citation
-----------
-DOI and latex block
+Cite this code!
+-----------------
+Please mention this DOI in your TNS reports and papers if you use
+our code!
+
+.. image:: https://zenodo.org/badge/804295497.svg
+  :target: https://doi.org/10.5281/zenodo.14331062
 
 
 FAQ

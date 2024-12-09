@@ -6,6 +6,9 @@
 ATLAS API Client documentation
 =================================
 
+.. image:: https://zenodo.org/badge/804295497.svg
+  :target: https://doi.org/10.5281/zenodo.14331062
+
 This is the documentation for the ATLAS API Client package. This provides a
 convenient way to interact with the ATLAS Transient Server REST-API via Python.
 

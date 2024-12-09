@@ -1,5 +1,6 @@
 # ATLAS API Client
 --- 
+[![DOI](https://zenodo.org/badge/804295497.svg)](https://doi.org/10.5281/zenodo.14331062)
 
 This  Python client facilitates the use of the ATLAS API.
 Some general use cases are shown below - feel free to reach out to request additional documentation or features.
