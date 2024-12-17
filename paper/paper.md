@@ -33,8 +33,8 @@ As part of routine operations, many other types of objects are detected, and
 the data for all these data are available on the ATLAS transient server. 
 Accessing these data is done through the ATLAS API. 
 Here we make available a python client to facilitate the use of tha ATLAS API
-and ensure that production codes that make API calls can remain 
-unaffected by changes to the API.
+and ensure that production codes that make calls to the server can remain 
+unaffected by internal changes to the API.
 
 
 # Statement of need
@@ -42,17 +42,19 @@ unaffected by changes to the API.
 `atlasapiclient` is a python client that facilitates the use of the ATLAS API.
 It provides a class-based interface to all the read-write utilities of the API and
 abstracts away the endpoint URLs and the token management.
-We expect the API to evolve over time which could break the production codes 
-that connect to the ATLAS servers, but by using this client we can mitigate 
-against this by releasing updates to the client that are compatible 
-with the new API, and only require users to download an update rather 
-than directly change their code. 
-
 The `atlasapiclient` was initially designed to be used in our transient 
-stream processing pipeline, but it can now be used to connect 
+stream processing pipeline, but it can now also be used to connect 
 other astronomy projects to the ATLAS data and its stream. 
 It is currently allowing the follow-up of ATLAS alerts by the Mookodi telescope
 in the South African Astronomical Observatory.
+
+We expect the API to evolve over time which could break the production codes 
+that connect to the ATLAS servers. 
+By having a dedicated client package that includes a full set of unit and
+integration tests we can mitigate these issues by releasing updates to the client 
+that are compatible with the new API but do not require users to change their
+existing code. 
+
 
 # Acknowledgements
 
