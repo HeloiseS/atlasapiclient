@@ -1,4 +1,4 @@
-# ATLAS API Client
+ATLAS API Client
 --- 
 [![DOI](https://zenodo.org/badge/804295497.svg)](https://doi.org/10.5281/zenodo.14331062)
 
