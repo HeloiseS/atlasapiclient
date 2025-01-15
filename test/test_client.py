@@ -8,7 +8,7 @@ import numpy as np
 
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
-    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, GetATLASIDsFromWebServerList
+    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, RequestATLASIDsFromWebServerList
 )
 from atlasapiclient.exceptions import ATLASAPIClientError
 from atlasapiclient.utils import config_path
@@ -272,9 +272,9 @@ class TestRequestMultipleSourceData:
     # save_response_to_json method 
 
 
-class TestGetATLASIDsFromWebServerList:
+class TestRequestATLASIDsFromWebServerList:
     def test_constructor(self, config_file):
-        #GetATLASIDsFromWebServerList(api_config_file=config_file,
+        #RequestATLASIDsFromWebServerList(api_config_file=config_file,
         #                            list_name='eyeball',
         #                           get_response=True
         #                          )
