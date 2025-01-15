@@ -52,33 +52,39 @@ class APIClient(ABC):
         Attributes
         -----------
         request: requests.post
-            The request.post object that will contain the response and the status code.
+            The request.post object that will contain the response and the 
+            status code.
             # TODO: maybe doesn't have to be a public attribute?
 
         response: list
-            The response we get from the request.post method (a list of json responses).
+            The response we get from the request.post method (a list of json 
+            responses).
 
         url: str
-            The end point of the API we're trying to access. This is provided by the children classes
-            which have the end points hard coded so I don't need to remember them.
+            The end point of the API we're trying to access. This is provided by 
+            the children classes which have the end points hard coded so I don't 
+            need to remember them.
 
         payload: dict
-            The payload we send to the server. This is provided by users when they
-            instanciate the children classes.
+            The payload we send to the server. This is provided by users when 
+            they instanciate the children classes.
         """
         # INITIALISE MAIN ATTRIBUTES
         if api_config_file is None:
             api_config_file = API_CONFIG_FILE
 
-        self.request = None
         self.response = None
+        self.response_data = None
         self.url = None
         self.payload = None
 
         assert os.path.exists(api_config_file), f"{api_config_file} file does not exist"  # Check file exits
 
-        with open(api_config_file, 'r') as my_yaml_file:  # Open the file
-            config = yaml.safe_load(my_yaml_file)
+        try:
+            with open(api_config_file, 'r') as my_yaml_file:  # Open the file
+                config = yaml.safe_load(my_yaml_file)
+        except yaml.YAMLError as e:
+            raise ATLASAPIClientError(f"Error parsing YAML file: {e}")
 
         self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
         self.apiURL = config['base_url']  # Set the base of the url (the same for all requests)
@@ -116,27 +122,24 @@ class APIClient(ABC):
         # TODO: This makes the request and stores the response immediately, but 
         # storing it into a variable called request. The thing returned is a 
         # response, and contains the data we want.
-        self.request = requests.post(self.url,
-                                     self.payload,
-                                     headers=self.headers
-                                     )
+        self.response = requests.post(self.url, self.payload, headers=self.headers)
 
-        if self.request.status_code == 200:  # Status if READ request went well
+        if self.response.status_code == 200:  # Status if READ request went well
             if inplace:
-                self.response = self.request.json()
+                self.response_data = self.response.json()
             else:
-                return self.request.json()
+                return self.response.json()
 
-        elif self.request.status_code == 201:  # Status if WRITE request went well
-            self.response = self.request.json()
+        elif self.response.status_code == 201:  # Status if WRITE request went well
+            self.response_data = self.response.json()
 
-        elif self.request.status_code == 204:  # Status if DELETE request went well
-            self.response = 'No Content'  # can't do .json() on a 204 response
+        elif self.response.status_code == 204:  # Status if DELETE request went well
+            self.response_data = 'No Content'  # can't do .json() on a 204 response
 
         else:  # else we raise an error
-            raise ATLASAPIClientError(f"Oops, status code is {self.request.status_code}")
+            raise ATLASAPIClientError(f"Oops, status code is {self.response.status_code}")
 
-        if self.response is None:  # If the response has not be changed -> error
+        if self.response_data is None:  # If the response has not be changed -> error
             raise ATLASAPIClientError("Bad response from the objectlist API")
             # exit(1)                                                    # Keep this here (from Ken) in case he ever needs
             # an error code to be returned to the server
@@ -207,12 +210,13 @@ class RequestVRAScores(APIClient):
         self.payload = payload
         
         # TODO: If get_response is True, we're making two identical requests??
-        self.request = requests.post(self.url, self.payload, headers=self.headers)
+        # self.request = requests.post(self.url, self.payload, headers=self.headers)
         if get_response and len(payload)==0:
             raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
 
         elif get_response:
             self.get_response()
+            
     # TODO: Should have a method to return the response as a dataframe
 
 
@@ -240,7 +244,7 @@ class RequestVRAToDoList(APIClient):
         super().__init__(api_config_file)
         self.url = self.apiURL + 'vratodolist/'
         self.payload = payload
-        self.request = requests.post(self.url, self.payload, headers=self.headers)
+        # self.request = requests.post(self.url, self.payload, headers=self.headers)
         if get_response and len(payload)==0:
             raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
 
@@ -276,7 +280,7 @@ class RequestCustomListsTable(APIClient):
         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
         self.url = self.apiURL + 'objectgroupslist/'
         self.payload = payload
-        self.request = requests.post(self.url, self.payload, headers=self.headers)
+        # self.request = requests.post(self.url, self.payload, headers=self.headers)
         if get_response and len(payload)==0:
             raise ATLASAPIClientError("If you want to get the response on instanciation you must specify a payload")
 
@@ -331,11 +335,11 @@ class GetATLASIDsFromWebServerList(APIClient):
 
     @cached_property
     def atlas_id_list_str(self):
-        return [str(x['id']) for x in self.response]
+        return [str(x['id']) for x in self.response_data]
 
     @cached_property
     def atlas_id_list_int(self):
-        return [int(x['id']) for x in self.response]
+        return [int(x['id']) for x in self.response_data]
             
 
 class RequestSingleSourceData(APIClient):
@@ -385,10 +389,10 @@ class RequestSingleSourceData(APIClient):
         None
         """
         assert output_dir is not None, "You need to provide an output directory"
-        assert self.response is not None, "You need to run get_response() before saving"
+        assert self.response_data is not None, "You need to run get_response() before saving"
 
-        with open(f"{output_dir}{str(self.response[0]['object']['id'])}.json", "w") as outfile:
-            json.dump(self.response[0], outfile)
+        with open(f"{output_dir}{str(self.response_data[0]['object']['id'])}.json", "w") as outfile:
+            json.dump(self.response_data[0], outfile)
 
 
 class RequestMultipleSourceData(APIClient):
@@ -425,8 +429,8 @@ class RequestMultipleSourceData(APIClient):
         self.url=  "objects/"
         self.url = self.apiURL + self.url
 
-        # INITIALIZE RESPONSE
-        self.response = []
+        # INITIALIZE RESPONSE AS A LIST
+        self.response_data = []
 
     def chunk_get_response_quiet(self):
         """Chunks the request in groups of 100 so don't get timed out by the server.
@@ -451,7 +455,7 @@ class RequestMultipleSourceData(APIClient):
                            }
 
             _response = self.get_response(inplace=False)
-            self.response.extend(_response)
+            self.response_data.extend(_response)
 
     def chunk_get_response(self):
         """Chunks the request in groups of 100 so don't get timed out by the server.
@@ -472,7 +476,7 @@ class RequestMultipleSourceData(APIClient):
                            }
 
             _response = self.get_response(inplace=False)
-            self.response.extend(_response)
+            self.response_data.extend(_response)
 
     def save_response_to_json(self, output_dir=None):
         """Saves the response to INDIVIDUAL text files with the name [ATLAS\_ID].json.
@@ -661,7 +665,7 @@ class WriteToCustomList(APIClient):
                            }
 
             _response = self.get_response(inplace=False)
-            self.response.extend(_response)
+            self.response_data.extend(_response)
 
 
 class RemoveFromCustomList(APIClient):
@@ -712,7 +716,7 @@ class RemoveFromCustomList(APIClient):
                            }
 
             _response = self.get_response(inplace=False)
-            self.response.extend(_response)
+            self.response_data.extend(_response)
 
 class WriteObjectDetectionListNumber(APIClient):
     def __init__(self,

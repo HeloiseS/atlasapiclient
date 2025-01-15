@@ -71,7 +71,7 @@ class TestWriteToVRARank():
                                             )
         writeto_rank.get_response()
 
-        assert  writeto_rank.request.status_code == 201, "Data wasn't written properly"
+        assert  writeto_rank.response.status_code == 201, "Data wasn't written properly"
 
 
 @pytest.mark.integration
@@ -84,9 +84,9 @@ class TestWriteRemoveCustomList():
         writeto_vra.get_response()
         # check that the string in the "info" key of the response dictionary is "Row created."
         try:
-            assert writeto_vra.response['info'] == 'Row created.', "Row wasn't created"
+            assert writeto_vra.response_data['info'] == 'Row created.', "Row wasn't created"
         except AssertionError:
-            assert writeto_vra.response['info'] == 'Duplicate row. Cannot add row.', "Row wasn't created"
+            assert writeto_vra.response_data['info'] == 'Duplicate row. Cannot add row.', "Row wasn't created"
 
     def test_remove_from_custom_list(self):
         removefrom_vra = atlasapi.RemoveFromCustomList(api_config_file = API_CONFIG_FILE,
@@ -114,5 +114,5 @@ class TestWriteRemoveCustomList():
                                                  )
         writeto_vra.get_response()
         # check that the string in the "info" key of the response dictionary is "Row created."
-        assert writeto_vra.response['info'] == 'Object group ID does not exist.', ("We are not catching the bad list "
+        assert writeto_vra.response_data['info'] == 'Object group ID does not exist.', ("We are not catching the bad list "
                                                                                    "number server side")
