@@ -288,7 +288,7 @@ class RequestCustomListsTable(APIClient):
             self.get_response()
 
 
-class GetATLASIDsFromWebServerList(APIClient):
+class RequestATLASIDsFromWebServerList(APIClient):
     # TODO: add the tests for this
     def __init__(self,
                  list_name: str,
