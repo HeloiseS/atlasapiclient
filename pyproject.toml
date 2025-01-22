@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
                                                                                                                              
 [project]                                                                                                                    
 name = "atlasapiclient"                                                                                                             
-version = "v0.4.1"
+version = "v1.0.0"
 authors = [                                                                                                                  
     {name = "Heloise Stevance", email = "hfstevance@gmail.com"},
     {name = "Jack Leland", email= "jack.leland@dtc.ox.ac.uk"},
