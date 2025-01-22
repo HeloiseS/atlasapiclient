@@ -122,11 +122,11 @@ class TestRequestMultipleSourceData():
                                                           array_ids=self.array_ids,
                                                           )
         request_data.chunk_get_response_quiet()
-        assert  request_data.request.status_code == 200, "Data wasn't read properly"
+        assert  request_data.response.status_code == 200, "Data wasn't read properly"
 
     def test_chunk_get_response(self):
         request_data = atlasapi.client.RequestMultipleSourceData(api_config_file=API_CONFIG_FILE,
                                                           array_ids=self.array_ids,
                                                           )
         request_data.chunk_get_response()
-        assert  request_data.request.status_code == 200, "Data wasn't read properly"
+        assert  request_data.response.status_code == 200, "Data wasn't read properly"

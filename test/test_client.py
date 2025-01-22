@@ -8,7 +8,7 @@ import numpy as np
 
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
-    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, GetATLASIDsFromWebServerList
+    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, RequestATLASIDsFromWebServerList
 )
 from atlasapiclient.exceptions import ATLASAPIClientError
 from atlasapiclient.utils import config_path
@@ -41,8 +41,8 @@ class TestAPIClient():
         client = APIClient()
         # This will fail if the config file api_config_MINE.yaml is not present
         assert isinstance(client, APIClient)
-        assert hasattr(client, 'request')
         assert hasattr(client, 'response')
+        assert hasattr(client, 'response_data')
         assert hasattr(client, 'url')
         assert hasattr(client, 'payload')
         assert hasattr(client, 'headers')   
@@ -60,24 +60,31 @@ class TestAPIClient():
             APIClient('config-file.json')
         
     def test_contructor_config_file_with_malformed_file(self):
-        # NOTE: This test will fail because the constructor raises a random 
-        # ScannerError, we should probably use something a bit more useful?
-        with pytest.raises(ScannerError):
+        with pytest.raises(ATLASAPIClientError):
             APIClient('test/test_client.py')
             
     def test_constructor_config_file_with_valid_file(self, config_file):
         # Use the config file we created in the fixture, i.e. the template
         client = APIClient(config_file)
         assert isinstance(client, APIClient)
-        assert hasattr(client, 'request')
-        assert hasattr(client, 'response')
-        assert hasattr(client, 'url')
-        assert hasattr(client, 'payload')
-        assert hasattr(client, 'headers')   
-        assert hasattr(client, 'apiURL')
         
+        # Check the uninstantiated attributes
+        assert hasattr(client, 'response')
+        assert client.response is None
+        assert hasattr(client, 'response_data')
+        assert client.response_data is None
+        assert hasattr(client, 'url')
+        assert client.url == None
+        assert hasattr(client, 'payload')
+        assert client.payload == None
+        
+        # Check the attributes that are set by the config file
+        assert hasattr(client, 'headers')   
         assert 'Authorization' in client.headers
         assert client.headers['Authorization'] == 'Token YOURTOKEN'
+        
+        assert hasattr(client, 'apiURL')
+        assert client.apiURL == "https/<server>/api/"
 
     def test_get_response_200(self, monkeypatch, client):
         # Replace the requests.post function with a lambda that returns a MockResponse
@@ -85,14 +92,14 @@ class TestAPIClient():
         
         response = client.get_response(inplace=False)
         # Check that the request is a MockResponse with a status code of 200
-        assert isinstance(client.request, MockResponse)
-        assert client.request.status_code == 200
-        assert isinstance(client.request.json(), dict)
-        assert client.request.json()['key'] == 'value'
+        assert isinstance(client.response, MockResponse)
+        assert client.response.status_code == 200
+        assert isinstance(client.response.json(), dict)
+        assert client.response.json()['key'] == 'value'
         
         # Check that the response is a dictionary
         assert isinstance(response, dict)
-        assert response == client.request.json()
+        assert response == client.response.json()
         
     def test_get_response_200_inplace(self, monkeypatch, client):
         # Replace the requests.post function with a lambda that returns a MockResponse
@@ -100,14 +107,14 @@ class TestAPIClient():
         
         response = client.get_response()
         # Check that the request is a MockResponse with a status code of 200
-        assert isinstance(client.request, MockResponse)
-        assert client.request.status_code == 200
-        assert isinstance(client.request.json(), dict)
-        assert client.request.json()['key'] == 'value'
+        assert isinstance(client.response, MockResponse)
+        assert client.response.status_code == 200
+        assert isinstance(client.response.json(), dict)
+        assert client.response.json()['key'] == 'value'
         
         # Check that the response is a dictionary
         assert response is None
-        assert client.response == client.request.json()
+        assert client.response_data == client.response.json()
     
     def test_get_response_400(self, monkeypatch, client):
         # Replace the requests.post function with a lambda that returns a MockResponse
@@ -124,7 +131,7 @@ class TestConeSearch:
         assert client.payload == payload
 
         client.get_response()
-        assert client.response == {'key': 'value'}
+        assert client.response_data == {'key': 'value'}
 
 
 class TestRequestVRAScores:
@@ -135,12 +142,12 @@ class TestRequestVRAScores:
         assert client.payload == payload
         
         client.get_response()
-        assert client.response == {'key': 'value'}
+        assert client.response_data == {'key': 'value'}
 
     def test_get_response(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
         client = RequestVRAScores(api_config_file=config_file, payload={'datethreshold': '2024-01-01'}, get_response=True)
-        assert client.response == {'key': 'value'}
+        assert client.response_data == {'key': 'value'}
 
 
 class TestRequestVRAToDoList:
@@ -152,15 +159,15 @@ class TestRequestVRAToDoList:
         client = RequestVRAToDoList(api_config_file=config_file)
                 
         client.get_response()
-        assert client.request.status_code == 200
-        assert client.response == {'key': 'value'}
+        assert client.response.status_code == 200
+        assert client.response_data == {'key': 'value'}
 
     def test_get_response(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
         payload = {'datethreshold': '2024-01-01'}
 
         client = RequestVRAToDoList(api_config_file=config_file, get_response=True, payload=payload)
-        assert client.response == {'key': 'value'}
+        assert client.response_data == {'key': 'value'}
 
 
 class TestRequestCustomListsTable:
@@ -170,8 +177,8 @@ class TestRequestCustomListsTable:
         client = RequestCustomListsTable(api_config_file=config_file, payload=payload)
         
         client.get_response()
-        assert client.request.status_code == 200
-        assert client.response == {'key': 'value'}
+        assert client.response.status_code == 200
+        assert client.response_data == {'key': 'value'}
 
     def test_get_response_objectids(self, monkeypatch, config_file):
         payload = {'objectid': '1132507360113744500,1151301851092728500'}
@@ -179,7 +186,7 @@ class TestRequestCustomListsTable:
         client = RequestCustomListsTable(
             api_config_file=config_file, get_response=True, payload=payload
         )
-        assert client.response == {'key': 'value'}
+        assert client.response_data == {'key': 'value'}
         
     def test_get_response_objectgroupid(self, monkeypatch, config_file):
         payload = {'objectgroupid': 73}
@@ -187,7 +194,7 @@ class TestRequestCustomListsTable:
         client = RequestCustomListsTable(
             api_config_file=config_file, get_response=True, payload=payload
         )
-        assert client.response == {'key': 'value'}
+        assert client.response_data == {'key': 'value'}
 
 
 class TestRequestSingleSourceData:
@@ -200,8 +207,8 @@ class TestRequestSingleSourceData:
                                          atlas_id=atlas_id)
         
         client.get_response()
-        assert client.request.status_code == 200
-        assert client.response == {'key': 'value'}
+        assert client.response.status_code == 200
+        assert client.response_data == {'key': 'value'}
 
     def test_get_response(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
@@ -210,7 +217,7 @@ class TestRequestSingleSourceData:
         atlas_id = '1234567890123456789'
         client = RequestSingleSourceData(api_config_file=config_file, 
                                          atlas_id=atlas_id, get_response=True)
-        assert client.response == {'key': 'value'}
+        assert client.response_data == {'key': 'value'}
         
     def test_short_id(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
@@ -236,7 +243,7 @@ class TestRequestMultipleSourceData:
         client = RequestMultipleSourceData(api_config_file=config_file, array_ids=atlas_ids)
         
         client.chunk_get_response()
-        assert  client.request.status_code == 200
+        assert  client.response.status_code == 200
         
     def test_constructor_quiet(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
@@ -244,7 +251,7 @@ class TestRequestMultipleSourceData:
         client = RequestMultipleSourceData(api_config_file=config_file, array_ids=atlas_ids)
         
         client.chunk_get_response_quiet()
-        assert  client.request.status_code == 200
+        assert  client.response.status_code == 200
 
     def test_nonarray_ids(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
@@ -265,9 +272,9 @@ class TestRequestMultipleSourceData:
     # save_response_to_json method 
 
 
-class TestGetATLASIDsFromWebServerList:
+class TestRequestATLASIDsFromWebServerList:
     def test_constructor(self, config_file):
-        #GetATLASIDsFromWebServerList(api_config_file=config_file,
+        #RequestATLASIDsFromWebServerList(api_config_file=config_file,
         #                            list_name='eyeball',
         #                           get_response=True
         #                          )
