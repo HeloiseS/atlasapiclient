@@ -318,13 +318,13 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.ConeSearch"><code class="docutils literal notranslate"><span class="pre">ConeSearch</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.GetATLASIDsFromWebServerList"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_int"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList.atlas_id_list_int</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_str"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList.atlas_id_list_str</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RemoveFromCustomList"><code class="docutils literal notranslate"><span class="pre">RemoveFromCustomList</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RemoveFromCustomList.chunk_get_response_quiet"><code class="docutils literal notranslate"><span class="pre">RemoveFromCustomList.chunk_get_response_quiet()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList"><code class="docutils literal notranslate"><span class="pre">RequestATLASIDsFromWebServerList</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList.atlas_id_list_int"><code class="docutils literal notranslate"><span class="pre">RequestATLASIDsFromWebServerList.atlas_id_list_int</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList.atlas_id_list_str"><code class="docutils literal notranslate"><span class="pre">RequestATLASIDsFromWebServerList.atlas_id_list_str</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RequestCustomListsTable"><code class="docutils literal notranslate"><span class="pre">RequestCustomListsTable</span></code></a></li>
@@ -446,22 +446,6 @@ an integer</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="atlasapiclient.client.GetATLASIDsFromWebServerList">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atlasapiclient.client.</span></span><span class="sig-name descname"><span class="pre">GetATLASIDsFromWebServerList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_config_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atlasapiclient.client.GetATLASIDsFromWebServerList" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#atlasapiclient.client.APIClient" title="atlasapiclient.client.APIClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIClient</span></code></a></p>
-<dl class="py property">
-<dt class="sig sig-object py" id="atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_int">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">atlas_id_list_int</span></span><a class="headerlink" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_int" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_str">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">atlas_id_list_str</span></span><a class="headerlink" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_str" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="atlasapiclient.client.RemoveFromCustomList">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atlasapiclient.client.</span></span><span class="sig-name descname"><span class="pre">RemoveFromCustomList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_config_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atlasapiclient.client.RemoveFromCustomList" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#atlasapiclient.client.APIClient" title="atlasapiclient.client.APIClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIClient</span></code></a></p>
@@ -470,6 +454,22 @@ an integer</p>
 <span class="sig-name descname"><span class="pre">chunk_get_response_quiet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atlasapiclient.client.RemoveFromCustomList.chunk_get_response_quiet" title="Link to this definition">#</a></dt>
 <dd><p>Chunks the request in groups of 100 so don’t get timed out by the server. No progress bar.</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atlasapiclient.client.RequestATLASIDsFromWebServerList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atlasapiclient.client.</span></span><span class="sig-name descname"><span class="pre">RequestATLASIDsFromWebServerList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_config_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atlasapiclient.client.APIClient" title="atlasapiclient.client.APIClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">APIClient</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="atlasapiclient.client.RequestATLASIDsFromWebServerList.atlas_id_list_int">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">atlas_id_list_int</span></span><a class="headerlink" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList.atlas_id_list_int" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="atlasapiclient.client.RequestATLASIDsFromWebServerList.atlas_id_list_str">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">atlas_id_list_str</span></span><a class="headerlink" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList.atlas_id_list_str" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -672,13 +672,13 @@ One for EACH object.</p>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.ConeSearch"><code class="docutils literal notranslate"><span class="pre">ConeSearch</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.GetATLASIDsFromWebServerList"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_int"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList.atlas_id_list_int</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.GetATLASIDsFromWebServerList.atlas_id_list_str"><code class="docutils literal notranslate"><span class="pre">GetATLASIDsFromWebServerList.atlas_id_list_str</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RemoveFromCustomList"><code class="docutils literal notranslate"><span class="pre">RemoveFromCustomList</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RemoveFromCustomList.chunk_get_response_quiet"><code class="docutils literal notranslate"><span class="pre">RemoveFromCustomList.chunk_get_response_quiet()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList"><code class="docutils literal notranslate"><span class="pre">RequestATLASIDsFromWebServerList</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList.atlas_id_list_int"><code class="docutils literal notranslate"><span class="pre">RequestATLASIDsFromWebServerList.atlas_id_list_int</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RequestATLASIDsFromWebServerList.atlas_id_list_str"><code class="docutils literal notranslate"><span class="pre">RequestATLASIDsFromWebServerList.atlas_id_list_str</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atlasapiclient.client.RequestCustomListsTable"><code class="docutils literal notranslate"><span class="pre">RequestCustomListsTable</span></code></a></li>
