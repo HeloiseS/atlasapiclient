@@ -27,7 +27,7 @@ from tqdm import tqdm
 import pandas as pd
 
 from atlasapiclient.exceptions import ATLASAPIClientError
-from atlasapiclient.utils import dict_list_id, API_CONFIG_FILE
+from atlasapiclient.utils import dict_list_id, API_CONFIG_FILE, get_url
 
 
 class APIClient(ABC):
@@ -87,7 +87,7 @@ class APIClient(ABC):
             raise ATLASAPIClientError(f"Error parsing YAML file: {e}")
 
         self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
-        self.apiURL = config['base_url']  # Set the base of the url (the same for all requests)
+        self.apiURL = get_url(config['base_url'])  # Set the base of the url (the same for all requests)
         # -> directs to the ATLAS transient web server
     
     def parse_atlas_id(self, atlas_id: str) -> int:

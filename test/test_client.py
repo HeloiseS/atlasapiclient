@@ -84,7 +84,7 @@ class TestAPIClient():
         assert client.headers['Authorization'] == 'Token YOURTOKEN'
         
         assert hasattr(client, 'apiURL')
-        assert client.apiURL == "https/<server>/api/"
+        assert client.apiURL == "https://<server>/api/"
 
     def test_get_response_200(self, monkeypatch, client):
         # Replace the requests.post function with a lambda that returns a MockResponse

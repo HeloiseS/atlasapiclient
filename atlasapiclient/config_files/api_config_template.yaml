@@ -1,2 +1,2 @@
 token: "YOURTOKEN"
-base_url: "https/<server>/api/"
+base_url: "https://<server>/api/"
