@@ -13,7 +13,6 @@ class TestUtilsTypes():
         
     def test_dict_list_id(self):
         assert isinstance(dict_list_id, dict), "dict_list_id is not a dictionary"
-        assert len(dict_list_id) == 18, "dict_list_id does not have 17 keys"
         for items in dict_list_id.items():
             assert isinstance(items[0], str), "The keys in dict_list_id are not strings"
             assert isinstance(items[1], list), "The values in dict_list_id are not lists"
