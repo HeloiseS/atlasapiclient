@@ -57,7 +57,7 @@ class TestAPIClient():
             APIClient('test')
     
     def test_constructor_config_file_with_missing_file(self):
-        with pytest.raises(AssertionError):
+        with pytest.raises(ATLASAPIClientConfigError):
             APIClient('config-file.json')
         
     def test_contructor_config_file_with_malformed_file(self):
