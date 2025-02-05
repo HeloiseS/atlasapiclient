@@ -6,8 +6,11 @@ from .exceptions import ATLASAPIClientConfigError
 
 class ATLASConfigFile:
     def __init__(self, file_path: str):
-        assert os.path.exists(file_path), f"{file_path} file does not exist"  # Check file exits
+        # Check that the file exists
+        if not os.path.exists(file_path):
+            ATLASAPIClientConfigError(f"{file_path} file does not exist")
         
+        # Set the file path and read the contents
         self.file_path = file_path
         self.contents = self._validate(self._read())
         
@@ -23,6 +26,8 @@ class ATLASConfigFile:
                 contents = yaml.safe_load(my_yaml_file)
         except yaml.YAMLError as e:
             raise ATLASAPIClientConfigError(f"Error parsing YAML file: {e}")
+        except FileNotFoundError as e:
+            raise ATLASAPIClientConfigError(f"Could not find file: {e}")
         
         return self._validate(contents)
     

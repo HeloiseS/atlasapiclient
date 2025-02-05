@@ -8,9 +8,10 @@ import numpy as np
 
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
-    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, RequestATLASIDsFromWebServerList
+    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, 
+    RequestATLASIDsFromWebServerList
 )
-from atlasapiclient.exceptions import ATLASAPIClientError
+from atlasapiclient.exceptions import ATLASAPIClientError, ATLASAPIClientConfigError
 from atlasapiclient.utils import config_path
 import atlasapiclient.client
 import atlasapiclient.utils
@@ -33,7 +34,7 @@ class TestAPIClient():
         # not present
         fake_config_file = os.path.join(config_path, 'fake_config.yaml')
         monkeypatch.setattr(atlasapiclient.client, "API_CONFIG_FILE", fake_config_file)
-        with pytest.raises(AssertionError):
+        with pytest.raises(ATLASAPIClientConfigError):
             APIClient()
         
         # Then make it a file we know exists.
@@ -81,7 +82,7 @@ class TestAPIClient():
         # Check the attributes that are set by the config file
         assert hasattr(client, 'headers')   
         assert 'Authorization' in client.headers
-        assert client.headers['Authorization'] == 'Token YOURTOKEN'
+        assert client.headers['Authorization'] == 'Token thisisntarealtokenpleaseputyourtokenhere'
         
         assert hasattr(client, 'apiURL')
         assert client.apiURL == "https://<server>/api/"
