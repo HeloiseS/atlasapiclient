@@ -14,11 +14,10 @@ Classes
 - RequestSingleSourceData: To download the data for a single source.
 - RequestMultipleSourceData: To download the data for multiple sources.
 """
-import os
-import yaml
 import json
 from functools import cached_property
 from abc import ABC
+import logging
 
 import requests
 import numpy as np
@@ -27,15 +26,24 @@ from tqdm import tqdm
 import pandas as pd
 
 from atlasapiclient.exceptions import ATLASAPIClientError
-from atlasapiclient.utils import dict_list_id, API_CONFIG_FILE, get_url
+from atlasapiclient.utils import (
+    dict_list_id, 
+    API_CONFIG_FILE, 
+    get_url,  
+)
+from atlasapiclient.config import ATLASConfigFile
+from atlasapiclient.authentication import Token
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 class APIClient(ABC):
     # this dictionary reflects the lists on the ATLAS transient server (url above)
     dict_list_id = dict_list_id
 
     def __init__(self,
-                 api_config_file: str = None
+                 api_config_file: str = None,
+                 auto_refresh_fl: bool = True,
                 ):
         """Abstract Class - Parent class for the ATLAS API pipelines.
         
@@ -51,12 +59,11 @@ class APIClient(ABC):
 
         Attributes
         -----------
-        request: requests.post
+        response: requests.post
             The request.post object that will contain the response and the 
             status code.
-            # TODO: maybe doesn't have to be a public attribute?
 
-        response: list
+        response_data: list
             The response we get from the request.post method (a list of json 
             responses).
 
@@ -68,27 +75,32 @@ class APIClient(ABC):
         payload: dict
             The payload we send to the server. This is provided by users when 
             they instanciate the children classes.
+            
+        token: Token
+            The token object that represents an ATLAS API token.
         """
-        # INITIALISE MAIN ATTRIBUTES
-        if api_config_file is None:
-            api_config_file = API_CONFIG_FILE
 
         self.response = None
         self.response_data = None
         self.url = None
         self.payload = None
+        
+        # INITIALISE MAIN ATTRIBUTES
+        if api_config_file is None:
+            api_config_file = API_CONFIG_FILE
 
-        assert os.path.exists(api_config_file), f"{api_config_file} file does not exist"  # Check file exits
+        self.config = ATLASConfigFile(api_config_file)
+        
+        self.token = Token(self.config['token'])
+        self.auto_refresh_fl = auto_refresh_fl
 
-        try:
-            with open(api_config_file, 'r') as my_yaml_file:  # Open the file
-                config = yaml.safe_load(my_yaml_file)
-        except yaml.YAMLError as e:
-            raise ATLASAPIClientError(f"Error parsing YAML file: {e}")
-
-        self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
-        self.apiURL = get_url(config['base_url'])  # Set the base of the url (the same for all requests)
+        # self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
+        self.apiURL = get_url(self.config['base_url'])  # Set the base of the url (the same for all requests)
         # -> directs to the ATLAS transient web server
+
+    @property
+    def headers(self):
+        return {'Authorization': self.token.as_auth_header()}
     
     def parse_atlas_id(self, atlas_id: str) -> int:
         """
@@ -108,14 +120,21 @@ class APIClient(ABC):
         return atlas_id
 
     def get_response(self,
-                     inplace: bool = True
+                     inplace: bool = True, 
+                     is_retry: bool = False,
                      ):
         """Get the response from the server.
 
         Parameters
         ------------
         inplace: bool
-            If True, sets self.response to the response from the server. If False, it ALSO returns the response.
+            If True, sets self.response to the response from the server. If 
+            False, it ALSO returns the response.
+            
+        is_retry: bool
+            If True, this is a retry of a failed request. If False, it's the
+            first attempt. This is used to determine whether to try refreshing
+            the token if the request fails due to an expired token.
         """
 
         # We must set the request just before we get the response in case the payload was defined after instanciation
@@ -136,15 +155,44 @@ class APIClient(ABC):
         elif self.response.status_code == 204:  # Status if DELETE request went well
             self.response_data = 'No Content'  # can't do .json() on a 204 response
 
+        # If the request is bad, we check the response and raise the apprpriate error
+        elif self.response.status_code == 401 and 'detail' in self.response.json():  # Status if the request is bad
+            response_detail = self.response.json()['detail']
+            if response_detail == "Token has expired.":
+                if not is_retry and self.auto_refresh_fl:
+                    # If it's a failed auth but just because the token has expired, 
+                    # refresh token and try again (but only if not already on 
+                    # second attempt)
+                    self.update_token()
+                    return self.get_response(inplace=inplace, is_retry=True)
+                else:
+                    raise ATLASAPIClientError("Token has expired. Please refresh your token.")
+            elif response_detail == "Authentication credentials were not provided.":
+                raise ATLASAPIClientError("Authentication credentials were not provided. Please check you have set your API token.")
+            elif response_detail == "Invalid token.":
+                raise ATLASAPIClientError("Invalid token. Please check your API token.")
         else:  # else we raise an error
             raise ATLASAPIClientError(f"Oops, status code is {self.response.status_code}")
 
-        if self.response_data is None:  # If the response has not be changed -> error
-            raise ATLASAPIClientError("Bad response from the objectlist API")
+        if self.response_data is None:  # If the response has not been changed -> error
+            print(self.response.json())
+            raise ATLASAPIClientError(f"Bad response from the objectlist API: {self.response}")
             # exit(1)                                                    # Keep this here (from Ken) in case he ever needs
-            # an error code to be returned to the server
-
-
+            # an error code to be returned to the server   
+            
+    def update_token(self):
+        """
+        """
+        # First refresh the token
+        self.token.refresh(self.apiURL)
+        
+        # Then write the new token to the config file
+        self.config['token'] = str(self.token)
+        self.config.write()
+        
+        
+        
+    
 ###################################################
 #                                          READ UTILITIES                                          #
 ###################################################
