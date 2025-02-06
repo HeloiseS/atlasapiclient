@@ -1,7 +1,7 @@
 # Write tests for utils in atlasapiclient.utils
 import pytest
 
-from atlasapiclient.utils import LIST_NAMES, API_CONFIG_FILE, dict_list_id, get_url
+from atlasapiclient.utils import LIST_NAMES, API_CONFIG_FILE, dict_list_id, validate_url
 from atlasapiclient.exceptions import ATLASAPIClientError
 
 class TestUtilsTypes():
@@ -22,73 +22,73 @@ class TestUtilsTypes():
             
 class TestGetUrl():
     def test_get_url_no_path_trailing_slash(self):
-        assert get_url("http://www.google.com") == "http://www.google.com/", "get_url did not add a trailing slash"
-        assert get_url("https://www.google.com") == "https://www.google.com/", "get_url did not add a trailing slash"
-        assert get_url("http://www.google.com/") == "http://www.google.com/", "get_url added an extra trailing slash"
-        assert get_url("https://www.google.com/") == "https://www.google.com/", "get_url added an extra trailing slash"
+        assert validate_url("http://www.google.com") == "http://www.google.com/", "get_url did not add a trailing slash"
+        assert validate_url("https://www.google.com") == "https://www.google.com/", "get_url did not add a trailing slash"
+        assert validate_url("http://www.google.com/") == "http://www.google.com/", "get_url added an extra trailing slash"
+        assert validate_url("https://www.google.com/") == "https://www.google.com/", "get_url added an extra trailing slash"
     
     def test_get_url_path_trailing_slash(self):
-        assert get_url("http://www.google.com/api") == "http://www.google.com/api/", "get_url did not add a trailing slash"
-        assert get_url("https://www.google.com/api") == "https://www.google.com/api/", "get_url did not add a trailing slash"
-        assert get_url("http://www.google.com/api/") == "http://www.google.com/api/", "get_url added an extra trailing slash"
-        assert get_url("https://www.google.com/api/") == "https://www.google.com/api/", "get_url added an extra trailing slash"
+        assert validate_url("http://www.google.com/api") == "http://www.google.com/api/", "get_url did not add a trailing slash"
+        assert validate_url("https://www.google.com/api") == "https://www.google.com/api/", "get_url did not add a trailing slash"
+        assert validate_url("http://www.google.com/api/") == "http://www.google.com/api/", "get_url added an extra trailing slash"
+        assert validate_url("https://www.google.com/api/") == "https://www.google.com/api/", "get_url added an extra trailing slash"
     
     def test_get_url_invalid_scheme(self):
         # Unsupported schemes
         with pytest.raises(ATLASAPIClientError):
-            get_url("ftp://www.google.com")
+            validate_url("ftp://www.google.com")
         with pytest.raises(ATLASAPIClientError):
-            get_url("htp://www.google.com")
+            validate_url("htp://www.google.com")
             
     def test_get_url_typo_scheme(self):
         with pytest.raises(ATLASAPIClientError):
-            get_url("http:/www.google.com")
+            validate_url("http:/www.google.com")
         with pytest.raises(ATLASAPIClientError):
-            get_url("http//www.google.com")
+            validate_url("http//www.google.com")
             
     def test_get_url_typo_scheme_trailing_slash(self):
         with pytest.raises(ATLASAPIClientError):
-            get_url("http:/www.google.com/")
+            validate_url("http:/www.google.com/")
         with pytest.raises(ATLASAPIClientError):
-            get_url("http//www.google.com/")
+            validate_url("http//www.google.com/")
 
     def test_get_url(self):
-        get_url("http://www.google.com") # Should not raise an error
-        get_url("https://www.google.com") # Should not raise an error
+        validate_url("http://www.google.com") # Should not raise an error
+        validate_url("https://www.google.com") # Should not raise an error
         
     def test_get_url_typo_scheme_path(self):
         with pytest.raises(ATLASAPIClientError):
-            get_url("http:/www.google.com/api")
+            validate_url("http:/www.google.com/api")
         with pytest.raises(ATLASAPIClientError):
-            get_url("http//www.google.com/api")
+            validate_url("http//www.google.com/api")
 
     def test_get_url_typo_scheme_path_trailing_slash(self):
         with pytest.raises(ATLASAPIClientError):
-            get_url("http:/www.google.com/api/")
+            validate_url("http:/www.google.com/api/")
         with pytest.raises(ATLASAPIClientError):
-            get_url("http//www.google.com/api/")
+            validate_url("http//www.google.com/api/")
     
     def test_get_url_invalid_netloc(self):
         with pytest.raises(ATLASAPIClientError):
-            get_url("http://")
+            validate_url("http://")
         with pytest.raises(ATLASAPIClientError):
-            get_url("https://")
+            validate_url("https://")
         with pytest.raises(ATLASAPIClientError):
-            get_url("http:///")
+            validate_url("http:///")
         with pytest.raises(ATLASAPIClientError):
-            get_url("https:///")
+            validate_url("https:///")
 
     def test_get_url_invalid_netloc_path(self):
         with pytest.raises(ATLASAPIClientError):
-            get_url("http:///api")
+            validate_url("http:///api")
         with pytest.raises(ATLASAPIClientError):
-            get_url("https:///api")
+            validate_url("https:///api")
         with pytest.raises(ATLASAPIClientError):
-            get_url("http:///api/")
+            validate_url("http:///api/")
         with pytest.raises(ATLASAPIClientError):
-            get_url("https:///api/")
+            validate_url("https:///api/")
     
     @pytest.mark.parametrize("url", [1, 1.0, True, False, [], {}, (), None])
     def test_get_url_invalid_type(self, url):
         with pytest.raises(ATLASAPIClientError):
-            get_url(url)
+            validate_url(url)

@@ -32,7 +32,7 @@ dict_list_id = {'garbage': [0, False],
                 }
 
             
-def get_url(config_val: str) -> str:
+def validate_url(config_val: str) -> str:
     """Ensure that the URL is valid, using urllib, and return it"""
     # Parse the URL into its components
     try:

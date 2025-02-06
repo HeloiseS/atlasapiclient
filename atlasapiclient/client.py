@@ -29,7 +29,7 @@ from atlasapiclient.exceptions import ATLASAPIClientError
 from atlasapiclient.utils import (
     dict_list_id, 
     API_CONFIG_FILE, 
-    get_url,  
+    validate_url,  
 )
 from atlasapiclient.config import ATLASConfigFile
 from atlasapiclient.authentication import Token
@@ -95,7 +95,7 @@ class APIClient(ABC):
         self.auto_refresh_fl = auto_refresh_fl
 
         # self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
-        self.apiURL = get_url(self.config['base_url'])  # Set the base of the url (the same for all requests)
+        self.apiURL = validate_url(self.config['base_url'])  # Set the base of the url (the same for all requests)
         # -> directs to the ATLAS transient web server
 
     @property

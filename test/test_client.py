@@ -15,12 +15,7 @@ from atlasapiclient.exceptions import ATLASAPIClientError, ATLASAPIClientConfigE
 from atlasapiclient.utils import config_path
 import atlasapiclient.client
 import atlasapiclient.utils
-
-
-@pytest.fixture()
-def config_file():
-    # Create a path to the api_config_template.yaml file in the config_files
-    return os.path.join(config_path, 'api_config_template.yaml')
+from .conftest import MockResponse
 
 
 class TestAPIClient():
@@ -283,10 +278,10 @@ class TestRequestATLASIDsFromWebServerList:
     # TODO: add test for list that doesn't exist (have the constructor through a useful error
 
 
-class MockResponse:
-    def __init__(self, status_code):
-        self.status_code = status_code
-        self.json = lambda: {'key': 'value'}
+# class MockResponse:
+#     def __init__(self, status_code):
+#         self.status_code = status_code
+#         self.json = lambda: {'key': 'value'}
     
-    def json(self):
-        return self.json
+#     def json(self):
+#         return self.json

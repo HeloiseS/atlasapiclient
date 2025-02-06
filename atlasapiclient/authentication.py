@@ -3,6 +3,7 @@ import getpass
 import requests
 
 from .exceptions import ATLASAPIClientAuthError
+from .utils import validate_url
 
 REFRESH_STATEMENT = """
 Your token has expired, now attempting to automatically refresh it.
@@ -62,13 +63,17 @@ class Token():
         return token
         
     def validate(self) -> str:
-       return self._validate(self.val)
+       self.val = self._validate(self.val)
    
     def refresh(self, base_url: str) -> str:
         """
         Refresh the token using the API endpoint 'auth-token/'. Requires getting
         the username and password from the user and vetting the output 
         """
+        # NOTE: Should we validate this url?
+        if not isinstance(base_url, str):
+            raise ATLASAPIClientAuthError("Base URL must be a string")
+        base_url = validate_url(base_url)
         auth_url = base_url + 'auth-token/'
         
         print(REFRESH_STATEMENT.format(url=auth_url)) 
