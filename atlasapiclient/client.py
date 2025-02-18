@@ -202,6 +202,7 @@ class ConeSearch(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ - Cone Search in ATLAS Transient Web Server
 
@@ -218,7 +219,7 @@ class ConeSearch(APIClient):
         ----------
         payload = {'ra': 150.0, 'dec': 34.0, 'radius': 1,  'requestType': 'nearest'}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         self.url = self.apiURL + 'cone/'
         self.payload = payload
@@ -236,6 +237,7 @@ class RequestVRAScores(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ -  tcs\_vra\_scores table
 
@@ -252,7 +254,7 @@ class RequestVRAScores(APIClient):
         --------
         payload = {'datethreshold': "2024-02-22"}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
         self.url = self.apiURL + 'vrascoreslist/'
         self.payload = payload
@@ -273,6 +275,7 @@ class RequestVRAToDoList(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ - tcs\_vra\_to\_do\_list table
 
@@ -289,7 +292,7 @@ class RequestVRAToDoList(APIClient):
         ----------
         payload = {'datethreshold': "2024-02-22"} # ADD A DATE THRESHOLD
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'vratodolist/'
         self.payload = payload
         # self.request = requests.post(self.url, self.payload, headers=self.headers)
@@ -307,6 +310,7 @@ class RequestCustomListsTable(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ - Check which custom lists objects are in or return all objects in a given custom list
 
@@ -324,7 +328,7 @@ class RequestCustomListsTable(APIClient):
         payload = {'objectid': '1132507360113744500,1151301851092728500'}
         paylod = {'objectgroupid': 73}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
         self.url = self.apiURL + 'objectgroupslist/'
         self.payload = payload
@@ -342,6 +346,7 @@ class RequestATLASIDsFromWebServerList(APIClient):
                  list_name: str,
                  get_response: bool = True,
                  api_config_file: str = None,
+                 **kwargs
                  ):
         """READ - Get all the ATLAS\_IDs from a given list on the ATLAS Transient Web Server
 
@@ -373,7 +378,7 @@ class RequestATLASIDsFromWebServerList(APIClient):
         atlas_id_list_int: list
             List of ATLAS IDs as integers
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.list_name = list_name
         self.url = self.apiURL + 'objectlist/'
         self.payload = {'objectlistid': self.dict_list_id[self.list_name][0],
@@ -396,6 +401,7 @@ class RequestSingleSourceData(APIClient):
                  mjdthreshold: float = None,
                  get_response: bool = True,
                  api_config_file: str = None,
+                 **kwargs
                  ):
         """READ - Get the data for a single source from the ATLAS Transient Web Server
 
@@ -411,7 +417,7 @@ class RequestSingleSourceData(APIClient):
            By default will use you api_config_MINE.yaml file.
         """
 
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         assert atlas_id is not None, "You need to provide an atlas_id"
 
         self.atlas_id = self.parse_atlas_id(atlas_id)
@@ -448,6 +454,7 @@ class RequestMultipleSourceData(APIClient):
                  array_ids: np.array = None,
                  mjdthreshold = None,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ - Request data for multiple sources. Contains a convenience
         method to chunk the request in groups of 100 so don't get timed out by the server.
@@ -461,7 +468,7 @@ class RequestMultipleSourceData(APIClient):
         api_config_file:
             By default will use you api_config_MINE.yaml file.
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         # ATLAS_ID ARRAY - CHECK VALIDITY AND ASSIGN
         assert array_ids is not None, "You need to provide an array of object IDs"          # Check not None
@@ -557,6 +564,7 @@ class WriteToVRAScores(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Write to the tcs\_vra\_scores table
 
@@ -581,7 +589,7 @@ class WriteToVRAScores(APIClient):
         api_config_file: str
             By default will use you api_config_MINE.yaml file.
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         self.url = self.apiURL + 'vrascores/'                               # THIS IS THE 'WRITE' URL for our Django API
 
@@ -599,6 +607,7 @@ class WriteToVRARank(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
 
         """WRITE - Write to the VRA Rank Table
@@ -615,7 +624,7 @@ class WriteToVRARank(APIClient):
         payload = {'objectid': '1132507360113744500'}
         payload = {'rank': 1.3}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         self.url = self.apiURL + 'vrarank/'
 
@@ -634,6 +643,7 @@ class WriteToToDo(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Write to the tcs\_vra\_todo table
 
@@ -650,7 +660,7 @@ class WriteToToDo(APIClient):
         ----------
         payload = {'objectid': '1132507360113744500'}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         self.url = self.apiURL + 'vratodo/'
 
@@ -670,6 +680,7 @@ class WriteToCustomList(APIClient):
                  list_name: str = None,
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Add an ATLAS\_ID to a custom list on the ATLAS Transient Web Server
 
@@ -684,7 +695,7 @@ class WriteToCustomList(APIClient):
         api_config_file: str
             By default will use you api_config_MINE.yaml file.
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'objectgroups/'
         self.array_ids = array_ids
         self.object_group_id = self.dict_list_id[list_name][0] # object group id is the number of the custom list
@@ -722,6 +733,7 @@ class RemoveFromCustomList(APIClient):
                  list_name: str = None,
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Remove  ATLAS\_IDs from a custom list
 
@@ -736,7 +748,7 @@ class RemoveFromCustomList(APIClient):
         api_config_file: str
             By default will use you api_config_MINE.yaml file.
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'objectgroupsdelete/'
         self.array_ids = array_ids
         self.object_group_id = self.dict_list_id[list_name][0] # object group id is the number of the custom list
@@ -771,6 +783,7 @@ class WriteObjectDetectionListNumber(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Modify which list an ATLAS\_ID is in.
 
@@ -790,7 +803,7 @@ class WriteObjectDetectionListNumber(APIClient):
                         'objectlist': list_number
                         }
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'objectdetectionlist/'
         self.payload = payload
 
@@ -806,6 +819,7 @@ class WriteObjectDetectionListNumber(APIClient):
 #                  api_config_file: str = None,
 #                  payload: dict = {},
 #                  get_response: bool = False
+#                  **kwargs,
 #                  ):
 #         """
 #
@@ -814,7 +828,7 @@ class WriteObjectDetectionListNumber(APIClient):
 #         payload = {'objectid': '1132507360113744500,1151301851092728500'}
 #         paylod = {'objectgroupid': 73}
 #         """
-#         super().__init__(api_config_file)
+#         super().__init__(api_config_file, **kwargs)
 #         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
 #         self.url = self.apiURL + 'objectlist/'
 #         self.payload = payload
