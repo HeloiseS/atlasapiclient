@@ -137,10 +137,8 @@ class APIClient(ABC):
             the token if the request fails due to an expired token.
         """
 
-        # We must set the request just before we get the response in case the payload was defined after instanciation
-        # TODO: This makes the request and stores the response immediately, but 
-        # storing it into a variable called request. The thing returned is a 
-        # response, and contains the data we want.
+        # We must set the request just before we get the response in case the 
+        # payload was defined after instantiation
         self.response = requests.post(self.url, self.payload, headers=self.headers)
 
         if self.response.status_code == 200:  # Status if READ request went well
@@ -163,14 +161,23 @@ class APIClient(ABC):
                     # If it's a failed auth but just because the token has expired, 
                     # refresh token and try again (but only if not already on 
                     # second attempt)
-                    self.update_token()
+                    self.refresh_token()
                     return self.get_response(inplace=inplace, is_retry=True)
                 else:
                     raise ATLASAPIClientError("Token has expired. Please refresh your token.")
             elif response_detail == "Authentication credentials were not provided.":
                 raise ATLASAPIClientError("Authentication credentials were not provided. Please check you have set your API token.")
             elif response_detail == "Invalid token.":
-                raise ATLASAPIClientError("Invalid token. Please check your API token.")
+                if not is_retry:
+                    # NOTE: This can occur if the token is invalid, but also if 
+                    # the token is valid but has already been refreshed 
+                    # somewhere else. In this latter case, we don't want to 
+                    # refresh the token again so we can instead try to just 
+                    # reread the token from the config file. 
+                    self.reinitialise_token()
+                    return self.get_response(inplace=inplace, is_retry=True)
+                else:
+                    raise ATLASAPIClientError("Invalid token. Please check or refresh your API token.")
         else:  # else we raise an error
             raise ATLASAPIClientError(f"Oops, status code is {self.response.status_code}")
 
@@ -179,11 +186,20 @@ class APIClient(ABC):
             raise ATLASAPIClientError(f"Bad response from the objectlist API: {self.response}")
             # exit(1)                                                    # Keep this here (from Ken) in case he ever needs
             # an error code to be returned to the server   
-            
-    def update_token(self):
+    
+    def reinitialise_token(self):
         """
+        Function to force the token to be updated if it's been changed in the 
+        config file. 
         """
-        # First refresh the token
+        self.config.read()
+        self.token = Token(self.config['token'])
+    
+    def refresh_token(self):
+        """
+        Convenience method to refresh the token and update the config file.
+        """        
+        # Then refresh the token
         self.token.refresh(self.apiURL)
         
         # Then write the new token to the config file
