@@ -82,13 +82,14 @@ class TestRequestCustomListsTable():
                                                                 payload={'objectid':'1103337110432157700'}
                                                                 )
         request_custom_lists.get_response()
-        assert request_custom_lists.request.status_code == 200, "Data wasn't read properly"
+        assert request_custom_lists.response.status_code == 200, "Data wasn't read properly"
+        
     def test_request_custom_list(self):
         request_custom_lists = atlasapi.client.RequestCustomListsTable(api_config_file=API_CONFIG_FILE,
                                                                 payload={'objectgroupid':'6'}
                                                                 )
         request_custom_lists.get_response()
-        assert request_custom_lists.request.status_code == 200, "Data wasn't read properly"
+        assert request_custom_lists.response.status_code == 200, "Data wasn't read properly"
 
 @pytest.mark.integration
 class TestRequestSingleSourceData():

@@ -1,2 +1,2 @@
-token: "YOURTOKEN"
-base_url: "https/<server>/api/"
+token: "thisisntarealtokenpleaseputyourtokenhere"
+base_url: "https://<server>/api/"
