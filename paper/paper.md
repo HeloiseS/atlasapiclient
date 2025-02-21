@@ -26,11 +26,10 @@ bibliography: paper.bib
 # Summary
 
 The Asteroid Terrestrial-impact Last Alert System (ATLAS) is an all-sky optical
-sky survey with a cadence of 24 to 48 hours `[@tonry:2018]`.
-The ATLAS Transient Server `[@smith:2020]` processes the alert stream to enable the discovery
+sky survey with a cadence of 24 to 48 hours `[@tonry2018]`.
+The ATLAS Transient Server `[@smith2020]` processes the alert stream to enable the discovery
 and follow-up of extra-galactic transients. 
-As part of routine operations, many other types of objects are detected, and 
-the data for all these data are available on the ATLAS transient server. 
+As part of routine operations, many other types of objects are detected, which are available on the ATLAS transient server. 
 Accessing these data is done through the ATLAS API. 
 Here we make available a python client to facilitate the use of tha ATLAS API
 and ensure that production codes that make calls to the server can remain 
@@ -46,7 +45,8 @@ The `atlasapiclient` was initially designed to be used in our transient
 stream processing pipeline, but it can now also be used to connect 
 other astronomy projects to the ATLAS data and its stream. 
 It is currently allowing the follow-up of ATLAS alerts by the Mookodi telescope
-in the South African Astronomical Observatory.
+in the South African Astronomical Observatory, which has allowed automated triggering
+and classification of transients within 100 Mpc (e.g. `[@class2025arc]`, `[@class2025cy]`), since early 2025.
 
 We expect the API to evolve over time which could break the production codes 
 that connect to the ATLAS servers. 
@@ -59,7 +59,7 @@ existing code.
 # Acknowledgements
 
 HFS is supported by the Schmidt Sciences foundation. 
-JL?
-KS?
+JL is supported by **[TBD]**.
+KS is supported by the Royal Society.
 
 # References
