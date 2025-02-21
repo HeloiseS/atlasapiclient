@@ -30,14 +30,10 @@ Note that the Forced Photometry is limited to 30 days prior to an alert and 150 
     If what you want is forced photometry given an RA and Dec check out the `Forced Photometry Server`_
 
 
-Data Rights
-------------
-The data is freely available, but access is ultimately limited by the capabilities of the server.
-There are plenty of resources to service standard requests but if your data requests
-start being a problem for our servers we might block your token temporarily and send you an email.
-If you're not sure that your request is reasonable, you can get in touch first.
-We'll need to approve your token anyway so if we don't know you we'll probably have a few questions.
-
+Data Access
+----------------
+You need to be approved by the team to access the data, primarily so
+we can manage the load on our servers.
 
 Citing this code
 -----------------

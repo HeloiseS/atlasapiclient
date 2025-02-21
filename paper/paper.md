@@ -8,16 +8,20 @@ authors:
   - name: Heloise F. Stevance
     orcid: 0000-0002-0504-4323
     equal-contrib: true
-    affiliation: "1" # (Multiple affiliations must be quoted)
-  - name: Jack Leland 
-    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
-    affiliation: 1
+    affiliation: "1,2" # (Multiple affiliations must be quoted)
   - name: Ken Smith 
     corresponding: true # (This is how to denote the corresponding author)
-    affiliation: 1
+    affiliation: "1,2"
+  - name: Jack Leland 
+    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
+    affiliation: 3
 affiliations:
  - name: Astrophysics sub-Department, Department of Physics, University of Oxford, Keble Road, Oxford, OX1 3RH, UK
    index: 1
+ - name: Astrophysics Research Center, Queen's University Belfast, Belfast, BT7 1NN, UK
+   index: 2
+ - name: Doctoral Training Center, University of Oxford, Keble Road, Oxford, OX1 3RH, UK
+   index: 3
 date: 17 December 2024
 bibliography: paper.bib
 
