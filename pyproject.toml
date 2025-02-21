@@ -3,30 +3,30 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"                                                                                      
                                                                                                                              
 [project]                                                                                                                    
-name = "atlasapiclient"                                                                                                             
-version = "v0.4.1"
-authors = [                                                                                                                  
+name = "atlasapiclient"
+version = "v1.0.0"
+authors = [
     {name = "Heloise Stevance", email = "hfstevance@gmail.com"},
     {name = "Jack Leland", email= "jack.leland@dtc.ox.ac.uk"},
     {name = "Ken Smith", email= "ken.w.smith@gmail.com"},
-]                                                                                                                            
-description = "API Client utility package for the ATLAS Transient Server"                                                                                        
-readme = "README.md"                                                                                                        
-requires-python = ">=3.8"                                                                                                    
-keywords = ["astronomy", "ATLAS API"]                                                                                        
-license = {text = "BSD-3-Clause"}                                                                                            
-dependencies = [                                                                                                             
-    "numpy", 
-    "pandas",                                                                                                            
-    "requests",                                                                                                              
-    "tqdm",                                                                                                                  
-    "pyyaml",                                                                                                                  
-    'importlib-metadata; python_version<"3.9"',                                                                              
-]                                                                                                                            
-# dynamic = ["version"]                                                                                                        
-                                                                                                                             
-# See some of the stuff I have in the hoki .toml file                                                                        
-                                                                                                                             
+]
+description = "API Client utility package for the ATLAS Transient Server"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["astronomy", "ATLAS API"]
+license = {text = "BSD-3-Clause"}
+dependencies = [
+    "numpy",
+    "pandas",
+    "requests",
+    "tqdm",
+    "pyyaml",
+    'importlib-metadata; python_version<"3.9"',
+]
+# dynamic = ["version"]
+
+# See some of the stuff I have in the hoki .toml file
+
 [tool.pytest.ini_options]
 markers = [
     "slow: marks tests as slow",
@@ -35,12 +35,12 @@ markers = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest"]  
-docs = ["sphinx==7.4.7", "sphinx_rtd_theme==3.0.2"]                                                                                           
-                                                                             
-                                                                                                                             
-#[project.scripts]                                                                                                           
-#my-script = "my_package.module:function"                                                                                    
-                                                                                                                             
-# ... other project metadata fields as specified in:                                                                         
-#     https://packaging.python.org/en/latest/specifications/declaring-project-metadata/         
+test = ["pytest"]
+docs = ["sphinx==7.4.7", "sphinx_rtd_theme==3.0.2"]
+
+
+#[project.scripts]
+#my-script = "my_package.module:function"
+
+# ... other project metadata fields as specified in:
+#     https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
