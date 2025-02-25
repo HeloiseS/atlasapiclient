@@ -10,9 +10,11 @@ authors:
     equal-contrib: true
     affiliation: "1,2" # (Multiple affiliations must be quoted)
   - name: Ken Smith 
+    orcid: 0000-0001-9535-3199
     corresponding: true # (This is how to denote the corresponding author)
     affiliation: "1,2"
   - name: Jack Leland 
+    orcid: 0000-0001-9262-3587
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 3
 affiliations:
@@ -20,7 +22,7 @@ affiliations:
    index: 1
  - name: Astrophysics Research Center, Queen's University Belfast, Belfast, BT7 1NN, UK
    index: 2
- - name: Doctoral Training Center, University of Oxford, Keble Road, Oxford, OX1 3RH, UK
+ - name: Oxford Research Software Engineering, Doctoral Training Centre, University of Oxford, Keble Road, Oxford, OX1 3RH, UK
    index: 3
 date: 17 December 2024
 bibliography: paper.bib
@@ -62,8 +64,7 @@ existing code.
 
 # Acknowledgements
 
-HFS is supported by the Schmidt Sciences foundation. 
-JL is supported by **[TBD]**.
-KS is supported by the Royal Society.
+HFS and JL are supported by the Schmidt Sciences foundation.
+KS is supported by **[TBD]**.
 
 # References
