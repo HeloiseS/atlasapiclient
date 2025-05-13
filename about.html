@@ -16,28 +16,25 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=f9c1cefe"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -51,7 +48,6 @@
     <link rel="prev" title="ATLAS API Client documentation" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -67,8 +63,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -76,6 +83,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -83,8 +91,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -100,8 +108,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -131,24 +138,26 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="ATLAS API Client 1.0.0 documentation - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="ATLAS API Client 1.0.0 documentation - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="ATLAS API Client 1.0.0 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">General info</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The ATLAS Sky Survey</a></li>
-
-
 
 
 </ul>
@@ -173,14 +182,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -277,16 +281,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -310,11 +322,18 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The ATLAS Sky Survey</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#who-is-this-code-for">Who is this code for?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-rights">Data Rights</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#cite-this-code">Cite this code!</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#faq">FAQ</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The ATLAS Sky Survey</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-what-is-this-code-for">Who/what is this code for?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-get-access">How to get access?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#help-i-forgot-my-password">Help I forgot my password!</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#just-admin-things">Just Admin Things</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gdpr">GDPR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute">How to contribute?</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-this-code">Citing this code</a></li>
 </ul>
 
             </nav>
@@ -336,40 +355,79 @@ forms of transient astrophysical events such as supernovae, variable stars,
 tidal disruption events, which are handled by the Transient sky survey team
 at Queen’s University Belfast and Oxford University.</p>
 <p>ATLAS is composed of four telescopes, two in Hawaii and one in South Africa and another in Chile.</p>
-</section>
-<section id="who-is-this-code-for">
-<h1>Who is this code for?<a class="headerlink" href="#who-is-this-code-for" title="Link to this heading">#</a></h1>
-<p>This package is a convenient way to interact with the API of the <strong>Transient Web Server in Belfast</strong>.
-It is used primarily to automate processes relating to data stream management, either internally
-(with the ATLAS Virtual Research Assistant) or externally by allowing collaborators to access the alerts and
-trigger automated follow-up.</p>
-<p>If you need to do a Cone Search or check out the data stored in your custom list, this is what you need.</p>
+<section id="who-what-is-this-code-for">
+<h2>Who/what is this code for?<a class="headerlink" href="#who-what-is-this-code-for" title="Link to this heading">#</a></h2>
+<p>This package allows authorised users of the ATLAS Transient web server to
+query the server without being exposed to regular or code breaking changes to the underlying API.
+In particular we have in mind <strong>bots</strong> and other <strong>automated services</strong>.</p>
+<p>It also allows users the make routine queries in a friendlier way, such as:
+* doing a <strong>Cone Search</strong>
+* check out the data in <strong>your custom list</strong></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If all you want is forced photometry given an RA and Dec check out the <a class="reference external" href="https://fallingstar-data.com/forcedphot/">Forced Photometry Server</a></p>
 </div>
 </section>
-<section id="data-rights">
-<h1>Data Rights<a class="headerlink" href="#data-rights" title="Link to this heading">#</a></h1>
-<p>[STEPHEN]</p>
+<section id="how-to-get-access">
+<h2>How to get access?<a class="headerlink" href="#how-to-get-access" title="Link to this heading">#</a></h2>
+<p>The ATLAS Transient web server is our <strong>production server</strong> for the survey, and we
+cannot give unlimited access to manage the load on our machines.</p>
+<p>Anyone with legitimate scientific interests can apply for access by submitting a <strong>1-page max</strong> science case
+to the [Data Request Form](<a class="reference external" href="https://forms.gle/Jvy18eejkvxmcN2f6">https://forms.gle/Jvy18eejkvxmcN2f6</a>), justifying your access needs
+(length of time and whether you need Write access - you probably do not).</p>
+<p>The ATLAS team will review requests <strong>at least once a month</strong> on the first Friday.
+If you require urgent access email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> with the subject line <strong>after submitting the form</strong>:
+“Urgent ATLAS access request - [Proposal Title]”. The [Proposal Title] should be the same as the one
+submitted in the form.</p>
+<p>Once you have been granted access you will receive an email with your username and
+a <strong>one-time use password</strong> which you will have to change on your first login.</p>
+<p><strong>[ you will be able to request a token…. bla check??]</strong></p>
 </section>
-<section id="cite-this-code">
-<h1>Cite this code!<a class="headerlink" href="#cite-this-code" title="Link to this heading">#</a></h1>
-<p>Please mention this DOI in your TNS reports and papers if you use
-our code!</p>
+<section id="help-i-forgot-my-password">
+<h2>Help I forgot my password!<a class="headerlink" href="#help-i-forgot-my-password" title="Link to this heading">#</a></h2>
+<p>The server doesn’t store your email address so it can’t send you an email to reset the password.
+If you forget it for good, you will need to email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> of <a class="reference external" href="mailto:ken&#46;smith&#37;&#52;&#48;physics&#46;ox&#46;ac&#46;uk">ken<span>&#46;</span>smith<span>&#64;</span>physics<span>&#46;</span>ox<span>&#46;</span>ac<span>&#46;</span>uk</a>.
+We will then use our admin super powers to reset your password to a <strong>one-time use</strong> password
+which you will then be able to reset.</p>
+</section>
+</section>
+<section id="just-admin-things">
+<h1>Just Admin Things<a class="headerlink" href="#just-admin-things" title="Link to this heading">#</a></h1>
+<section id="gdpr">
+<h2>GDPR<a class="headerlink" href="#gdpr" title="Link to this heading">#</a></h2>
+<p>As ATLAS users your name and last name will be stored on our server.
+Your email address will be stored on a Google Drive spreadsheet alongside the information
+provided with your Data Access Request Form.
+We will only keep this information as long as needed to provide you access.
+The ATLAS user list will be reviewed twice a year: In November and in May.
+If your Data Access Request is out of date, or if you have not logged into the server since the last review,
+we will email you with a <strong>two-week deletion warning</strong>. If we receive no response,
+your profile will be deleted and your access revoked.</p>
+<p><em>Who can see my data?</em>:
+All users of the server can see your name.surname when you comment.
+Your email is stored in a private Google Drive spreadsheet that only a couple of project administrators
+can access. It will never be shared.</p>
+</section>
+<section id="how-to-contribute">
+<h2>How to contribute?<a class="headerlink" href="#how-to-contribute" title="Link to this heading">#</a></h2>
+<p>If you would like to contribute to this project you are welcome to
+fork and open a pull request however <strong>we strongly recommend asking
+the dev team (via hfstevance&#64;gmail.com) before you start putting
+in some work</strong>. It’s possible that changes you want to make would
+require other changes in our telescope pipelines and if we do not have
+the resources to refactor those codes, or if your changes are incompatible
+with our other pipelines, we may have to deny what could look like
+a very sensible PR.</p>
+<p>If there are good first issues we will flag them clearly.</p>
+</section>
+</section>
+<section id="citing-this-code">
+<h1>Citing this code<a class="headerlink" href="#citing-this-code" title="Link to this heading">#</a></h1>
+<p>Software in science needs recognition so we can keep funding and human
+resources allocated.
+Please cite this DOI in your TNS reports and papers if you used our code, and thank you!</p>
 <a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.14331062"><img alt="https://zenodo.org/badge/804295497.svg" src="https://zenodo.org/badge/804295497.svg" />
 </a>
-</section>
-<section id="faq">
-<h1>FAQ<a class="headerlink" href="#faq" title="Link to this heading">#</a></h1>
-<ul class="simple">
-<li><p><strong>Can I query by TNS/ZTF name?:</strong> No. Do a cone search.</p></li>
-</ul>
-<p>WHY?: Because it’s too low on our priority list and we don’t have the time. If it’s a really big deal for you and you might have working hours to help us with this, get in touch.</p>
-<ul class="simple">
-<li><p><strong>Can I do a cone search? :</strong> Not yet. Poke us if we’ve not done it by February 2025.</p></li>
-<li><p><strong>Why does the API return so much data?:</strong> Because it’d take forever to refactor and it’s low on the priority list. If it’s a big deal for you talk to us, it might bump it further up the to-do list.</p></li>
-</ul>
 </section>
 
 
@@ -408,8 +466,7 @@ our code!</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -418,11 +475,18 @@ our code!</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The ATLAS Sky Survey</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#who-is-this-code-for">Who is this code for?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-rights">Data Rights</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#cite-this-code">Cite this code!</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#faq">FAQ</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The ATLAS Sky Survey</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-what-is-this-code-for">Who/what is this code for?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-get-access">How to get access?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#help-i-forgot-my-password">Help I forgot my password!</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#just-admin-things">Just Admin Things</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gdpr">GDPR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute">How to contribute?</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-this-code">Citing this code</a></li>
 </ul>
 
   </nav></div>
@@ -472,8 +536,8 @@ By Heloise Stevance
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
