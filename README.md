@@ -1,5 +1,5 @@
-ATLAS API Client
---- 
+# ATLAS API Client
+
 [![DOI](https://zenodo.org/badge/804295497.svg)](https://doi.org/10.5281/zenodo.14331062)
 
 
@@ -145,8 +145,8 @@ client = RequestMultipleSourceData(atlas_ids=YOUR_LIST_OF_IDS, mjdthreshold = LO
 client.chunk_get_response() # Chunks the list of IDs into a bunch of payloads and colates the responses.
 ```
 
+---
 
-----
 ## Housekeeping
 
 ### GDPR

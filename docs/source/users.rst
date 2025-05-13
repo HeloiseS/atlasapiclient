@@ -89,6 +89,7 @@ Your data can be found in the `client.response_data` attribute. Note that it is 
 want to do `client.response_data[0]` to get the JSON data.
 
 .. code-block:: python
+
    detections = pd.DataFrame(client.response_data[0]['lc'])
    non_dets = pd.DataFrame(client.response_data[0]['lcnondets'])
 
@@ -96,6 +97,7 @@ Make a Neat Plot
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: python
+
    mjd_min, mjd_max= 58277, 58327
 
    filter_colors = {'c': 'blue', 'o': 'orange'}
@@ -125,7 +127,9 @@ Make a Neat Plot
    ax.legend()
 
 
+
 .. image:: 18cow.png
+
    :width: 200px
    :alt: AT2018cow lightcurve
    :align: center
