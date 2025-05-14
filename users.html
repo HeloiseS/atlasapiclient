@@ -325,6 +325,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Set-up</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-file">Config file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-get-a-token">How do I get a token?</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-recipes">Quick Recipes</a><ul class="visible nav section-nav flex-column">
@@ -393,11 +394,21 @@ cp<span class="w"> </span>api_config_template.yaml<span class="w"> </span>api_co
 </ol>
 </li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>How do I get a token?</strong>
-For now, you ask Ken, the wizard in charge the ATLAS transient servers. Email: <a class="reference external" href="mailto:k&#46;w&#46;smith&#37;&#52;&#48;qub&#46;ac&#46;uk">k<span>&#46;</span>w<span>&#46;</span>smith<span>&#64;</span>qub<span>&#46;</span>ac<span>&#46;</span>uk</a></p>
+</section>
+<section id="how-do-i-get-a-token">
+<h2>How do I get a token?<a class="headerlink" href="#how-do-i-get-a-token" title="Link to this heading">#</a></h2>
+<p>Once you have access to the web server you can get a token for API access by using the
+<cite>APIClient.refresh_token()</cite> method. This will generate a token for you and save
+it in the config file defined within the <cite>API_CONFIG_FILE</cite> variable in the <cite>atlasapiclient/utils.py</cite> file.
+For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlaspaiclient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlaspaiclient</span><span class="o">.</span><span class="n">APIClient</span><span class="p">()</span>
+<span class="n">client</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">()</span>
+</pre></div>
 </div>
+<p>This will work for any of the clients included in <cite>atlasapiclient.client</cite>. If
+your token is expired you can use the same method to refresh it.</p>
 </section>
 </section>
 <section id="quick-recipes">
@@ -566,6 +577,7 @@ The following entries are the individual crossmatches.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Set-up</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-file">Config file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-get-a-token">How do I get a token?</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-recipes">Quick Recipes</a><ul class="visible nav section-nav flex-column">
