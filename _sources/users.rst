@@ -129,7 +129,7 @@ Make a Neat Plot
 
 
 .. figure:: _static/18cow.png
-   :width: 200px
+   :width: 500px
    :alt: AT2018cow lightcurve
    :align: center
 
