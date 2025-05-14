@@ -57,21 +57,26 @@ which you will then be able to reset.
 
 Just Admin Things
 --------------------
-GDPR
-======
-As ATLAS users your name and last name will be stored on our server.
+Privacy Policy
+==============
+As ATLAS users your first name and last name will be stored on our server.
 Your email address will be stored on a Google Drive spreadsheet alongside the information
 provided with your Data Access Request Form.
-We will only keep this information as long as needed to provide you access.
+We store this data because it is required to provide you access to this service and we will only store it
+as long as needed to provide this service.
 The ATLAS user list will be reviewed twice a year: In November and in May.
 If your Data Access Request is out of date, or if you have not logged into the server since the last review,
 we will email you with a **two-week deletion warning**. If we receive no response,
 your profile will be deleted and your access revoked.
+If you would like us to delete your data sooner, send an email to hfstevance@gmail.com and we will remove your account
+and associated data.
 
 *Who can see my data?*:
 All users of the server can see your name.surname when you comment.
 Your email is stored in a private Google Drive spreadsheet that only a couple of project administrators
-can access. It will never be shared.
+can access.
+
+**We will never share your data with third parties**
 
 
 How to contribute?
