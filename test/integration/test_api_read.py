@@ -24,7 +24,7 @@ OBJECT_ID = '1000506771295744900'
 
 @pytest.mark.integration
 class TestConeSearch():
-    def test_instanciate_with_my_config(self):
+    def test_instantiate_with_my_config(self):
         cone_search = atlasapi.client.ConeSearch(api_config_file = API_CONFIG_FILE)
 
     def test_get_response(self):
@@ -82,13 +82,14 @@ class TestRequestCustomListsTable():
                                                                 payload={'objectid':'1103337110432157700'}
                                                                 )
         request_custom_lists.get_response()
-        assert request_custom_lists.request.status_code == 200, "Data wasn't read properly"
+        assert request_custom_lists.response.status_code == 200, "Data wasn't read properly"
+        
     def test_request_custom_list(self):
         request_custom_lists = atlasapi.client.RequestCustomListsTable(api_config_file=API_CONFIG_FILE,
                                                                 payload={'objectgroupid':'6'}
                                                                 )
         request_custom_lists.get_response()
-        assert request_custom_lists.request.status_code == 200, "Data wasn't read properly"
+        assert request_custom_lists.response.status_code == 200, "Data wasn't read properly"
 
 @pytest.mark.integration
 class TestRequestSingleSourceData():
@@ -122,11 +123,11 @@ class TestRequestMultipleSourceData():
                                                           array_ids=self.array_ids,
                                                           )
         request_data.chunk_get_response_quiet()
-        assert  request_data.request.status_code == 200, "Data wasn't read properly"
+        assert  request_data.response.status_code == 200, "Data wasn't read properly"
 
     def test_chunk_get_response(self):
         request_data = atlasapi.client.RequestMultipleSourceData(api_config_file=API_CONFIG_FILE,
                                                           array_ids=self.array_ids,
                                                           )
         request_data.chunk_get_response()
-        assert  request_data.request.status_code == 200, "Data wasn't read properly"
+        assert  request_data.response.status_code == 200, "Data wasn't read properly"

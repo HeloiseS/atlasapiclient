@@ -30,6 +30,7 @@ class TestWriteToVRAScores():
                                                 )
         writeto_vra.payload = {'objectid': '1132507360113744501', 'debug': 1}
         writeto_vra.get_response()
+        
     def test_send_something_from_instanciation(self):
         # TODO: IF THE OBJECT DOESN'T EXIST THEN THE API WILL STILL RETURN A 201,
         # WITH A MESSAGE PAYLOAD SAYING INFO: THE OBJECT DOES NOT EXIST
@@ -71,7 +72,7 @@ class TestWriteToVRARank():
                                             )
         writeto_rank.get_response()
 
-        assert  writeto_rank.request.status_code == 201, "Data wasn't written properly"
+        assert  writeto_rank.response.status_code == 201, "Data wasn't written properly"
 
 
 @pytest.mark.integration
@@ -84,9 +85,9 @@ class TestWriteRemoveCustomList():
         writeto_vra.get_response()
         # check that the string in the "info" key of the response dictionary is "Row created."
         try:
-            assert writeto_vra.response['info'] == 'Row created.', "Row wasn't created"
+            assert writeto_vra.response_data['info'] == 'Row created.', "Row wasn't created"
         except AssertionError:
-            assert writeto_vra.response['info'] == 'Duplicate row. Cannot add row.', "Row wasn't created"
+            assert writeto_vra.response_data['info'] == 'Duplicate row. Cannot add row.', "Row wasn't created"
 
     def test_remove_from_custom_list(self):
         removefrom_vra = atlasapi.RemoveFromCustomList(api_config_file = API_CONFIG_FILE,
@@ -114,5 +115,5 @@ class TestWriteRemoveCustomList():
                                                  )
         writeto_vra.get_response()
         # check that the string in the "info" key of the response dictionary is "Row created."
-        assert writeto_vra.response['info'] == 'Object group ID does not exist.', ("We are not catching the bad list "
-                                                                                   "number server side")
+        assert writeto_vra.response_data['info'] == 'Object does not exist.', ("We are not catching the bad list "
+                                                                               "number server side")
