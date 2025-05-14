@@ -162,7 +162,6 @@
 
 
 
-
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Docs</span></p>
 <ul class="nav bd-sidenav">
@@ -327,16 +326,16 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The ATLAS Sky Survey</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#who-what-is-this-code-for">Who/what is this code for?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-get-access">How to get access?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#help-i-forgot-my-password">Help I forgot my password!</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#just-admin-things">Just Admin Things</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-get-access">How to get access?</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#help-i-forgot-my-password">Help I forgot my password!</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#privacy-policy">Privacy Policy</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute">How to contribute?</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-this-code">Citing this code</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#just-admin-things">Just Admin Things</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#privacy-policy">Privacy Policy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute-to-this-code">How to contribute to this code?</a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-this-code">Citing this code</a></li>
 </ul>
 
             </nav>
@@ -352,18 +351,19 @@ document.write(`
   <section id="the-atlas-sky-survey">
 <h1>The ATLAS Sky Survey<a class="headerlink" href="#the-atlas-sky-survey" title="Link to this heading">#</a></h1>
 <p>The <a class="reference external" href="https://atlas.fallingstar.com/">Asteroid Terrestrial-impact Last Alert System</a> (ATLAS)  is an all sky
-survey whose main goal is to discover and track near earth objects.
+survey which is funded to discover and track near earth objects.
 As part of its normal operations, ATLAS also discovers many other
 forms of transient astrophysical events such as supernovae, variable stars,
-tidal disruption events, which are handled by the Transient sky survey team
-at Queen’s University Belfast and Oxford University.</p>
+tidal disruption events.
+These are handled by the Transient sky survey team at Queen’s University Belfast and Oxford University.</p>
 <p>ATLAS is composed of four telescopes, two in Hawaii and one in South Africa and another in Chile.</p>
 </section>
 <section id="who-what-is-this-code-for">
 <h1>Who/what is this code for?<a class="headerlink" href="#who-what-is-this-code-for" title="Link to this heading">#</a></h1>
-<p>This package allows authorised users of the ATLAS Transient web server to
-query the server without being exposed to regular or code breaking changes to the underlying API.
-In particular we have in mind <strong>bots</strong> and other <strong>automated services</strong>.</p>
+<p>This package allows users of the ATLAS Transient web server to
+query the server without being exposed to code breaking changes to the underlying API.
+In particular we have in mind <strong>bots</strong> and other <strong>automated services</strong> which
+need to run smoothly and continuously to ingest and handle a data stream.</p>
 <p>It also allows users the make routine queries in a friendlier way, such as:
 * doing a <strong>Cone Search</strong>
 * check out the data in <strong>your custom list</strong></p>
@@ -374,31 +374,30 @@ In particular we have in mind <strong>bots</strong> and other <strong>automated 
 </section>
 <section id="how-to-get-access">
 <h1>How to get access?<a class="headerlink" href="#how-to-get-access" title="Link to this heading">#</a></h1>
-<p>The ATLAS Transient web server is our <strong>production server</strong> for the survey, and we
-cannot give unlimited access to manage the load on our machines.</p>
+<p>The ATLAS Transient web server is our <strong>production server</strong> for the survey, and
+to manage the load on our machines we cannot give unlimited access.</p>
 <p>Anyone with legitimate scientific interests can apply for access by submitting a <strong>1-page max</strong> science case
 to the [Data Request Form](<a class="reference external" href="https://forms.gle/Jvy18eejkvxmcN2f6">https://forms.gle/Jvy18eejkvxmcN2f6</a>), justifying your access needs
 (length of time and whether you need Write access - you probably do not).</p>
 <p>The ATLAS team will review requests <strong>at least once a month</strong> on the first Friday.
-If you require urgent access email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> with the subject line <strong>after submitting the form</strong>:
+If you require urgent access email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a>  <strong>after submitting the form</strong> with the subject line:
 “Urgent ATLAS access request - [Proposal Title]”. The [Proposal Title] should be the same as the one
 submitted in the form.</p>
 <p>Once you have been granted access you will receive an email with your username and
 a <strong>one-time use password</strong> which you will have to change on your first login.</p>
 <p><strong>[ you will be able to request a token…. bla check??]</strong></p>
-</section>
 <section id="help-i-forgot-my-password">
-<h1>Help I forgot my password!<a class="headerlink" href="#help-i-forgot-my-password" title="Link to this heading">#</a></h1>
+<h2>Help I forgot my password!<a class="headerlink" href="#help-i-forgot-my-password" title="Link to this heading">#</a></h2>
 <p>The server doesn’t store your email address so it can’t send you an email to reset the password.
-If you forget it for good, you will need to email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> of <a class="reference external" href="mailto:ken&#46;smith&#37;&#52;&#48;physics&#46;ox&#46;ac&#46;uk">ken<span>&#46;</span>smith<span>&#64;</span>physics<span>&#46;</span>ox<span>&#46;</span>ac<span>&#46;</span>uk</a>.
+If you forget it for good, you will need to email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> or <a class="reference external" href="mailto:ken&#46;smith&#37;&#52;&#48;physics&#46;ox&#46;ac&#46;uk">ken<span>&#46;</span>smith<span>&#64;</span>physics<span>&#46;</span>ox<span>&#46;</span>ac<span>&#46;</span>uk</a>.
 We will then use our admin super powers to reset your password to a <strong>one-time use</strong> password
 which you will then be able to reset.</p>
+</section>
+</section>
 <section id="just-admin-things">
-<h2>Just Admin Things<a class="headerlink" href="#just-admin-things" title="Link to this heading">#</a></h2>
-</section>
-</section>
+<h1>Just Admin Things<a class="headerlink" href="#just-admin-things" title="Link to this heading">#</a></h1>
 <section id="privacy-policy">
-<h1>Privacy Policy<a class="headerlink" href="#privacy-policy" title="Link to this heading">#</a></h1>
+<h2>Privacy Policy<a class="headerlink" href="#privacy-policy" title="Link to this heading">#</a></h2>
 <p>As ATLAS users your first name and last name will be stored on our server.
 Your email address will be stored on a Google Drive spreadsheet alongside the information
 provided with your Data Access Request Form.
@@ -406,18 +405,18 @@ We store this data because it is required to provide you access to this service 
 as long as needed to provide this service.
 The ATLAS user list will be reviewed twice a year: In November and in May.
 If your Data Access Request is out of date, or if you have not logged into the server since the last review,
-we will email you with a <strong>two-week deletion warning</strong>. If we receive no response,
-your profile will be deleted and your access revoked.
+we will email you with a <strong>two-week deletion warning</strong>.
+If we receive no response, your profile will be deleted and your access revoked.
 If you would like us to delete your data sooner, send an email to <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> and we will remove your account
 and associated data.</p>
 <p><em>Who can see my data?</em>:
-All users of the server can see your name.surname when you comment.
+All users of the server can see your name.surname when you comment on an object.
 Your email is stored in a private Google Drive spreadsheet that only a couple of project administrators
 can access.</p>
 <p><strong>We will never share your data with third parties</strong></p>
 </section>
-<section id="how-to-contribute">
-<h1>How to contribute?<a class="headerlink" href="#how-to-contribute" title="Link to this heading">#</a></h1>
+<section id="how-to-contribute-to-this-code">
+<h2>How to contribute to this code?<a class="headerlink" href="#how-to-contribute-to-this-code" title="Link to this heading">#</a></h2>
 <p>If you would like to contribute to this project you are welcome to
 fork and open a pull request however <strong>we strongly recommend asking
 the dev team (via hfstevance&#64;gmail.com) before you start putting
@@ -427,14 +426,15 @@ the resources to refactor those codes, or if your changes are incompatible
 with our other pipelines, we may have to deny what could look like
 a very sensible PR.</p>
 <p>If there are good first issues we will flag them clearly.</p>
+</section>
+</section>
 <section id="citing-this-code">
-<h2>Citing this code<a class="headerlink" href="#citing-this-code" title="Link to this heading">#</a></h2>
+<h1>Citing this code<a class="headerlink" href="#citing-this-code" title="Link to this heading">#</a></h1>
 <p>Software in science needs recognition so we can keep funding and human
 resources allocated.
 Please cite this DOI in your TNS reports and papers if you used our code, and thank you!</p>
 <a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.14331062"><img alt="https://zenodo.org/badge/804295497.svg" src="https://zenodo.org/badge/804295497.svg" />
 </a>
-</section>
 </section>
 
 
@@ -484,16 +484,16 @@ Please cite this DOI in your TNS reports and papers if you used our code, and th
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The ATLAS Sky Survey</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#who-what-is-this-code-for">Who/what is this code for?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-get-access">How to get access?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#help-i-forgot-my-password">Help I forgot my password!</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#just-admin-things">Just Admin Things</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-get-access">How to get access?</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#help-i-forgot-my-password">Help I forgot my password!</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#privacy-policy">Privacy Policy</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute">How to contribute?</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-this-code">Citing this code</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#just-admin-things">Just Admin Things</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#privacy-policy">Privacy Policy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute-to-this-code">How to contribute to this code?</a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-this-code">Citing this code</a></li>
 </ul>
 
   </nav></div>
