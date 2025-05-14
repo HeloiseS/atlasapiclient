@@ -28,7 +28,19 @@ submitted in the form.
 Once you have been granted access you will receive an email with your username and
 a **one-time use password** which you will have to change on your first login.
 
-**[ you will be able to request a token.... bla check??]**
+Once you have access to the web server you can get a token for API access by using the 
+``APIClient.refresh_token() method``. 
+This will generate a token for you and save it in the config file defined within the ``API_CONFIG_FILE`` 
+variable in the ``atlasapiclient/utils.py file``. 
+
+For example:
+```python   
+from atlasapiclient import client as atlaspaiclient
+
+client = atlaspaiclient.APIClient()
+client.refresh_token()
+```
+
 
 ### Help I forgot my password!
 The server doesn't store your email address so it can't send you an email to reset the password.
