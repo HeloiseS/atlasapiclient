@@ -115,5 +115,5 @@ class TestWriteRemoveCustomList():
                                                  )
         writeto_vra.get_response()
         # check that the string in the "info" key of the response dictionary is "Row created."
-        assert writeto_vra.response_data['info'] == 'Object group ID does not exist.', ("We are not catching the bad list "
-                                                                                   "number server side")
+        assert writeto_vra.response_data['info'] == 'Object does not exist.', ("We are not catching the bad list "
+                                                                               "number server side")

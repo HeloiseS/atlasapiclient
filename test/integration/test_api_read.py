@@ -24,7 +24,7 @@ OBJECT_ID = '1000506771295744900'
 
 @pytest.mark.integration
 class TestConeSearch():
-    def test_instanciate_with_my_config(self):
+    def test_instantiate_with_my_config(self):
         cone_search = atlasapi.client.ConeSearch(api_config_file = API_CONFIG_FILE)
 
     def test_get_response(self):
