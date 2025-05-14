@@ -9,3 +9,7 @@ class ATLASAPIClientRequestError(ATLASAPIClientError):
 
 class ATLASAPIClientAuthError(ATLASAPIClientError):
     pass
+
+
+class ATLASAPIClientArgumentWarning(Warning):
+    pass

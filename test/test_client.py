@@ -8,18 +8,17 @@ import numpy as np
 
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
-    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, RequestATLASIDsFromWebServerList
+    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, 
 )
-from atlasapiclient.exceptions import ATLASAPIClientError
+from atlasapiclient.exceptions import (
+    ATLASAPIClientError, 
+    ATLASAPIClientConfigError,
+    ATLASAPIClientArgumentWarning
+)
 from atlasapiclient.utils import config_path
 import atlasapiclient.client
 import atlasapiclient.utils
-
-
-@pytest.fixture()
-def config_file():
-    # Create a path to the api_config_template.yaml file in the config_files
-    return os.path.join(config_path, 'api_config_template.yaml')
+from .conftest import MockResponse
 
 
 class TestAPIClient():
@@ -33,7 +32,7 @@ class TestAPIClient():
         # not present
         fake_config_file = os.path.join(config_path, 'fake_config.yaml')
         monkeypatch.setattr(atlasapiclient.client, "API_CONFIG_FILE", fake_config_file)
-        with pytest.raises(AssertionError):
+        with pytest.raises(ATLASAPIClientConfigError):
             APIClient()
         
         # Then make it a file we know exists.
@@ -56,7 +55,7 @@ class TestAPIClient():
             APIClient('test')
     
     def test_constructor_config_file_with_missing_file(self):
-        with pytest.raises(AssertionError):
+        with pytest.raises(ATLASAPIClientConfigError):
             APIClient('config-file.json')
         
     def test_contructor_config_file_with_malformed_file(self):
@@ -81,10 +80,10 @@ class TestAPIClient():
         # Check the attributes that are set by the config file
         assert hasattr(client, 'headers')   
         assert 'Authorization' in client.headers
-        assert client.headers['Authorization'] == 'Token YOURTOKEN'
+        assert client.headers['Authorization'] == 'Token thisisntarealtokenpleaseputyourtokenhere'
         
         assert hasattr(client, 'apiURL')
-        assert client.apiURL == "https/<server>/api/"
+        assert client.apiURL == "https://<server>/api/"
 
     def test_get_response_200(self, monkeypatch, client):
         # Replace the requests.post function with a lambda that returns a MockResponse
@@ -132,6 +131,21 @@ class TestConeSearch:
 
         client.get_response()
         assert client.response_data == {'key': 'value'}
+    
+    def test_verify_payload(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        payload = {'ra': 150,'dec': 60, 'radius': 60, 'requestType': 'nearest'}
+        client = ConeSearch(api_config_file=config_file, payload=payload)
+        
+        # Check that the payload is valid
+        client.verify_payload()
+        
+        # Check that the payload raises a warning if the radius is too large
+        client.payload['radius'] = 400
+        with pytest.warns(ATLASAPIClientArgumentWarning):
+            client.verify_payload()
+        # Final check to ensure the verification step doesn't raise an error
+        client.verify_payload()
 
 
 class TestRequestVRAScores:
@@ -282,10 +296,10 @@ class TestRequestATLASIDsFromWebServerList:
     # TODO: add test for list that doesn't exist (have the constructor through a useful error
 
 
-class MockResponse:
-    def __init__(self, status_code):
-        self.status_code = status_code
-        self.json = lambda: {'key': 'value'}
+# class MockResponse:
+#     def __init__(self, status_code):
+#         self.status_code = status_code
+#         self.json = lambda: {'key': 'value'}
     
-    def json(self):
-        return self.json
+#     def json(self):
+#         return self.json

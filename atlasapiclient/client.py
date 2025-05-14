@@ -14,11 +14,11 @@ Classes
 - RequestSingleSourceData: To download the data for a single source.
 - RequestMultipleSourceData: To download the data for multiple sources.
 """
-import os
-import yaml
 import json
 from functools import cached_property
+import warnings
 from abc import ABC
+import logging
 
 import requests
 import numpy as np
@@ -26,16 +26,29 @@ from pkg_resources import non_empty_lines
 from tqdm import tqdm
 import pandas as pd
 
-from atlasapiclient.exceptions import ATLASAPIClientError
-from atlasapiclient.utils import dict_list_id, API_CONFIG_FILE
+from atlasapiclient.exceptions import (
+    ATLASAPIClientError, 
+    ATLASAPIClientArgumentWarning,
+)
+from atlasapiclient.utils import (
+    dict_list_id, 
+    API_CONFIG_FILE, 
+    validate_url,  
+)
+from atlasapiclient.config import ATLASConfigFile
+from atlasapiclient.authentication import Token
 
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 class APIClient(ABC):
     # this dictionary reflects the lists on the ATLAS transient server (url above)
     dict_list_id = dict_list_id
 
     def __init__(self,
-                 api_config_file: str = None
+                 api_config_file: str = None,
+                 auto_refresh_fl: bool = True,
                 ):
         """Abstract Class - Parent class for the ATLAS API pipelines.
         
@@ -51,12 +64,11 @@ class APIClient(ABC):
 
         Attributes
         -----------
-        request: requests.post
+        response: requests.post
             The request.post object that will contain the response and the 
             status code.
-            # TODO: maybe doesn't have to be a public attribute?
 
-        response: list
+        response_data: list
             The response we get from the request.post method (a list of json 
             responses).
 
@@ -68,27 +80,32 @@ class APIClient(ABC):
         payload: dict
             The payload we send to the server. This is provided by users when 
             they instanciate the children classes.
+            
+        token: Token
+            The token object that represents an ATLAS API token.
         """
-        # INITIALISE MAIN ATTRIBUTES
-        if api_config_file is None:
-            api_config_file = API_CONFIG_FILE
 
         self.response = None
         self.response_data = None
         self.url = None
         self.payload = None
+        
+        # INITIALISE MAIN ATTRIBUTES
+        if api_config_file is None:
+            api_config_file = API_CONFIG_FILE
 
-        assert os.path.exists(api_config_file), f"{api_config_file} file does not exist"  # Check file exits
+        self.config = ATLASConfigFile(api_config_file)
+        
+        self.token = Token(self.config['token'])
+        self.auto_refresh_fl = auto_refresh_fl
 
-        try:
-            with open(api_config_file, 'r') as my_yaml_file:  # Open the file
-                config = yaml.safe_load(my_yaml_file)
-        except yaml.YAMLError as e:
-            raise ATLASAPIClientError(f"Error parsing YAML file: {e}")
-
-        self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
-        self.apiURL = config['base_url']  # Set the base of the url (the same for all requests)
+        # self.headers = {'Authorization': f"Token {config['token']}"}  # Set the headers with my private token
+        self.apiURL = validate_url(self.config['base_url'])  # Set the base of the url (the same for all requests)
         # -> directs to the ATLAS transient web server
+
+    @property
+    def headers(self):
+        return {'Authorization': self.token.as_auth_header()}
     
     def parse_atlas_id(self, atlas_id: str) -> int:
         """
@@ -108,20 +125,25 @@ class APIClient(ABC):
         return atlas_id
 
     def get_response(self,
-                     inplace: bool = True
+                     inplace: bool = True, 
+                     is_retry: bool = False,
                      ):
         """Get the response from the server.
 
         Parameters
         ------------
         inplace: bool
-            If True, sets self.response to the response from the server. If False, it ALSO returns the response.
+            If True, sets self.response to the response from the server. If 
+            False, it ALSO returns the response.
+            
+        is_retry: bool
+            If True, this is a retry of a failed request. If False, it's the
+            first attempt. This is used to determine whether to try refreshing
+            the token if the request fails due to an expired token.
         """
 
-        # We must set the request just before we get the response in case the payload was defined after instanciation
-        # TODO: This makes the request and stores the response immediately, but 
-        # storing it into a variable called request. The thing returned is a 
-        # response, and contains the data we want.
+        # We must set the request just before we get the response in case the 
+        # payload was defined after instantiation
         self.response = requests.post(self.url, self.payload, headers=self.headers)
 
         if self.response.status_code == 200:  # Status if READ request went well
@@ -136,31 +158,84 @@ class APIClient(ABC):
         elif self.response.status_code == 204:  # Status if DELETE request went well
             self.response_data = 'No Content'  # can't do .json() on a 204 response
 
+        # If the request is bad, we check the response and raise the apprpriate error
+        elif self.response.status_code == 401 and 'detail' in self.response.json():  # Status if the request is bad
+            response_detail = self.response.json()['detail']
+            if response_detail == "Token has expired.":
+                if not is_retry and self.auto_refresh_fl:
+                    # If it's a failed auth but just because the token has expired, 
+                    # refresh token and try again (but only if not already on 
+                    # second attempt)
+                    self.refresh_token()
+                    return self.get_response(inplace=inplace, is_retry=True)
+                else:
+                    raise ATLASAPIClientError("Token has expired. Please refresh your token.")
+            elif response_detail == "Authentication credentials were not provided.":
+                raise ATLASAPIClientError("Authentication credentials were not provided. Please check you have set your API token.")
+            elif response_detail == "Invalid token.":
+                if not is_retry:
+                    # NOTE: This can occur if the token is invalid, but also if 
+                    # the token is valid but has already been refreshed 
+                    # somewhere else. In this latter case, we don't want to 
+                    # refresh the token again so we can instead try to just 
+                    # reread the token from the config file. 
+                    self.reinitialise_token()
+                    return self.get_response(inplace=inplace, is_retry=True)
+                else:
+                    raise ATLASAPIClientError("Invalid token. Please check or refresh your API token.")
         else:  # else we raise an error
             raise ATLASAPIClientError(f"Oops, status code is {self.response.status_code}")
 
-        if self.response_data is None:  # If the response has not be changed -> error
-            raise ATLASAPIClientError("Bad response from the objectlist API")
+        if self.response_data is None:  # If the response has not been changed -> error
+            print(self.response.json())
+            raise ATLASAPIClientError(f"Bad response from the objectlist API: {self.response}")
             # exit(1)                                                    # Keep this here (from Ken) in case he ever needs
-            # an error code to be returned to the server
+            # an error code to be returned to the server   
+    
+    def reinitialise_token(self):
+        """
+        Function to force the token to be updated if it's been changed in the 
+        config file. 
+        """
+        self.config.read()
+        self.token = Token(self.config['token'])
+    
+    def refresh_token(self):
+        """
+        Convenience method to refresh the token and update the config file.
+        """        
+        # Then refresh the token
+        self.token.refresh(self.apiURL)
+        
+        # Then write the new token to the config file
+        self.config['token'] = str(self.token)
+        self.config.write()
+        
+        print(f"\n\nToken refreshed and written to {self.config.file_path}"
+              "\n"
+              "\nEnjoy the ATLAS API!\n\n")
 
-
+    
 ###################################################
 #                                          READ UTILITIES                                          #
 ###################################################
 
 class ConeSearch(APIClient):
+    CONE_SEARCH_MAX_RADIUS = 300  # arcseconds
+    
     def __init__(self,
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ - Cone Search in ATLAS Transient Web Server
 
         Parameters
         ------------
         payload: dict
-            The Payload must contain RA, DEC, search radius in arcseconds and request type ('all', 'count' or 'nearest')
+            The Payload must contain RA, DEC, search radius in arcseconds and 
+            request type ('all', 'count' or 'nearest')
         get_response: bool
             If True, will get the response on instanciation
         api_config_file: str
@@ -170,11 +245,12 @@ class ConeSearch(APIClient):
         ----------
         payload = {'ra': 150.0, 'dec': 34.0, 'radius': 1,  'requestType': 'nearest'}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         self.url = self.apiURL + 'cone/'
         self.payload = payload
 
+        self.verify_payload()
 
         # self.request = requests.post(self.url, self.payload, headers=self.headers)
         if get_response and len(payload) == 0:
@@ -182,12 +258,29 @@ class ConeSearch(APIClient):
 
         elif get_response:
             self.get_response()
+            
+    def verify_payload(self):
+        """
+        Verifcation function to check that payload contains a radius that is not 
+        too large.
+        """
+        # Check that the radius is not too large
+        if ('radius' in self.payload
+            and self.payload['radius'] > self.CONE_SEARCH_MAX_RADIUS
+            ):
+            warnings.warn(
+                f"Radius cannot be larger than {self.CONE_SEARCH_MAX_RADIUS} "
+                "arcseconds, any values greater than this will be rounded down "
+                f"to {self.CONE_SEARCH_MAX_RADIUS} arcseconds", 
+                ATLASAPIClientArgumentWarning
+            )
 
 class RequestVRAScores(APIClient):
     def __init__(self,
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ -  tcs\_vra\_scores table
 
@@ -204,7 +297,7 @@ class RequestVRAScores(APIClient):
         --------
         payload = {'datethreshold': "2024-02-22"}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
         self.url = self.apiURL + 'vrascoreslist/'
         self.payload = payload
@@ -225,6 +318,7 @@ class RequestVRAToDoList(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ - tcs\_vra\_to\_do\_list table
 
@@ -241,7 +335,7 @@ class RequestVRAToDoList(APIClient):
         ----------
         payload = {'datethreshold': "2024-02-22"} # ADD A DATE THRESHOLD
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'vratodolist/'
         self.payload = payload
         # self.request = requests.post(self.url, self.payload, headers=self.headers)
@@ -259,6 +353,7 @@ class RequestCustomListsTable(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ - Check which custom lists objects are in or return all objects in a given custom list
 
@@ -276,7 +371,7 @@ class RequestCustomListsTable(APIClient):
         payload = {'objectid': '1132507360113744500,1151301851092728500'}
         paylod = {'objectgroupid': 73}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
         self.url = self.apiURL + 'objectgroupslist/'
         self.payload = payload
@@ -294,6 +389,7 @@ class RequestATLASIDsFromWebServerList(APIClient):
                  list_name: str,
                  get_response: bool = True,
                  api_config_file: str = None,
+                 **kwargs
                  ):
         """READ - Get all the ATLAS\_IDs from a given list on the ATLAS Transient Web Server
 
@@ -325,7 +421,7 @@ class RequestATLASIDsFromWebServerList(APIClient):
         atlas_id_list_int: list
             List of ATLAS IDs as integers
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.list_name = list_name
         self.url = self.apiURL + 'objectlist/'
         self.payload = {'objectlistid': self.dict_list_id[self.list_name][0],
@@ -348,6 +444,7 @@ class RequestSingleSourceData(APIClient):
                  mjdthreshold: float = None,
                  get_response: bool = True,
                  api_config_file: str = None,
+                 **kwargs
                  ):
         """READ - Get the data for a single source from the ATLAS Transient Web Server
 
@@ -363,7 +460,7 @@ class RequestSingleSourceData(APIClient):
            By default will use you api_config_MINE.yaml file.
         """
 
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         assert atlas_id is not None, "You need to provide an atlas_id"
 
         self.atlas_id = self.parse_atlas_id(atlas_id)
@@ -400,6 +497,7 @@ class RequestMultipleSourceData(APIClient):
                  array_ids: np.array = None,
                  mjdthreshold = None,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """READ - Request data for multiple sources. Contains a convenience
         method to chunk the request in groups of 100 so don't get timed out by the server.
@@ -413,7 +511,7 @@ class RequestMultipleSourceData(APIClient):
         api_config_file:
             By default will use you api_config_MINE.yaml file.
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         # ATLAS_ID ARRAY - CHECK VALIDITY AND ASSIGN
         assert array_ids is not None, "You need to provide an array of object IDs"          # Check not None
@@ -509,6 +607,7 @@ class WriteToVRAScores(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Write to the tcs\_vra\_scores table
 
@@ -533,7 +632,7 @@ class WriteToVRAScores(APIClient):
         api_config_file: str
             By default will use you api_config_MINE.yaml file.
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         self.url = self.apiURL + 'vrascores/'                               # THIS IS THE 'WRITE' URL for our Django API
 
@@ -551,6 +650,7 @@ class WriteToVRARank(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
 
         """WRITE - Write to the VRA Rank Table
@@ -567,7 +667,7 @@ class WriteToVRARank(APIClient):
         payload = {'objectid': '1132507360113744500'}
         payload = {'rank': 1.3}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         self.url = self.apiURL + 'vrarank/'
 
@@ -586,6 +686,7 @@ class WriteToToDo(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Write to the tcs\_vra\_todo table
 
@@ -602,7 +703,7 @@ class WriteToToDo(APIClient):
         ----------
         payload = {'objectid': '1132507360113744500'}
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
 
         self.url = self.apiURL + 'vratodo/'
 
@@ -622,6 +723,7 @@ class WriteToCustomList(APIClient):
                  list_name: str = None,
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Add an ATLAS\_ID to a custom list on the ATLAS Transient Web Server
 
@@ -636,7 +738,7 @@ class WriteToCustomList(APIClient):
         api_config_file: str
             By default will use you api_config_MINE.yaml file.
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'objectgroups/'
         self.array_ids = array_ids
         self.object_group_id = self.dict_list_id[list_name][0] # object group id is the number of the custom list
@@ -674,6 +776,7 @@ class RemoveFromCustomList(APIClient):
                  list_name: str = None,
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Remove  ATLAS\_IDs from a custom list
 
@@ -688,7 +791,7 @@ class RemoveFromCustomList(APIClient):
         api_config_file: str
             By default will use you api_config_MINE.yaml file.
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'objectgroupsdelete/'
         self.array_ids = array_ids
         self.object_group_id = self.dict_list_id[list_name][0] # object group id is the number of the custom list
@@ -723,6 +826,7 @@ class WriteObjectDetectionListNumber(APIClient):
                  payload: dict = {},
                  get_response: bool = False,
                  api_config_file: str = None,
+                 **kwargs,
                  ):
         """WRITE - Modify which list an ATLAS\_ID is in.
 
@@ -742,7 +846,7 @@ class WriteObjectDetectionListNumber(APIClient):
                         'objectlist': list_number
                         }
         """
-        super().__init__(api_config_file)
+        super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'objectdetectionlist/'
         self.payload = payload
 
@@ -758,6 +862,7 @@ class WriteObjectDetectionListNumber(APIClient):
 #                  api_config_file: str = None,
 #                  payload: dict = {},
 #                  get_response: bool = False
+#                  **kwargs,
 #                  ):
 #         """
 #
@@ -766,7 +871,7 @@ class WriteObjectDetectionListNumber(APIClient):
 #         payload = {'objectid': '1132507360113744500,1151301851092728500'}
 #         paylod = {'objectgroupid': 73}
 #         """
-#         super().__init__(api_config_file)
+#         super().__init__(api_config_file, **kwargs)
 #         # THIS IS THE 'READ' URL FOR VRA SCORES TABLE
 #         self.url = self.apiURL + 'objectlist/'
 #         self.payload = payload
