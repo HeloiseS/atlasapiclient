@@ -44,7 +44,6 @@ submitted in the form.
 Once you have been granted access you will receive an email with your username and
 a **one-time use password** which you will have to change on your first login.
 
-**[ you will be able to request a token.... bla check??]**
 
 Help I forgot my password!
 ~~~~~~~~~~~~~~~~~~~~~~

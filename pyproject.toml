@@ -40,7 +40,10 @@ docs = ["sphinx==7.4.7", "sphinx_rtd_theme==3.0.2"]
                                                                              
                                                                                                                              
 #[project.scripts]                                                                                                           
-#my-script = "my_package.module:function"                                                                                    
+#my-script = "my_package.module:function"  
+
+[tool.setuptools]
+packages = ["atlasapiclient", ]
                                                                                                                              
 # ... other project metadata fields as specified in:                                                                         
 #     https://packaging.python.org/en/latest/specifications/declaring-project-metadata/         
