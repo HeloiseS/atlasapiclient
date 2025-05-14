@@ -15,7 +15,7 @@ or clone the repository from github:
 
 
 Config file
--------------------------
+~~~~~~~~~
 The client requires a config ile that contains the base url of the ATLAS transient web servers and your token for the ATLAS API.
 In the directory `atlasapiclient/config_files` you will find the `api_config_template.yaml` file.
 
@@ -41,7 +41,7 @@ Quick Recipes
 =================
 
 Cone Search
------------------------
+~~~~~~~~~~~~
 
 The cone search requires **four parameters**:
 
@@ -64,11 +64,10 @@ The cone search requires **four parameters**:
 
 
 Data for a Single Object
-----------------------------------------
+~~~~~~~~~~~~~~~~~~~
 
 Get the data
-~~~~~~~~~~~~
-
+--------------
 .. code-block:: python
 
    from atlasapiclient import client as atlaspaiclient
@@ -83,7 +82,7 @@ The path to that file is encoded in the `API_CONFIG_FILE` variable in the `atlas
 If you feel fancy and want to name your config file differently you have to keep track of its location and parse it with the argument `api_config_file`.
 
 Extract the Lightcurve from the JSON
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
 
 Your data can be found in the `client.response_data` attribute. Note that it is a `list` so if you only have one object you
 want to do `client.response_data[0]` to get the JSON data.
@@ -94,7 +93,7 @@ want to do `client.response_data[0]` to get the JSON data.
    non_dets = pd.DataFrame(client.response_data[0]['lcnondets'])
 
 Make a Neat Plot
-~~~~~~~~~~~~~~~~
+------------------
 
 .. code-block:: python
 
@@ -135,8 +134,8 @@ Make a Neat Plot
 
    AT 2018 cow lightcurve
 
-Get Multiple objects
-----------------------
+Get Data for Multiple objects
+~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want to query the ATLAS API for multiple objects you're going to encounter the rate limit, which is 100 per query.
 To handle this, there is a class to chunk stuff for you:
