@@ -14,13 +14,13 @@ convenient way to interact with the ATLAS Transient Server REST-API via Python.
 
 .. toctree::
    :maxdepth: 2
-   :caption: General info
+   :caption: About
 
    about
 
 .. toctree::
    :maxdepth: 2
-   :caption: For Users
+   :caption: Docs
 
    users
 
