@@ -128,10 +128,11 @@ Make a Neat Plot
 
 
 
-.. image:: _static/18cow.png
+.. figure:: _static/18cow.png
    :width: 200px
    :alt: AT2018cow lightcurve
    :align: center
+
    AT 2018 cow lightcurve
 
 Get Multiple objects
