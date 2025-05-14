@@ -211,8 +211,10 @@ class APIClient(ABC):
         self.config['token'] = str(self.token)
         self.config.write()
         
-        
-        
+        print(f"\n\nToken refreshed and written to {self.config.file_path}"
+              "\n"
+              "\nEnjoy the ATLAS API!\n\n")
+
     
 ###################################################
 #                                          READ UTILITIES                                          #
