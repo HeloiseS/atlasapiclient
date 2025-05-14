@@ -1,5 +1,4 @@
-The ATLAS Sky Survey
-====================
+
 .. _Asteroid Terrestrial-impact Last Alert System: https://atlas.fallingstar.com/
 .. _Forced Photometry Server: https://fallingstar-data.com/forcedphot/
 
