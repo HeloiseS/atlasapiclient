@@ -9,9 +9,12 @@ import numpy as np
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
     RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, 
-    RequestATLASIDsFromWebServerList
 )
-from atlasapiclient.exceptions import ATLASAPIClientError, ATLASAPIClientConfigError
+from atlasapiclient.exceptions import (
+    ATLASAPIClientError, 
+    ATLASAPIClientConfigError,
+    ATLASAPIClientArgumentWarning
+)
 from atlasapiclient.utils import config_path
 import atlasapiclient.client
 import atlasapiclient.utils
@@ -128,6 +131,21 @@ class TestConeSearch:
 
         client.get_response()
         assert client.response_data == {'key': 'value'}
+    
+    def test_verify_payload(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        payload = {'ra': 150,'dec': 60, 'radius': 60, 'requestType': 'nearest'}
+        client = ConeSearch(api_config_file=config_file, payload=payload)
+        
+        # Check that the payload is valid
+        client.verify_payload()
+        
+        # Check that the payload raises a warning if the radius is too large
+        client.payload['radius'] = 400
+        with pytest.warns(ATLASAPIClientArgumentWarning):
+            client.verify_payload()
+        # Final check to ensure the verification step doesn't raise an error
+        client.verify_payload()
 
 
 class TestRequestVRAScores:

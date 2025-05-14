@@ -16,6 +16,7 @@ Classes
 """
 import json
 from functools import cached_property
+import warnings
 from abc import ABC
 import logging
 
@@ -25,7 +26,10 @@ from pkg_resources import non_empty_lines
 from tqdm import tqdm
 import pandas as pd
 
-from atlasapiclient.exceptions import ATLASAPIClientError
+from atlasapiclient.exceptions import (
+    ATLASAPIClientError, 
+    ATLASAPIClientArgumentWarning,
+)
 from atlasapiclient.utils import (
     dict_list_id, 
     API_CONFIG_FILE, 
@@ -33,6 +37,7 @@ from atlasapiclient.utils import (
 )
 from atlasapiclient.config import ATLASConfigFile
 from atlasapiclient.authentication import Token
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -214,6 +219,8 @@ class APIClient(ABC):
 ###################################################
 
 class ConeSearch(APIClient):
+    CONE_SEARCH_MAX_RADIUS = 300  # arcseconds
+    
     def __init__(self,
                  payload: dict = {},
                  get_response: bool = False,
@@ -225,7 +232,8 @@ class ConeSearch(APIClient):
         Parameters
         ------------
         payload: dict
-            The Payload must contain RA, DEC, search radius in arcseconds and request type ('all', 'count' or 'nearest')
+            The Payload must contain RA, DEC, search radius in arcseconds and 
+            request type ('all', 'count' or 'nearest')
         get_response: bool
             If True, will get the response on instanciation
         api_config_file: str
@@ -240,6 +248,7 @@ class ConeSearch(APIClient):
         self.url = self.apiURL + 'cone/'
         self.payload = payload
 
+        self.verify_payload()
 
         # self.request = requests.post(self.url, self.payload, headers=self.headers)
         if get_response and len(payload) == 0:
@@ -247,6 +256,22 @@ class ConeSearch(APIClient):
 
         elif get_response:
             self.get_response()
+            
+    def verify_payload(self):
+        """
+        Verifcation function to check that payload contains a radius that is not 
+        too large.
+        """
+        # Check that the radius is not too large
+        if ('radius' in self.payload
+            and self.payload['radius'] > self.CONE_SEARCH_MAX_RADIUS
+            ):
+            warnings.warn(
+                f"Radius cannot be larger than {self.CONE_SEARCH_MAX_RADIUS} "
+                "arcseconds, any values greater than this will be rounded down "
+                f"to {self.CONE_SEARCH_MAX_RADIUS} arcseconds", 
+                ATLASAPIClientArgumentWarning
+            )
 
 class RequestVRAScores(APIClient):
     def __init__(self,
