@@ -32,10 +32,22 @@ In the directory `atlasapiclient/config_files` you will find the `api_config_tem
 * 2) Update your token (if you don't have a token see below)
 * 3) Update the url to "https://psweb.mp.qub.ac.uk/sne/atlas4/api/"
 
-.. note::
-   **How do I get a token?**
-   For now, you ask Ken, the wizard in charge the ATLAS transient servers. Email: k.w.smith@qub.ac.uk
 
+**How do I get a token?**
+Once you have access to the web server you can get a token by using the 
+`APIClient.refresh_token()` method. This will generate a token for you and save 
+it in the config file defined within the `API_CONFIG_FILE` variable in the `atlasapiclient/utils.py` file.
+For example:
+
+.. code-block:: python
+
+   from atlasapiclient import client as atlaspaiclient
+
+   client = atlaspaiclient.APIClient()
+   client.refresh_token()
+
+This will work for any of the clients included in `atlasapiclient.client`. If 
+your token is expired you can use the same method to refresh it.
 
 Quick Recipes
 =================
