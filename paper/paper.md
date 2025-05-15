@@ -13,7 +13,7 @@ authors:
     orcid: 0000-0001-9262-3587
     equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 3
-  - name: Ken Smith 
+  - name: Ken W. Smith 
     orcid: 0000-0001-9535-3199
     corresponding: true # (This is how to denote the corresponding author)
     affiliation: "1,2"
@@ -38,7 +38,7 @@ and follow-up of extra-galactic transients.
 The data from the ATLAS server can be accessed through a REST API,
 which has allowed the development of bots that need direct access to the data
 to help rank alerts  and
-trigger follow-up observations of promising targets .
+trigger follow-up observations of promising targets.
 Here we present the python client we have developed for the ATLAS API 
 to help connect bots and scientists to our data. 
 
