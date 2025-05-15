@@ -23,7 +23,7 @@ affiliations:
    index: 1
  - name: Astrophysics Research Center, Queen's University Belfast, Belfast, BT7 1NN, UK
    index: 2
- - name: Oxford Research Software Engineering, Doctoral Training Centre, University of Oxford, Keble Road, Oxford, OX1 3RH, UK
+ - name: Oxford Research Software Engineering Group, Doctoral Training Centre, University of Oxford, Keble Road, Oxford, OX1 3RH, UK
    index: 3
 date: 15 May 2025
 bibliography: paper.bib
@@ -37,7 +37,8 @@ sky survey with a cadence of 24 to 48 hours [@tonry2018], and
 the ATLAS Transient Server [@smith2020] processes the alert stream to enable the discovery
 and follow-up of extra-galactic transients.
 The data from the ATLAS server can be accessed through a REST API,
-which has allowed the development of bots to help rank alerts  and
+which has allowed the development of bots that need direct access to the data
+to help rank alerts  and
 trigger follow-up observations of promising targets .
 Here we present the python client we have developed for the ATLAS API 
 to help connect bots and scientists to our data. 
@@ -55,21 +56,24 @@ other astronomy projects to the ATLAS data and its stream.
 It is currently allowing the follow-up of ATLAS alerts by the Mookodi telescope
 in the South African Astronomical Observatory [@erasmus2024spie], which has allowed automated triggering
 and classification of transients within 100 Mpc (e.g. [@class2025arc], [@class2025cy]), since early 2025.
-In the future this will allow us ot connect our stream to other surveys and 
+In the future this will allow us to connect our stream to other surveys and 
 follow-up facilities (e.g. [@soxs])
 
 We expect the API to evolve over time which could break the production codes 
-that connect to the ATLAS servers. 
+that connect to the ATLAS servers.
 By having a dedicated client package that includes a full set of unit and
-integration tests we can mitigate these issues by releasing updates to the client 
+integration tests we can release updates to the client 
 that are compatible with the new API but do not require users to change their
 existing code. 
+Decoupling the user's code form the implementation of the API therefore
+increases robustness from the users side. 
 
 # Data Access 
 In order to gain access to the servers, prospective users will need to fill a 
 [Data Request Form](https://forms.gle/Jvy18eejkvxmcN2f6) including 
 a short (no longer than 1 page) science case justifying their access needs
 (length of time; Read-only or Read-Write access).
+We have also included data policies compliant with the General Data Protection Regulation (GDPR).
 
 
 # Acknowledgements
