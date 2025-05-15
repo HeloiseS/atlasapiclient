@@ -17,7 +17,6 @@ authors:
     orcid: 0000-0001-9535-3199
     corresponding: true # (This is how to denote the corresponding author)
     affiliation: "1,2"
-
 affiliations:
  - name: Astrophysics sub-Department, Department of Physics, University of Oxford, Keble Road, Oxford, OX1 3RH, UK
    index: 1
@@ -44,7 +43,9 @@ Here we present the python client we have developed for the ATLAS API
 to help connect bots and scientists to our data. 
 
 
+
 # Statement of need
+
 
 `atlasapiclient` is a python client that facilitates the use of the ATLAS REST API.
 It provides a class-based interface to all the read-write utilities of the API and
@@ -77,8 +78,8 @@ We have also included data policies compliant with the General Data Protection R
 
 
 # Acknowledgements
-
 HFS and JL are supported by the Schmidt Sciences foundation.
 KS is supported by the Royal Society.
+
 
 # References
