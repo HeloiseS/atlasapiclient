@@ -35,9 +35,9 @@ variable in the ``atlasapiclient/utils.py file``.
 
 For example:
 ```python   
-from atlasapiclient import client as atlaspaiclient
+from atlasapiclient import client as atlasapiclient
 
-client = atlaspaiclient.APIClient()
+client = atlasapiclient.APIClient()
 client.refresh_token()
 ```
 
@@ -84,9 +84,9 @@ cp api_config_template.yaml api_config_MINE.yaml
 ### Cone Search
 
 ``` python
-from atlasapiclient import client as atlaspaiclient
+from atlasapiclient import client as atlasapiclient
 
-client = atlaspaiclient.ConeSearch(payload={'ra': 150,
+client = atlasapiclient.ConeSearch(payload={'ra': 150,
                                             'dec': 60,
                                             'radius': 60,
                                             'requestType': 'nearest'},
@@ -99,10 +99,10 @@ client = atlaspaiclient.ConeSearch(payload={'ra': 150,
 To get the data:
 
 ```python
-from atlasapiclient import client as atlaspaiclient
+from atlasapiclient import client as atlasapiclient
 
 atlas_id = '1161600211221604900'
-client = atlaspaiclient.RequestSingleSourceData(atlas_id=atlas_id, get_response=True)
+client = atlasapiclient.RequestSingleSourceData(atlas_id=atlas_id, get_response=True)
 ```
 
 To extract the light curve data from the JSON:
@@ -151,9 +151,9 @@ ax.legend()
 ### Data for Multiple Objects
 
 ```python
-from atlasapiclient import client as atlaspaiclient
+from atlasapiclient import client as atlasapiclient
 
-client = RequestMultipleSourceData(atlas_ids=YOUR_LIST_OF_IDS, mjdthreshold = LOWER_MJD_THRESHOLD)
+client = atlasapiclient.RequestMultipleSourceData(array_ids=YOUR_LIST_OF_IDS, mjdthreshold = LOWER_MJD_THRESHOLD)
 client.chunk_get_response() # Chunks the list of IDs into a bunch of payloads and colates the responses.
 ```
 
