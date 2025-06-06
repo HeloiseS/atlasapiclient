@@ -1,7 +1,7 @@
 # ATLAS API Client
 
 [![DOI](https://zenodo.org/badge/804295497.svg)](https://doi.org/10.5281/zenodo.14331062)
-
+[![status](https://joss.theoj.org/papers/f5f456c92c349fc87ad933e661460b19/status.svg)](https://joss.theoj.org/papers/f5f456c92c349fc87ad933e661460b19)
 
 ### Who/what is this code for?
 This package allows authorised users of the ATLAS Transient web server to
