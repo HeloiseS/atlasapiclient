@@ -212,7 +212,6 @@ Software in science needs recognition so we can keep funding and human
 resources allocated.
 Please cite this DOI in your TNS reports and papers if you used our code, and thank you!
 
-.. image:: https://zenodo.org/badge/804295497.svg
-  :target: https://doi.org/10.5281/zenodo.14331062
+[![DOI](https://zenodo.org/badge/804295497.svg)](https://doi.org/10.5281/zenodo.14331062)
 
 
