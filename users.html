@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Set-up &#8212; ATLAS API Client 1.2.0 documentation</title>
+    <title>The Docs &#8212; ATLAS API Client 1.2.0 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Dev Notes" href="dev.html" />
+    <link rel="next" title="ATLAS API Client Reference" href="api-reference.html" />
     <link rel="prev" title="Who/what is this code for?" href="about.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -155,26 +155,20 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">About</span></p>
-<ul class="nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">For Users</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="about.html">Who/what is this code for?</a></li>
 
 
 
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Docs</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Set-up</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Docs</a></li>
 
 
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">For Devs</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="dev.html">Dev Notes</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Manual</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
 </ul>
 
     </div>
@@ -313,7 +307,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Set-up</h1>
+    <h1>The Docs</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -323,27 +317,27 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Set-up</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-file">Config file</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-get-a-token">How do I get a token?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Docs</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up">Set-up</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install">Install</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#config-file">Config file</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-get-a-token">How do I get a token?</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-recipes">Quick Recipes</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cone-search">Cone Search</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-for-a-single-object">Data for a Single Object</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-the-data">Get the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-for-a-single-object">Data for a Single Object</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-the-data-for-a-specific-atlas-id">Get the data for a specific ATLAS ID</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-the-lightcurve-from-the-json">Extract the Lightcurve from the JSON</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-neat-plot">Make a Neat Plot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-data-for-multiple-objects">Get Data for Multiple objects</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-data-for-multiple-objects">Get Data for Multiple objects</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-and-other-bits-of-data">Data Structure and other bits of data</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-sherlock-crossmatches">Getting the Sherlock crossmatches</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-that-atlas-id-object-in-tns">Is that ATLAS_ID object in TNS?</a></li>
-</ul>
-</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-and-other-bits-of-data">Data Structure and other bits of data</a></li>
 </ul>
 
             </nav>
@@ -356,8 +350,12 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="set-up">
-<h1>Set-up<a class="headerlink" href="#set-up" title="Link to this heading">#</a></h1>
+  <section id="the-docs">
+<h1>The Docs<a class="headerlink" href="#the-docs" title="Link to this heading">#</a></h1>
+<section id="set-up">
+<h2>Set-up<a class="headerlink" href="#set-up" title="Link to this heading">#</a></h2>
+<section id="install">
+<h3>Install<a class="headerlink" href="#install" title="Link to this heading">#</a></h3>
 <p>First you need to install the package, you can either use pip</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>atlasapiclient
 </pre></div>
@@ -366,8 +364,9 @@ document.write(`
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:HeloiseS/atlasapiclient.git
 </pre></div>
 </div>
+</section>
 <section id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Link to this heading">#</a></h2>
+<h3>Config file<a class="headerlink" href="#config-file" title="Link to this heading">#</a></h3>
 <p>The client requires a config ile that contains the base url of the ATLAS transient web servers and your token for the ATLAS API.
 In the directory <cite>atlasapiclient/config_files</cite> you will find the <cite>api_config_template.yaml</cite> file.</p>
 <ul class="simple">
@@ -382,7 +381,9 @@ cp<span class="w"> </span>api_config_template.yaml<span class="w"> </span>api_co
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The name of that file matters immensly. <strong>Unless you know what you’re doing DON’T CHANGE IT</strong></p>
+<p>As you’ll see below we don’t explicitely parse the config file because we assume you have named yours  <code class="docutils literal notranslate"><span class="pre">api_config_MINE.yaml</span></code>.
+The path to that file is encoded in the <code class="docutils literal notranslate"><span class="pre">API_CONFIG_FILE</span></code> variable in the <code class="docutils literal notranslate"><span class="pre">atlasapiclient/utils.py</span></code> file and parsed by default to the classes.
+If you feel fancy and want to name your config file differently you have to keep track of its location and parse it with the argument <cite>api_config_file</cite>.</p>
 </div>
 <ul class="simple">
 <li><ol class="arabic simple" start="2">
@@ -396,18 +397,20 @@ cp<span class="w"> </span>api_config_template.yaml<span class="w"> </span>api_co
 </ul>
 </section>
 <section id="how-do-i-get-a-token">
-<h2>How do I get a token?<a class="headerlink" href="#how-do-i-get-a-token" title="Link to this heading">#</a></h2>
+<h3>How do I get a token?<a class="headerlink" href="#how-do-i-get-a-token" title="Link to this heading">#</a></h3>
 <p>Once you have access to the web server you can get a token for API access by using the
 <cite>APIClient.refresh_token()</cite> method. This will generate a token for you and save
 it in the config file defined within the <cite>API_CONFIG_FILE</cite> variable in the <cite>atlasapiclient/utils.py</cite> file.
 For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">atlaspaiclient</span><span class="o">.</span><span class="n">APIClient</span><span class="p">()</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">APIClient</span><span class="p">()</span>
 <span class="n">client</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>This will work for any of the clients included in <cite>atlasapiclient.client</cite>. If
 your token is expired you can use the same method to refresh it.</p>
+</section>
 </section>
 </section>
 <section id="quick-recipes">
@@ -433,17 +436,23 @@ your token is expired you can use the same method to refresh it.</p>
 </section>
 <section id="data-for-a-single-object">
 <h2>Data for a Single Object<a class="headerlink" href="#data-for-a-single-object" title="Link to this heading">#</a></h2>
-<section id="get-the-data">
-<h3>Get the data<a class="headerlink" href="#get-the-data" title="Link to this heading">#</a></h3>
+<section id="get-the-data-for-a-specific-atlas-id">
+<h3>Get the data for a specific ATLAS ID<a class="headerlink" href="#get-the-data-for-a-specific-atlas-id" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
 
 <span class="n">atlas_id</span> <span class="o">=</span> <span class="s1">&#39;1161600211221604900&#39;</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">RequestSingleSourceData</span><span class="p">(</span><span class="n">atlas_id</span><span class="o">=</span><span class="n">atlas_id</span><span class="p">,</span> <span class="n">get_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Note: Here we don’t parse the config file because we assume you have named yours  <cite>api_config_MINE.yaml</cite>.
-The path to that file is encoded in the <cite>API_CONFIG_FILE</cite> variable in the <cite>atlasapiclient/utils.py</cite> file and parsed by default to the classes.</p>
-<p>If you feel fancy and want to name your config file differently you have to keep track of its location and parse it with the argument <cite>api_config_file</cite>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>What is `get_response`?</strong> This argument just tells the function whether you want to make the request
+right away as soon as the <cite>RequestSingleSourceData</cite> object has been instanciated. Not doing this
+allows you to set up the object, check the payload that was created on instanciation, and then
+you can get the response by calling the <cite>get_response()</cite> method. If you don’t need to check the
+payload then it’s just easier to do it all in one swoop, but when debugging you don’t necessarily want
+to make API calls so we made it an <strong>opt-in</strong> situation.</p>
+</div>
 </section>
 <section id="extract-the-lightcurve-from-the-json">
 <h3>Extract the Lightcurve from the JSON<a class="headerlink" href="#extract-the-lightcurve-from-the-json" title="Link to this heading">#</a></h3>
@@ -453,10 +462,21 @@ want to do <cite>client.response_data[0]</cite> to get the JSON data.</p>
 <span class="n">non_dets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">response_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lcnondets&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>Why is my response data in a list?</strong> This is standard for API response: here we’ve only asked
+for one object but if we had asked for 3, then each object would have their JSON data in an item of the
+list. Ensuring that the result type is consistent regardless of the number of objects is a good
+idea in general so you’re not mixing types depending on user requests. <strong>Remember: Even if you ask
+for only one object, you’ll be getting a list</strong>.</p>
+</div>
 </section>
 <section id="make-a-neat-plot">
 <h3>Make a Neat Plot<a class="headerlink" href="#make-a-neat-plot" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mjd_min</span><span class="p">,</span> <span class="n">mjd_max</span><span class="o">=</span> <span class="mi">58277</span><span class="p">,</span> <span class="mi">58327</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">mjd_min</span><span class="p">,</span> <span class="n">mjd_max</span><span class="o">=</span> <span class="mi">58277</span><span class="p">,</span> <span class="mi">58327</span>
 
 <span class="n">filter_colors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">}</span>
 
@@ -483,6 +503,7 @@ want to do <cite>client.response_data[0]</cite> to get the JSON data.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;MJD&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Magnitude&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <figure class="align-center" id="id1">
@@ -493,9 +514,8 @@ want to do <cite>client.response_data[0]</cite> to get the JSON data.</p>
 </figcaption>
 </figure>
 </section>
-</section>
 <section id="get-data-for-multiple-objects">
-<h2>Get Data for Multiple objects<a class="headerlink" href="#get-data-for-multiple-objects" title="Link to this heading">#</a></h2>
+<h3>Get Data for Multiple objects<a class="headerlink" href="#get-data-for-multiple-objects" title="Link to this heading">#</a></h3>
 <p>If you want to query the ATLAS API for multiple objects you’re going to encounter the rate limit, which is 100 per query.
 To handle this, there is a class to chunk stuff for you:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
@@ -507,27 +527,22 @@ To handle this, there is a class to chunk stuff for you:</p>
 <p>You can then get the data just as you would for a single object.</p>
 </section>
 </section>
+</section>
 <section id="data-structure-and-other-bits-of-data">
 <h1>Data Structure and other bits of data<a class="headerlink" href="#data-structure-and-other-bits-of-data" title="Link to this heading">#</a></h1>
 <p>The ATLAS API gives you back <em>everything</em> (or nearly).
-You can check out the json <a href="#id2"><span class="problematic" id="id3">`schema`_</span></a>  if you want to navigate
+You can check out the json <a class="reference external" href="https://psweb.mp.qub.ac.uk/misc/api/atlas/">schema</a>  if you want to navigate
 the key structure and what they mean. <strong>If anything is not clear please add an issue to the GH</strong>.
 Here is a couple of handy recipes…</p>
-<section id="getting-the-sherlock-crossmatches">
-<h2>Getting the Sherlock crossmatches<a class="headerlink" href="#getting-the-sherlock-crossmatches" title="Link to this heading">#</a></h2>
 <p>The first crossmatch (if any) is a merged entry which cherry picks the best information from all catalogues (so if a galaxy has info in 3 catalogues it will be cross matched 3 times and the info from these catalogues will appear as separate entries in our list of dictionaries - the first entry in the list will be the combination of all the best info in those 3 entries)
 The following entries are the individual crossmatches.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary_crossmatch</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">response_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;sherlock_crossmatches&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-</section>
-<section id="is-that-atlas-id-object-in-tns">
-<h2>Is that ATLAS_ID object in TNS?<a class="headerlink" href="#is-that-atlas-id-object-in-tns" title="Link to this heading">#</a></h2>
 <p>You can check the crossmatches using:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">response_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tns_crossmatches&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-</section>
 </section>
 
 
@@ -551,11 +566,11 @@ The following entries are the individual crossmatches.</p>
       </div>
     </a>
     <a class="right-next"
-       href="dev.html"
+       href="api-reference.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Dev Notes</p>
+        <p class="prev-next-title">ATLAS API Client Reference</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -575,27 +590,27 @@ The following entries are the individual crossmatches.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Set-up</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#config-file">Config file</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-get-a-token">How do I get a token?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Docs</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up">Set-up</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install">Install</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#config-file">Config file</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-get-a-token">How do I get a token?</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-recipes">Quick Recipes</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cone-search">Cone Search</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-for-a-single-object">Data for a Single Object</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-the-data">Get the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-for-a-single-object">Data for a Single Object</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-the-data-for-a-specific-atlas-id">Get the data for a specific ATLAS ID</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-the-lightcurve-from-the-json">Extract the Lightcurve from the JSON</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-neat-plot">Make a Neat Plot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-data-for-multiple-objects">Get Data for Multiple objects</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-data-for-multiple-objects">Get Data for Multiple objects</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-and-other-bits-of-data">Data Structure and other bits of data</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-sherlock-crossmatches">Getting the Sherlock crossmatches</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-that-atlas-id-object-in-tns">Is that ATLAS_ID object in TNS?</a></li>
-</ul>
-</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-and-other-bits-of-data">Data Structure and other bits of data</a></li>
 </ul>
 
   </nav></div>
@@ -621,7 +636,7 @@ By Heloise Stevance
 
   <p class="copyright">
     
-      © Copyright 2024, Heloise Stevance.
+      © Copyright 2026, Heloise Stevance.
       <br/>
     
   </p>
