@@ -42,8 +42,7 @@ For example:
 
 .. code-block:: python
 
-   from atlasapiclient import client as atlaspaiclient
-
+   from atlasapiclient import client as atlasapi
    client = atlaspaiclient.APIClient()
    client.refresh_token()
 
@@ -65,9 +64,9 @@ The cone search requires **four parameters**:
 
 .. code-block:: python
 
-    from atlasapiclient import client as atlaspaiclient
+    from atlasapiclient import client as atlasapi
 
-    client = atlaspaiclient.ConeSearch(payload={'ra': 150,
+    client = atlasapi.ConeSearch(payload={'ra': 150,
                                                 'dec': 60,
                                                 'radius': 60,
                                                 'requestType': 'nearest'},
@@ -83,10 +82,10 @@ Get the data
 --------------
 .. code-block:: python
 
-   from atlasapiclient import client as atlaspaiclient
+   from atlasapiclient import client as atlasapi
 
    atlas_id = '1161600211221604900'
-   client = atlaspaiclient.RequestSingleSourceData(atlas_id=atlas_id, get_response=True)
+   client = atlasapi.RequestSingleSourceData(atlas_id=atlas_id, get_response=True)
 
 
 Note: Here we don't parse the config file because we assume you have named yours  `api_config_MINE.yaml`.
@@ -155,9 +154,9 @@ To handle this, there is a class to chunk stuff for you:
 
 .. code-block:: python
 
-   from atlasapiclient import client as atlaspaiclient
+   from atlasapiclient import client as atlasapi
 
-   client = RequestMultipleSourceData(atlas_ids=YOUR_LIST_OF_IDS, mjdthreshold = LOWER_MJD_THRESHOLD)
+   client = atlasapi.RequestMultipleSourceData(atlas_ids=YOUR_LIST_OF_IDS, mjdthreshold = LOWER_MJD_THRESHOLD)
    client.chunk_get_response() # Chunks the list of IDs into a bunch of payloads and colates the responses.
 
 You can then get the data just as you would for a single object.

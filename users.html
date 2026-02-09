@@ -401,8 +401,7 @@ cp<span class="w"> </span>api_config_template.yaml<span class="w"> </span>api_co
 <cite>APIClient.refresh_token()</cite> method. This will generate a token for you and save
 it in the config file defined within the <cite>API_CONFIG_FILE</cite> variable in the <cite>atlasapiclient/utils.py</cite> file.
 For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlaspaiclient</span>
-
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">atlaspaiclient</span><span class="o">.</span><span class="n">APIClient</span><span class="p">()</span>
 <span class="n">client</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">()</span>
 </pre></div>
@@ -422,9 +421,9 @@ your token is expired you can use the same method to refresh it.</p>
 <li><p>Search radius in <strong>arcseconds</strong></p></li>
 <li><p>Request type: All, Nearest or Count (case insensitive)</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlaspaiclient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">atlaspaiclient</span><span class="o">.</span><span class="n">ConeSearch</span><span class="p">(</span><span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">ConeSearch</span><span class="p">(</span><span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
                                             <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
                                             <span class="s1">&#39;radius&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
                                             <span class="s1">&#39;requestType&#39;</span><span class="p">:</span> <span class="s1">&#39;nearest&#39;</span><span class="p">},</span>
@@ -436,10 +435,10 @@ your token is expired you can use the same method to refresh it.</p>
 <h2>Data for a Single Object<a class="headerlink" href="#data-for-a-single-object" title="Link to this heading">#</a></h2>
 <section id="get-the-data">
 <h3>Get the data<a class="headerlink" href="#get-the-data" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlaspaiclient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
 
 <span class="n">atlas_id</span> <span class="o">=</span> <span class="s1">&#39;1161600211221604900&#39;</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">atlaspaiclient</span><span class="o">.</span><span class="n">RequestSingleSourceData</span><span class="p">(</span><span class="n">atlas_id</span><span class="o">=</span><span class="n">atlas_id</span><span class="p">,</span> <span class="n">get_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">RequestSingleSourceData</span><span class="p">(</span><span class="n">atlas_id</span><span class="o">=</span><span class="n">atlas_id</span><span class="p">,</span> <span class="n">get_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Note: Here we don’t parse the config file because we assume you have named yours  <cite>api_config_MINE.yaml</cite>.
@@ -499,9 +498,9 @@ want to do <cite>client.response_data[0]</cite> to get the JSON data.</p>
 <h2>Get Data for Multiple objects<a class="headerlink" href="#get-data-for-multiple-objects" title="Link to this heading">#</a></h2>
 <p>If you want to query the ATLAS API for multiple objects you’re going to encounter the rate limit, which is 100 per query.
 To handle this, there is a class to chunk stuff for you:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlaspaiclient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">RequestMultipleSourceData</span><span class="p">(</span><span class="n">atlas_ids</span><span class="o">=</span><span class="n">YOUR_LIST_OF_IDS</span><span class="p">,</span> <span class="n">mjdthreshold</span> <span class="o">=</span> <span class="n">LOWER_MJD_THRESHOLD</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">RequestMultipleSourceData</span><span class="p">(</span><span class="n">atlas_ids</span><span class="o">=</span><span class="n">YOUR_LIST_OF_IDS</span><span class="p">,</span> <span class="n">mjdthreshold</span> <span class="o">=</span> <span class="n">LOWER_MJD_THRESHOLD</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">chunk_get_response</span><span class="p">()</span> <span class="c1"># Chunks the list of IDs into a bunch of payloads and colates the responses.</span>
 </pre></div>
 </div>
