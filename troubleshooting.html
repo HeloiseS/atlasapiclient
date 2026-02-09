@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Who/what is this code for? &#8212; ATLAS API Client 1.2.0 documentation</title>
+    <title>Troubleshooting &#8212; ATLAS API Client 1.2.0 documentation</title>
   
   
   
@@ -40,12 +40,12 @@
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'about';</script>
-    <link rel="author" title="About these documents" href="#" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'troubleshooting';</script>
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="The Docs" href="users.html" />
-    <link rel="prev" title="ATLAS API Client documentation" href="index.html" />
+    <link rel="next" title="ATLAS API Client Reference" href="api-reference.html" />
+    <link rel="prev" title="The Docs" href="users.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -157,14 +157,14 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">For Users</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Who/what is this code for?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Who/what is this code for?</a></li>
 
 
 
 <li class="toctree-l1"><a class="reference internal" href="users.html">The Docs</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">For Devs</span></p>
@@ -224,7 +224,7 @@
       
       
       
-      <li><a href="_sources/about.rst" target="_blank"
+      <li><a href="_sources/troubleshooting.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -308,7 +308,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Who/what is this code for?</h1>
+    <h1>Troubleshooting</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -318,19 +318,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Who/what is this code for?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-get-access">How to get access?</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#help-i-forgot-my-password">Help I forgot my password!</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-error-messages">Common Error messages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-verify-your-token-is-working-correctly">How to verify your token is working correctly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-if-refresh-token-fails">What if <code class="docutils literal notranslate"><span class="pre">refresh_token()</span></code> fails?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-rest-my-password">How do I rest my password?</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#just-admin-things">Just Admin Things</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#privacy-policy">Privacy Policy</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute-to-this-code">How to contribute to this code?</a></li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-this-code">Citing this code</a></li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -341,89 +333,56 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p>The <a class="reference external" href="https://atlas.fallingstar.com/">Asteroid Terrestrial-impact Last Alert System</a> (ATLAS)  is an all sky
-survey which is funded to discover and track near earth objects.
-As part of its normal operations, ATLAS also discovers many other
-forms of transient astrophysical events such as supernovae, variable stars,
-tidal disruption events.
-These are handled by the Transient sky survey team at Queen’s University Belfast and Oxford University.</p>
-<p>ATLAS is composed of four telescopes, two in Hawaii and one in South Africa and another in Chile.</p>
-<section id="who-what-is-this-code-for">
-<h1>Who/what is this code for?<a class="headerlink" href="#who-what-is-this-code-for" title="Link to this heading">#</a></h1>
-<p>This package allows users of the ATLAS Transient web server to
-query the server without being exposed to code breaking changes to the underlying API.
-In particular we have in mind <strong>bots</strong> and other <strong>automated services</strong> which
-need to run smoothly and continuously to ingest and handle a data stream.</p>
-<p>It also allows users the make routine queries in a friendlier way, such as:
-* doing a <strong>Cone Search</strong>
-* check out the data in <strong>your custom list</strong></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If all you want is forced photometry given an RA and Dec check out the <a class="reference external" href="https://fallingstar-data.com/forcedphot/">Forced Photometry Server</a></p>
+  <section id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h1>
+<section id="common-error-messages">
+<h2>Common Error messages<a class="headerlink" href="#common-error-messages" title="Link to this heading">#</a></h2>
+<p>If you are new to HTML error messages, here are some useful things to know:</p>
+<ul class="simple">
+<li><p>2xx errors: <strong>It Worked!</strong> (you rarely see that one, you’ll get your data)</p></li>
+<li><dl class="simple">
+<dt>4xx errors: <strong>You are the problem</strong></dt><dd><ul>
+<li><p>400 Bad Request: <strong>Your request is the problem</strong> (missing or badly formatted data, etc.)</p></li>
+<li><p>401 Unauthorized: <strong>Your token is the problem</strong> (invalid or expired token, etc.)</p></li>
+<li><p>403 Forbidden: <strong>Your access is the problem</strong> (for example you’re trying to do a write operation with a read-only token))</p></li>
+<li><p>404 Not Found: <strong>The URL is the problem</strong> (you might be using an old URL, etc.)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>5xx errors: <strong>The server is the problem</strong> (server is down or overloaded, etc.)</p></li>
+</ul>
+<p>And these onese you likely won’t see when using this package but fyi:
+* 1xx errors: <strong>Some Info</strong>
+* 3xx errors: <strong>Redirection</strong></p>
+</section>
+<section id="how-to-verify-your-token-is-working-correctly">
+<h2>How to verify your token is working correctly<a class="headerlink" href="#how-to-verify-your-token-is-working-correctly" title="Link to this heading">#</a></h2>
+<p>We have not implemented a function that just “pings” the server to check this without requesting data.
+The <strong>Easiest thing to do is a cone search</strong> like shown in the docs, because it does not
+rely on you knowing a specific ATLAS ID.</p>
+<p>If you get no data you can check the error message by doing</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">ConeSearch</span><span class="p">(</span><span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+                                            <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+                                            <span class="s1">&#39;radius&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+                                            <span class="s1">&#39;requestType&#39;</span><span class="p">:</span> <span class="s1">&#39;nearest&#39;</span><span class="p">},</span>
+                                    <span class="n">get_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">response_status_code</span><span class="p">)</span>
+</pre></div>
 </div>
 </section>
-<section id="how-to-get-access">
-<h1>How to get access?<a class="headerlink" href="#how-to-get-access" title="Link to this heading">#</a></h1>
-<p>The ATLAS Transient web server is our <strong>production server</strong> for the survey, and
-to manage the load on our machines we cannot give unlimited access.</p>
-<p>Anyone with legitimate scientific interests can apply for access by submitting a <strong>1-page max</strong> science case
-to the [Data Request Form](<a class="reference external" href="https://forms.gle/Jvy18eejkvxmcN2f6">https://forms.gle/Jvy18eejkvxmcN2f6</a>), justifying your access needs
-(length of time and whether you need Write access - you probably do not).</p>
-<p>The ATLAS team will review requests <strong>at least once a month</strong> on the first Friday.
-If you require urgent access email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a>  <strong>after submitting the form</strong> with the subject line:
-“Urgent ATLAS access request - [Proposal Title]”. The [Proposal Title] should be the same as the one
-submitted in the form.</p>
-<p>Once you have been granted access you will receive an email with your username and
-a <strong>one-time use password</strong> which you will have to change on your first login.</p>
-<section id="help-i-forgot-my-password">
-<h2>Help I forgot my password!<a class="headerlink" href="#help-i-forgot-my-password" title="Link to this heading">#</a></h2>
-<p>The server doesn’t store your email address so it can’t send you an email to reset the password.
-If you forget it for good, you will need to email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> or <a class="reference external" href="mailto:ken&#46;smith&#37;&#52;&#48;physics&#46;ox&#46;ac&#46;uk">ken<span>&#46;</span>smith<span>&#64;</span>physics<span>&#46;</span>ox<span>&#46;</span>ac<span>&#46;</span>uk</a>.
-We will then use our admin super powers to reset your password to a <strong>one-time use</strong> password
-which you will then be able to reset.</p>
+<section id="what-if-refresh-token-fails">
+<h2>What if <code class="docutils literal notranslate"><span class="pre">refresh_token()</span></code> fails?<a class="headerlink" href="#what-if-refresh-token-fails" title="Link to this heading">#</a></h2>
+<p>Email <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> or <a class="reference external" href="mailto:k&#46;w&#46;smith&#37;&#52;&#48;qub&#46;ac&#46;uk">k<span>&#46;</span>w<span>&#46;</span>smith<span>&#64;</span>qub<span>&#46;</span>ac<span>&#46;</span>uk</a></p>
 </section>
+<section id="how-do-i-rest-my-password">
+<h2>How do I rest my password?<a class="headerlink" href="#how-do-i-rest-my-password" title="Link to this heading">#</a></h2>
+<p>You can do it from the web interface by clicking on “Forgot password?” and following the instructions.
+If that fails, email us.</p>
 </section>
-<section id="just-admin-things">
-<h1>Just Admin Things<a class="headerlink" href="#just-admin-things" title="Link to this heading">#</a></h1>
-<section id="privacy-policy">
-<h2>Privacy Policy<a class="headerlink" href="#privacy-policy" title="Link to this heading">#</a></h2>
-<p>As ATLAS users your first name and last name will be stored on our server.
-Your email address will be stored on a Google Drive spreadsheet alongside the information
-provided with your Data Access Request Form.
-We store this data because it is required to provide you access to this service and we will only store it
-as long as needed to provide this service.
-The ATLAS user list will be reviewed twice a year: In November and in May.
-If your Data Access Request is out of date, or if you have not logged into the server since the last review,
-we will email you with a <strong>two-week deletion warning</strong>.
-If we receive no response, your profile will be deleted and your access revoked.
-If you would like us to delete your data sooner, send an email to <a class="reference external" href="mailto:hfstevance&#37;&#52;&#48;gmail&#46;com">hfstevance<span>&#64;</span>gmail<span>&#46;</span>com</a> and we will remove your account
-and associated data.</p>
-<p><em>Who can see my data?</em>:
-All users of the server can see your name.surname when you comment on an object.
-Your email is stored in a private Google Drive spreadsheet that only a couple of project administrators
-can access.</p>
-<p><strong>We will never share your data with third parties</strong></p>
-</section>
-<section id="how-to-contribute-to-this-code">
-<h2>How to contribute to this code?<a class="headerlink" href="#how-to-contribute-to-this-code" title="Link to this heading">#</a></h2>
-<p>If you would like to contribute to this project you are welcome to
-fork and open a pull request however <strong>we strongly recommend asking
-the dev team (via hfstevance&#64;gmail.com) before you start putting
-in some work</strong>. It’s possible that changes you want to make would
-require other changes in our telescope pipelines and if we do not have
-the resources to refactor those codes, or if your changes are incompatible
-with our other pipelines, we may have to deny what could look like
-a very sensible PR.</p>
-<p>If there are good first issues we will flag them clearly.</p>
-</section>
-</section>
-<section id="citing-this-code">
-<h1>Citing this code<a class="headerlink" href="#citing-this-code" title="Link to this heading">#</a></h1>
-<p>Software in science needs recognition so we can keep funding and human
-resources allocated.
-Please cite this DOI in your TNS reports and papers if you used our code, and thank you!</p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.14331062"><img alt="https://zenodo.org/badge/804295497.svg" src="https://zenodo.org/badge/804295497.svg" />
-</a>
 </section>
 
 
@@ -438,20 +397,20 @@ Please cite this DOI in your TNS reports and papers if you used our code, and th
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="index.html"
+       href="users.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">ATLAS API Client documentation</p>
+        <p class="prev-next-title">The Docs</p>
       </div>
     </a>
     <a class="right-next"
-       href="users.html"
+       href="api-reference.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The Docs</p>
+        <p class="prev-next-title">ATLAS API Client Reference</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -471,19 +430,11 @@ Please cite this DOI in your TNS reports and papers if you used our code, and th
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Who/what is this code for?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-get-access">How to get access?</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#help-i-forgot-my-password">Help I forgot my password!</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-error-messages">Common Error messages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-verify-your-token-is-working-correctly">How to verify your token is working correctly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-if-refresh-token-fails">What if <code class="docutils literal notranslate"><span class="pre">refresh_token()</span></code> fails?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-rest-my-password">How do I rest my password?</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#just-admin-things">Just Admin Things</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#privacy-policy">Privacy Policy</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute-to-this-code">How to contribute to this code?</a></li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#citing-this-code">Citing this code</a></li>
-</ul>
-
   </nav></div>
 
 </div></div>
