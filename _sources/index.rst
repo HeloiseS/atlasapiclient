@@ -18,6 +18,7 @@ convenient way to interact with the ATLAS Transient Server REST-API via Python.
 
    about
    users
+   troubleshooting
    API Reference <api-reference>
 
 

@@ -62,6 +62,12 @@ For example:
 This will work for any of the clients included in `atlasapiclient.client`. If 
 your token is expired you can use the same method to refresh it.
 
+.. tip:: 
+   **How long will my token last?** Depending on the level of access provided based on your request,
+   we will issue tokens for 3 months, 6 months or 1 year. If your token expires you can use the `refresh_token()` 
+   method to get a new one, but if you have any issues with that please email us. 
+
+
 Quick Recipes
 =================
 
