@@ -13,14 +13,18 @@ It also allows users the make routine queries in a friendlier way, such as:
 * check out the data in **your custom list**
 
 ### How to get access?
-The ATLAS Transient web server is our **production server** for the survey, and we
-cannot give unlimited access to manage the load on our machines.
 
-Anyone with legitimate scientific interests can apply for access by submitting a **1-page max** science case
-to the [Data Request Form](https://forms.gle/Jvy18eejkvxmcN2f6), justifying your access needs
-(length of time and whether you need Write access - you probably do not).
+The ATLAS Transient web server is our **production server** for the survey, 
+and we cannot give unlimited access to manage the load on our machines. 
+If you have legitimate scientific interests and can complement the 
+scientific exploitation projects by the ATLAS team, you can submit a request for access. 
+We would expect either a willingness to enhance the ATLAS transient data, 
+through data sharing or public access to other data products (e.g. spectra), 
+or exploit complimentary science cases to our own interests. You should make the case for 
+access by submitting a **1-page max** science case to the [Data Request Form](https://forms.gle/Jvy18eejkvxmcN2f6), 
+justifying your access needs (length of time and whether you need Write access - you probably do not).
 
-The ATLAS team will review requests **at least once a month** on the first Friday.
+The ATLAS team will review requests **once a month** on the first Friday.
 If you require urgent access email hfstevance@gmail.com with the subject line **after submitting the form**:
 "Urgent ATLAS access request - [Proposal Title]". The [Proposal Title] should be the same as the one
 submitted in the form.
