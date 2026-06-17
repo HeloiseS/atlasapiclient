@@ -152,11 +152,19 @@ class APIClient(ABC):
             else:
                 return self.response.json()
 
+        # Fixed by Claude for issue #42 (2026-06-17): 201/204 branches now
+        # return data when inplace=False, matching the 200 branch.
         elif self.response.status_code == 201:  # Status if WRITE request went well
-            self.response_data = self.response.json()
+            if inplace:
+                self.response_data = self.response.json()
+            else:
+                return self.response.json()
 
         elif self.response.status_code == 204:  # Status if DELETE request went well
-            self.response_data = 'No Content'  # can't do .json() on a 204 response
+            if inplace:
+                self.response_data = 'No Content'  # can't do .json() on a 204 response
+            else:
+                return 'No Content'
 
         # If the request is bad, we check the response and raise the apprpriate error
         elif self.response.status_code == 401 and 'detail' in self.response.json():  # Status if the request is bad

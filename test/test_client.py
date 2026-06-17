@@ -119,7 +119,25 @@ class TestAPIClient():
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(400))
         with pytest.raises(ATLASAPIClientError):
             client.get_response()
-            
+
+    # Added by Claude to fix issue #42 (2026-06-17)
+    def test_get_response_201_inplace_false(self, monkeypatch, client):
+        # WRITE success (201) with inplace=False must return the data, same as 200 does
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(201))
+
+        response = client.get_response(inplace=False)
+
+        assert response is not None
+        assert response == client.response.json()
+
+    def test_get_response_204_inplace_false(self, monkeypatch, client):
+        # DELETE success (204) with inplace=False must return the data, same as 200 does
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(204))
+
+        response = client.get_response(inplace=False)
+
+        assert response == 'No Content'
+
 
 class TestConeSearch:
     def test_constructor(self, monkeypatch, config_file):
