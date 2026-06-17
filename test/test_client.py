@@ -7,7 +7,8 @@ import numpy as np
 
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
-    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch, 
+    RequestSingleSourceData, RequestMultipleSourceData, ConeSearch,
+    WriteToCustomList,
 )
 from atlasapiclient.exceptions import (
     ATLASAPIClientError, 
@@ -299,8 +300,36 @@ class TestRequestMultipleSourceData:
         with pytest.raises(AssertionError):
             RequestMultipleSourceData(api_config_file=config_file, array_ids=atlas_ids)
     
-    # TODO: write tests for the chunk_get_response methods and the 
-    # save_response_to_json method 
+    # TODO: write tests for the chunk_get_response methods and the
+    # save_response_to_json method
+
+
+class TestWriteToCustomList:
+    # Added by Claude to fix issue #43 (2026-06-17)
+    def test_chunk_get_response_quiet_initializes_response_data(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(201))
+        atlas_ids = np.array([str(i) for i in range(150)])  # >100 -> triggers chunking
+
+        client = WriteToCustomList(api_config_file=config_file, array_ids=atlas_ids,
+                                    list_name='mookodi')
+
+        assert isinstance(client.response_data, list)
+
+    def test_get_response_true_does_not_double_fire_last_chunk(self, monkeypatch, config_file):
+        call_count = {'n': 0}
+
+        def fake_post(*args, **kwargs):
+            call_count['n'] += 1
+            return MockResponse(201)
+
+        monkeypatch.setattr(requests, 'post', fake_post)
+        atlas_ids = np.array([str(i) for i in range(150)])  # 2 chunks: 100 + 50
+
+        WriteToCustomList(api_config_file=config_file, array_ids=atlas_ids,
+                           list_name='mookodi', get_response=True)
+
+        # One POST per chunk only - get_response=True must not re-fire the last chunk
+        assert call_count['n'] == 2
 
 
 class TestRequestATLASIDsFromWebServerList:

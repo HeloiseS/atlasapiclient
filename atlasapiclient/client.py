@@ -729,12 +729,19 @@ class WriteToCustomList(APIClient):
                             'objectgroupid': self.object_group_id
                            }
 
-        if get_response: self.get_response()
+            # Fixed by Claude for issue #43 (2026-06-17): only fire here when
+            # chunking wasn't already used above, otherwise this re-submits
+            # the last chunk's payload a second time.
+            if get_response: self.get_response()
 
     def chunk_get_response_quiet(self):
         """Chunks the request in groups of 100 so don't get timed out by the server. No progress bar."""
         # Split array_ids into chunks of 100
         chunks = [self.array_ids[i:i + 100] for i in range(0, len(self.array_ids), 100)]
+
+        # Fixed by Claude for issue #43 (2026-06-17): response_data must be
+        # initialized to a list before extending it, as RemoveFromCustomList does.
+        self.response_data = []
 
         # Iterate over each chunk and make separate requests
         for chunk in chunks:
