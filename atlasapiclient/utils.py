@@ -29,6 +29,7 @@ dict_list_id = {'garbage': [0, False],
                 'heloise': [72, True],
                 'vra': [73, True],
                 'mookodi_live': [16, True],
+                'salt': [14, True],
                 'dummy': [999, True]
                 }
 
