@@ -192,7 +192,7 @@ class APIClient(ABC):
                 else:
                     raise ATLASAPIClientError("Invalid token. Please check or refresh your API token.")
         else:  # else we raise an error
-            raise ATLASAPIClientError(f"Oops, status code is {self.response.status_code}")
+            raise ATLASAPIClientError(f"Oops, status code is {self.response.status_code}: {self.response.text}")
 
         if self.response_data is None:  # If the response has not been changed -> error
             print(self.response.json())
