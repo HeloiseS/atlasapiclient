@@ -192,7 +192,7 @@ class APIClient(ABC):
                 else:
                     raise ATLASAPIClientError("Invalid token. Please check or refresh your API token.")
         else:  # else we raise an error
-            raise ATLASAPIClientError(f"Oops, status code is {self.response.status_code}")
+            raise ATLASAPIClientError(f"Oops, status code is {self.response.status_code}: {self.response.text}")
 
         if self.response_data is None:  # If the response has not been changed -> error
             print(self.response.json())
@@ -702,7 +702,8 @@ class WriteToCustomList(APIClient):
                  api_config_file: str = None,
                  **kwargs,
                  ):
-        """WRITE - Add an ATLAS\_ID to a custom list on the ATLAS Transient Web Server
+        """WRITE - Add ATLAS\_IDs to a custom list on the ATLAS Transient Web Server.
+        Sends one request per ID — the server objectgroups/ endpoint only accepts a single integer.
 
         Parameters
         ------------
@@ -718,40 +719,21 @@ class WriteToCustomList(APIClient):
         super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'objectgroups/'
         self.array_ids = array_ids
-        self.object_group_id = self.dict_list_id[list_name][0] # object group id is the number of the custom list
-
-        # if self.array_ids smaller than 100 we can just create the payload and use get_response from ATLASAPIBase
-        # if self.array_ids is larger than 100 we need to call chunk_get_response(_quiet)
-        if self.array_ids.shape[0] > 100:
-            self.chunk_get_response_quiet()
-        else:
-            self.payload = {'objectid': ','.join(map(str, self.array_ids)),
-                            'objectgroupid': self.object_group_id
-                           }
-
-            # Fixed by Claude for issue #43 (2026-06-17): only fire here when
-            # chunking wasn't already used above, otherwise this re-submits
-            # the last chunk's payload a second time.
-            if get_response: self.get_response()
-
-    def chunk_get_response_quiet(self):
-        """Chunks the request in groups of 100 so don't get timed out by the server. No progress bar."""
-        # Split array_ids into chunks of 100
-        chunks = [self.array_ids[i:i + 100] for i in range(0, len(self.array_ids), 100)]
-
-        # Fixed by Claude for issue #43 (2026-06-17): response_data must be
-        # initialized to a list before extending it, as RemoveFromCustomList does.
+        self.object_group_id = self.dict_list_id[list_name][0]
         self.response_data = []
 
-        # Iterate over each chunk and make separate requests
-        for chunk in chunks:
-            array_ids_str = ','.join(map(str, chunk))
-            self.payload = {'objectid': array_ids_str,
-                            'objectgroupid': self.object_group_id
-                           }
+        if get_response:
+            self.chunk_get_response_quiet()
 
+    def chunk_get_response_quiet(self):
+        # Claude wrote this fix (2026-07-01): server objectgroups/ IntegerField only accepts one ID per request
+        for atlas_id in self.array_ids:
+            self.payload = {'objectid': str(atlas_id), 'objectgroupid': self.object_group_id}
             _response = self.get_response(inplace=False)
-            self.response_data.extend(_response)
+            if isinstance(_response, list):
+                self.response_data.extend(_response)
+            elif _response is not None:
+                self.response_data.append(_response)
 
 
 class RemoveFromCustomList(APIClient):

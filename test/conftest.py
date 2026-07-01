@@ -18,6 +18,7 @@ class MockResponse:
     def __init__(self, status_code):
         self.status_code = status_code
         self.json = lambda: {'key': 'value'}
+        self.text = 'mock error text'
     
     def json(self):
         return self.json

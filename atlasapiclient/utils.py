@@ -30,6 +30,7 @@ dict_list_id = {'garbage': [0, False],
                 'vra': [73, True],
                 'mookodi_live': [16, True],
                 'salt': [14, True],
+                'mookodi_peak': [17, True],
                 'dummy': [999, True]
                 }
 
