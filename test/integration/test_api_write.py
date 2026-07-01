@@ -79,14 +79,14 @@ class TestWriteRemoveCustomList():
     def test_write_to_custom_list(self):
         writeto_vra = atlasapi.WriteToCustomList(api_config_file = API_CONFIG_FILE,
                                                  array_ids=np.array(['1103337110432157700']),
-                                                 list_name='vra'
+                                                 list_name='vra',
+                                                 get_response=True,
                                                  )
-        writeto_vra.get_response()
-        # check that the string in the "info" key of the response dictionary is "Row created."
+        # response_data is a list (one entry per ID); server returns info per row
         try:
-            assert writeto_vra.response_data['info'] == 'Row created.', "Row wasn't created"
+            assert writeto_vra.response_data[0]['info'] == 'Row created.', "Row wasn't created"
         except AssertionError:
-            assert writeto_vra.response_data['info'] == 'Duplicate row. Cannot add row.', "Row wasn't created"
+            assert writeto_vra.response_data[0]['info'] == 'Duplicate row. Cannot add row.', "Row wasn't created"
 
     def test_remove_from_custom_list(self):
         removefrom_vra = atlasapi.RemoveFromCustomList(api_config_file = API_CONFIG_FILE,
@@ -110,9 +110,8 @@ class TestWriteRemoveCustomList():
         # not really OUR test but good to check behaviour
         writeto_vra = atlasapi.WriteToCustomList(api_config_file = API_CONFIG_FILE,
                                                  array_ids=np.array(['1103337110432157700']),
-                                                 list_name='dummy'
+                                                 list_name='dummy',
+                                                 get_response=True,
                                                  )
-        writeto_vra.get_response()
-        # check that the string in the "info" key of the response dictionary is "Row created."
-        assert writeto_vra.response_data['info'] == 'Object does not exist.', ("We are not catching the bad list "
-                                                                               "number server side")
+        assert writeto_vra.response_data[0]['info'] == 'Object does not exist.', ("We are not catching the bad list "
+                                                                                  "number server side")

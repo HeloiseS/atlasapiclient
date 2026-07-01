@@ -315,7 +315,7 @@ class TestWriteToCustomList:
 
         assert isinstance(client.response_data, list)
 
-    def test_get_response_true_does_not_double_fire_last_chunk(self, monkeypatch, config_file):
+    def test_get_response_true_sends_one_request_per_id(self, monkeypatch, config_file):
         call_count = {'n': 0}
 
         def fake_post(*args, **kwargs):
@@ -323,13 +323,13 @@ class TestWriteToCustomList:
             return MockResponse(201)
 
         monkeypatch.setattr(requests, 'post', fake_post)
-        atlas_ids = np.array([str(i) for i in range(150)])  # 2 chunks: 100 + 50
+        atlas_ids = np.array([str(i) for i in range(150)])
 
         WriteToCustomList(api_config_file=config_file, array_ids=atlas_ids,
                            list_name='mookodi', get_response=True)
 
-        # One POST per chunk only - get_response=True must not re-fire the last chunk
-        assert call_count['n'] == 2
+        # Server objectgroups/ only accepts a single integer — one POST per ID
+        assert call_count['n'] == 150
 
 
 class TestRequestATLASIDsFromWebServerList:
