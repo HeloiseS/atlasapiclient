@@ -740,9 +740,8 @@ class RemoveFromCustomList(APIClient):
     def __init__(self,
                  array_ids: np.array = None,
                  list_name: str = None,
-                 get_response: bool = False,
                  api_config_file: str = None,
-                 chunk_size: int = 100,  # NEW: chunk size parameter
+                 chunk_size: int = 100,
                  **kwargs,
                  ):
         """
@@ -754,52 +753,39 @@ class RemoveFromCustomList(APIClient):
             The ATLAS IDs. Can be an array a list or a tuple.
         list_name: str
             The name of the list you want (NOT THE NUMBER). e.g. 'mookodi'.
-        get_response: bool
-            If True, will get the response on instantiation.
         api_config_file: str
             Optional path to your API config file.
         chunk_size: int
-            Max number of IDs per chunk. Default is 100.
+            Kept for API compatibility; not used (server only accepts one ID per request).
         """
         super().__init__(api_config_file, **kwargs)
         self.url = self.apiURL + 'objectgroupsdelete/'
         self.array_ids = array_ids
-        self.chunk_size = chunk_size  # NEW: store chunk size
+        self.chunk_size = chunk_size
         self.object_group_id = self.dict_list_id[list_name][0]
         self.response_data = []
-
-        if self.array_ids.shape[0] > self.chunk_size:
-            self.chunk_get_response_quiet()
-        else:
-            self.payload = {
-                'objectid': ','.join(map(str, self.array_ids)),
-                'objectgroupid': self.object_group_id
-            }
+        self.chunk_get_response_quiet()
 
     def chunk_get_response_quiet(self, max_retries=3, backoff_range=(1, 5)):
-        chunks = [self.array_ids[i:i + self.chunk_size]
-                  for i in range(0, len(self.array_ids), self.chunk_size)]
-        self.response_data = []
-
-        for idx, chunk in enumerate(chunks):
-            array_ids_str = ','.join(map(str, chunk))
-            self.payload = {'objectid': array_ids_str, 'objectgroupid': self.object_group_id}
-
+        # Claude wrote this fix (2026-07-07): objectgroupsdelete/ only accepts one ID per request
+        for atlas_id in self.array_ids:
+            self.payload = {'objectid': str(atlas_id), 'objectgroupid': self.object_group_id}
             attempt = 0
             while attempt < max_retries:
                 try:
                     _response = self.get_response(inplace=False)
-                    self.response_data.extend(_response)
+                    if isinstance(_response, list):
+                        self.response_data.extend(_response)
+                    elif _response is not None:
+                        self.response_data.append(_response)
                     break
                 except Exception as e:
                     attempt += 1
-                    wait_time = random.uniform(*backoff_range)
-                    logging.warning(
-                        f"[Chunk {idx+1}/{len(chunks)}] Retry {attempt}/{max_retries} after error: {e}. Sleeping {wait_time:.2f}s...")
-                    time.sleep(wait_time)
+                    wait = random.uniform(*backoff_range)
+                    logging.warning(f"Retry {attempt}/{max_retries} for ID {atlas_id}: {e}. Sleeping {wait:.2f}s")
+                    time.sleep(wait)
             else:
-                logging.error(
-                    f"[Chunk {idx+1}/{len(chunks)}] Failed after {max_retries} retries. Chunk skipped.")
+                logging.error(f"Failed to remove ID {atlas_id} after {max_retries} retries. Skipping.")
 
 class WriteObjectDetectionListNumber(APIClient):
     def __init__(self,

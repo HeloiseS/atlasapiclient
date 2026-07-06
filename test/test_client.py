@@ -8,7 +8,7 @@ import numpy as np
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
     RequestSingleSourceData, RequestMultipleSourceData, ConeSearch,
-    WriteToCustomList,
+    WriteToCustomList, RemoveFromCustomList,
 )
 from atlasapiclient.exceptions import (
     ATLASAPIClientError, 
@@ -330,6 +330,23 @@ class TestWriteToCustomList:
 
         # Server objectgroups/ only accepts a single integer — one POST per ID
         assert call_count['n'] == 150
+
+
+class TestRemoveFromCustomList:
+    def test_sends_one_request_per_id(self, monkeypatch, config_file):
+        call_count = {'n': 0}
+
+        def fake_post(*args, **kwargs):
+            call_count['n'] += 1
+            return MockResponse(204)
+
+        monkeypatch.setattr(requests, 'post', fake_post)
+        atlas_ids = np.array([str(i) for i in range(5)])
+
+        RemoveFromCustomList(api_config_file=config_file, array_ids=atlas_ids, list_name='mookodi')
+
+        # Server objectgroupsdelete/ only accepts a single integer — one POST per ID
+        assert call_count['n'] == 5
 
 
 class TestRequestATLASIDsFromWebServerList:
