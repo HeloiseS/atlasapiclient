@@ -89,11 +89,10 @@ class TestWriteRemoveCustomList():
             assert writeto_vra.response_data[0]['info'] == 'Duplicate row. Cannot add row.', "Row wasn't created"
 
     def test_remove_from_custom_list(self):
-        removefrom_vra = atlasapi.RemoveFromCustomList(api_config_file = API_CONFIG_FILE,
-                                                       array_ids=np.array(['1103337110432157700']),
-                                                       list_name='vra'
-                                                       )
-        removefrom_vra.get_response()
+        atlasapi.RemoveFromCustomList(api_config_file = API_CONFIG_FILE,
+                                      array_ids=np.array(['1103337110432157700']),
+                                      list_name='vra'
+                                      )
         # no assert because with an HTTP 204 response there is no content to check (not allowed to send message)
 
     # make a test where the list_name doesn't exist in dict_list_names (keyerror)
