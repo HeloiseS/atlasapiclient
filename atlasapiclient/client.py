@@ -31,9 +31,10 @@ from atlasapiclient.exceptions import (
     ATLASAPIClientArgumentWarning,
 )
 from atlasapiclient.utils import (
-    dict_list_id, 
-    API_CONFIG_FILE, 
-    validate_url,  
+    dict_list_id,
+    API_CONFIG_FILE,
+    validate_url,
+    VALID_SHERLOCK_CLASSES,
 )
 from atlasapiclient.config import ATLASConfigFile
 from atlasapiclient.authentication import Token
@@ -397,6 +398,16 @@ class RequestATLASIDsFromWebServerList(APIClient):
                  list_name: str,
                  get_response: bool = True,
                  api_config_file: str = None,
+                 vra_gte: float = None,
+                 vra_lte: float = None,
+                 rb_pix_gte: float = None,
+                 rb_pix_lte: float = None,
+                 ra_gte: float = None,
+                 ra_lte: float = None,
+                 dec_gte: float = None,
+                 dec_lte: float = None,
+                 sherlock_class: str = None,
+                 spec_type: str = None,
                  **kwargs
                  ):
         """READ - Get all the ATLAS\_IDs from a given list on the ATLAS Transient Web Server
@@ -416,6 +427,19 @@ class RequestATLASIDsFromWebServerList(APIClient):
             If True, will get the response on instanciation
         api_config_file: str
             By default will use you api_config_MINE.yaml file.
+        vra_gte, vra_lte: float
+            Optional lower/upper bounds on VRA score.
+        rb_pix_gte, rb_pix_lte: float
+            Optional lower/upper bounds on RB Pix score.
+        ra_gte, ra_lte, dec_gte, dec_lte: float
+            Optional lower/upper bounds on RA/Dec.
+        sherlock_class: str
+            Optional exact-match filter on Sherlock classification. Valid values are
+            in `atlasapiclient.utils.VALID_SHERLOCK_CLASSES`
+            ('ORPHAN', 'SN', 'NT', 'VS', 'CV', 'BS', 'UNCLEAR', 'HPM'); anything else
+            raises an `ATLASAPIClientArgumentWarning`.
+        spec_type: str
+            Optional exact-match filter on spectroscopic classification.
 
         Notes
         -------
@@ -434,6 +458,28 @@ class RequestATLASIDsFromWebServerList(APIClient):
         self.url = self.apiURL + 'objectlist/'
         self.payload = {'objectlistid': self.dict_list_id[self.list_name][0],
                         'getcustomlist': self.dict_list_id[self.list_name][1]}
+
+        filters = {
+            'vra_gte': vra_gte,
+            'vra_lte': vra_lte,
+            'rb_pix_gte': rb_pix_gte,
+            'rb_pix_lte': rb_pix_lte,
+            'ra_gte': ra_gte,
+            'ra_lte': ra_lte,
+            'dec_gte': dec_gte,
+            'dec_lte': dec_lte,
+            'sherlock_class': sherlock_class,
+            'spec_type': spec_type,
+        }
+        self.payload.update({k: v for k, v in filters.items() if v is not None})
+
+        if sherlock_class is not None and sherlock_class not in VALID_SHERLOCK_CLASSES:
+            warnings.warn(
+                f"'{sherlock_class}' is not a known Sherlock classification "
+                f"({', '.join(VALID_SHERLOCK_CLASSES)}) - the request will "
+                "likely return no results.",
+                ATLASAPIClientArgumentWarning
+            )
 
         if get_response: self.get_response()
 

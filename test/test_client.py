@@ -8,7 +8,7 @@ import numpy as np
 from atlasapiclient.client import (
     APIClient, RequestVRAScores, RequestVRAToDoList, RequestCustomListsTable,
     RequestSingleSourceData, RequestMultipleSourceData, ConeSearch,
-    WriteToCustomList, RemoveFromCustomList,
+    WriteToCustomList, RemoveFromCustomList, RequestATLASIDsFromWebServerList,
 )
 from atlasapiclient.exceptions import (
     ATLASAPIClientError, 
@@ -350,12 +350,58 @@ class TestRemoveFromCustomList:
 
 
 class TestRequestATLASIDsFromWebServerList:
-    def test_constructor(self, config_file):
-        #RequestATLASIDsFromWebServerList(api_config_file=config_file,
-        #                            list_name='eyeball',
-        #                           get_response=True
-        #                          )
-        pass
+    def test_constructor(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        client = RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                                    list_name='eyeball',
+                                                    get_response=True
+                                                    )
+        assert client.payload == {'objectlistid': client.dict_list_id['eyeball'][0],
+                                   'getcustomlist': client.dict_list_id['eyeball'][1]}
+
+    def test_payload_without_filters_omits_filter_keys(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        client = RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                                    list_name='eyeball',
+                                                    get_response=False
+                                                    )
+        assert 'vra_gte' not in client.payload
+        assert 'dec_lte' not in client.payload
+        assert 'sherlock_class' not in client.payload
+
+    def test_payload_includes_only_provided_filters(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        client = RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                                    list_name='eyeball',
+                                                    get_response=False,
+                                                    vra_gte=9.0,
+                                                    dec_lte=10.0,
+                                                    sherlock_class='SN'
+                                                    )
+        assert client.payload['vra_gte'] == 9.0
+        assert client.payload['dec_lte'] == 10.0
+        assert client.payload['sherlock_class'] == 'SN'
+        assert 'vra_lte' not in client.payload
+        assert 'ra_gte' not in client.payload
+
+    def test_valid_sherlock_class_raises_no_warning(self, monkeypatch, config_file, recwarn):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                          list_name='eyeball',
+                                          get_response=False,
+                                          sherlock_class='SN'
+                                          )
+        assert len(recwarn) == 0
+
+    def test_invalid_sherlock_class_raises_warning(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        with pytest.warns(ATLASAPIClientArgumentWarning):
+            RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                              list_name='eyeball',
+                                              get_response=False,
+                                              sherlock_class='GALAXY'
+                                              )
+
     # TODO: add test for list that doesn't exist (have the constructor through a useful error
 
 

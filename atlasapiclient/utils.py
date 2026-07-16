@@ -5,6 +5,7 @@ from .exceptions import ATLASAPIClientError
 
 # Useful Constants
 LIST_NAMES = "follow_up, good, possible, eyeball, attic, cv, mdwarf, pm_stars"
+VALID_SHERLOCK_CLASSES = ('ORPHAN', 'SN', 'NT', 'VS', 'CV', 'BS', 'UNCLEAR', 'HPM')
 config_path = Path(__file__).parent / 'config_files'
 
 # NOTE: We might want to consider changing the name of the config file

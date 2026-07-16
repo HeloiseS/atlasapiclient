@@ -35,7 +35,10 @@ exclude_patterns = []
 html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']
 html_logo='_static/logo.png'
-html_theme_options = {"**": ["sbt-sidebar-nav.html"],
+html_theme_options = {
   "show_toc_level": 4,
   "show_navbar_depth": 4,
+}
+html_sidebars = {
+  "**": ["sbt-sidebar-nav.html"],
 }
