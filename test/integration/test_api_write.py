@@ -112,5 +112,5 @@ class TestWriteRemoveCustomList():
                                                  list_name='dummy',
                                                  get_response=True,
                                                  )
-        assert writeto_vra.response_data[0]['info'] == 'Object does not exist.', ("We are not catching the bad list "
+        assert writeto_vra.response_data[0]['info'] == 'Object group ID does not exist.', ("We are not catching the bad list "
                                                                                   "number server side")
