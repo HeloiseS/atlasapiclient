@@ -384,6 +384,24 @@ class TestRequestATLASIDsFromWebServerList:
         assert 'vra_lte' not in client.payload
         assert 'ra_gte' not in client.payload
 
+    def test_valid_sherlock_class_raises_no_warning(self, monkeypatch, config_file, recwarn):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                          list_name='eyeball',
+                                          get_response=False,
+                                          sherlock_class='SN'
+                                          )
+        assert len(recwarn) == 0
+
+    def test_invalid_sherlock_class_raises_warning(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        with pytest.warns(ATLASAPIClientArgumentWarning):
+            RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                              list_name='eyeball',
+                                              get_response=False,
+                                              sherlock_class='GALAXY'
+                                              )
+
     # TODO: add test for list that doesn't exist (have the constructor through a useful error
 
 

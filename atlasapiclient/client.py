@@ -31,9 +31,10 @@ from atlasapiclient.exceptions import (
     ATLASAPIClientArgumentWarning,
 )
 from atlasapiclient.utils import (
-    dict_list_id, 
-    API_CONFIG_FILE, 
-    validate_url,  
+    dict_list_id,
+    API_CONFIG_FILE,
+    validate_url,
+    VALID_SHERLOCK_CLASSES,
 )
 from atlasapiclient.config import ATLASConfigFile
 from atlasapiclient.authentication import Token
@@ -433,7 +434,10 @@ class RequestATLASIDsFromWebServerList(APIClient):
         ra_gte, ra_lte, dec_gte, dec_lte: float
             Optional lower/upper bounds on RA/Dec.
         sherlock_class: str
-            Optional exact-match filter on Sherlock classification.
+            Optional exact-match filter on Sherlock classification. Valid values are
+            in `atlasapiclient.utils.VALID_SHERLOCK_CLASSES`
+            ('ORPHAN', 'SN', 'NT', 'VS', 'CV', 'BS', 'UNCLEAR', 'HPM'); anything else
+            raises an `ATLASAPIClientArgumentWarning`.
         spec_type: str
             Optional exact-match filter on spectroscopic classification.
 
@@ -468,6 +472,14 @@ class RequestATLASIDsFromWebServerList(APIClient):
             'spec_type': spec_type,
         }
         self.payload.update({k: v for k, v in filters.items() if v is not None})
+
+        if sherlock_class is not None and sherlock_class not in VALID_SHERLOCK_CLASSES:
+            warnings.warn(
+                f"'{sherlock_class}' is not a known Sherlock classification "
+                f"({', '.join(VALID_SHERLOCK_CLASSES)}) - the request will "
+                "likely return no results.",
+                ATLASAPIClientArgumentWarning
+            )
 
         if get_response: self.get_response()
 
