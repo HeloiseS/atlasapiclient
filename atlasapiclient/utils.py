@@ -1,12 +1,22 @@
 import os
 import urllib
+from datetime import datetime, timezone
 from pathlib import Path
-from .exceptions import ATLASAPIClientError 
+from .exceptions import ATLASAPIClientError
 
 # Useful Constants
 LIST_NAMES = "follow_up, good, possible, eyeball, attic, cv, mdwarf, pm_stars"
 VALID_SHERLOCK_CLASSES = ('ORPHAN', 'SN', 'NT', 'VS', 'CV', 'BS', 'UNCLEAR', 'HPM')
 config_path = Path(__file__).parent / 'config_files'
+DEFAULT_MJD_LOOKBACK_DAYS = 100
+
+# MJD epoch: 1858-11-17 00:00 UTC
+_MJD_EPOCH = datetime(1858, 11, 17, tzinfo=timezone.utc)
+
+
+def today_mjd() -> float:
+    """Return the current UTC time as a Modified Julian Date (MJD)."""
+    return (datetime.now(timezone.utc) - _MJD_EPOCH).total_seconds() / 86400
 
 # NOTE: We might want to consider changing the name of the config file
 API_CONFIG_FILE = os.path.join(config_path,'api_config_MINE.yaml')

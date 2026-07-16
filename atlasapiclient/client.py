@@ -15,6 +15,7 @@ Classes
 - RequestMultipleSourceData: To download the data for multiple sources.
 """
 import json
+from datetime import datetime, timedelta, timezone
 from functools import cached_property
 import warnings
 from abc import ABC
@@ -35,6 +36,8 @@ from atlasapiclient.utils import (
     API_CONFIG_FILE,
     validate_url,
     VALID_SHERLOCK_CLASSES,
+    today_mjd,
+    DEFAULT_MJD_LOOKBACK_DAYS,
 )
 from atlasapiclient.config import ATLASConfigFile
 from atlasapiclient.authentication import Token
@@ -408,6 +411,7 @@ class RequestATLASIDsFromWebServerList(APIClient):
                  dec_lte: float = None,
                  sherlock_class: str = None,
                  spec_type: str = None,
+                 datethreshold: str = None,
                  **kwargs
                  ):
         """READ - Get all the ATLAS\_IDs from a given list on the ATLAS Transient Web Server
@@ -440,6 +444,12 @@ class RequestATLASIDsFromWebServerList(APIClient):
             raises an `ATLASAPIClientArgumentWarning`.
         spec_type: str
             Optional exact-match filter on spectroscopic classification.
+        datethreshold: str
+            Lower date bound (ISO format, e.g. '2026-04-07') on when objects were
+            added to the list. If not provided, defaults to today's date minus 100
+            days. To fetch the full list with no lower bound, pass
+            datethreshold='1858-11-17' explicitly (the MJD epoch, i.e. before any
+            ATLAS data exists).
 
         Notes
         -------
@@ -456,8 +466,15 @@ class RequestATLASIDsFromWebServerList(APIClient):
         super().__init__(api_config_file, **kwargs)
         self.list_name = list_name
         self.url = self.apiURL + 'objectlist/'
+
+        if datethreshold is None:
+            today_utc = datetime.now(timezone.utc).date()
+            datethreshold = (today_utc - timedelta(days=DEFAULT_MJD_LOOKBACK_DAYS)).isoformat()
+        self.datethreshold = datethreshold
+
         self.payload = {'objectlistid': self.dict_list_id[self.list_name][0],
-                        'getcustomlist': self.dict_list_id[self.list_name][1]}
+                        'getcustomlist': self.dict_list_id[self.list_name][1],
+                        'datethreshold': self.datethreshold}
 
         filters = {
             'vra_gte': vra_gte,
@@ -507,7 +524,9 @@ class RequestSingleSourceData(APIClient):
         atlas_id: str
             The ATLAS ID as a string
         mjdthreshold:
-            The Lower MJD threshold (we don't have a higher one yet)
+            The Lower MJD threshold (we don't have a higher one yet). If not
+            provided, defaults to today's MJD minus 100 days. To fetch the
+            full history with no lower bound, pass mjdthreshold=0 explicitly.
         get_response: bool
             If True, will get the response on instanciation
         api_config_file:
@@ -518,6 +537,8 @@ class RequestSingleSourceData(APIClient):
         assert atlas_id is not None, "You need to provide an atlas_id"
 
         self.atlas_id = self.parse_atlas_id(atlas_id)
+        if mjdthreshold is None:
+            mjdthreshold = today_mjd() - DEFAULT_MJD_LOOKBACK_DAYS
         self.mjdthreshold = mjdthreshold
         self.url=  "objects/"
         self.url = self.apiURL+self.url
@@ -554,6 +575,21 @@ class RequestMultipleSourceData(APIClient):
                  chunk_size: int = 100,
                  **kwargs,
                  ):
+        """READ - Get the data for multiple sources from the ATLAS Transient Web Server
+
+        Parameters
+        ----------
+        array_ids: np.array
+            The ATLAS IDs as a numpy array
+        mjdthreshold:
+            The Lower MJD threshold (we don't have a higher one yet). If not
+            provided, defaults to today's MJD minus 100 days. To fetch the
+            full history with no lower bound, pass mjdthreshold=0 explicitly.
+        api_config_file:
+           By default will use you api_config_MINE.yaml file.
+        chunk_size: int
+            Number of IDs to request per chunked call.
+        """
         super().__init__(api_config_file, **kwargs)
 
         assert array_ids is not None, "You need to provide an array of object IDs"
@@ -561,6 +597,8 @@ class RequestMultipleSourceData(APIClient):
         assert len(array_ids) > 0, "array_ids must not be empty"
 
         self.array_ids = np.array([self.parse_atlas_id(str(x)) for x in array_ids])
+        if mjdthreshold is None:
+            mjdthreshold = today_mjd() - DEFAULT_MJD_LOOKBACK_DAYS
         self.mjdthreshold = mjdthreshold
         self.url = self.apiURL + "objects/"
         self.response_data = []

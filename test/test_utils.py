@@ -1,15 +1,37 @@
 # Write tests for utils in atlasapiclient.utils
+from datetime import datetime, timezone
+
 import pytest
 
-from atlasapiclient.utils import LIST_NAMES, API_CONFIG_FILE, dict_list_id, validate_url
+from atlasapiclient.utils import (
+    LIST_NAMES, API_CONFIG_FILE, dict_list_id, validate_url, today_mjd,
+    DEFAULT_MJD_LOOKBACK_DAYS,
+)
 from atlasapiclient.exceptions import ATLASAPIClientError
 
 class TestUtilsTypes():
     def test_LIST_NAMES(self):
         assert isinstance(LIST_NAMES, str), "LIST_NAMES is not a string"
-    
+
     def test_API_CONFIG_FILE(self):
         assert isinstance(API_CONFIG_FILE, str), "API_CONFIG_FILE is not a string"
+
+
+class TestTodayMjd:
+    def test_today_mjd_at_known_reference_date(self, monkeypatch):
+        import atlasapiclient.utils as utils_module
+
+        class FrozenDatetime(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return datetime(2000, 1, 1, tzinfo=timezone.utc)
+
+        monkeypatch.setattr(utils_module, 'datetime', FrozenDatetime)
+        # 2000-01-01 00:00 UTC is the well-known reference MJD 51544.0
+        assert today_mjd() == 51544.0
+
+    def test_default_mjd_lookback_days_is_100(self):
+        assert DEFAULT_MJD_LOOKBACK_DAYS == 100
         
     def test_dict_list_id(self):
         assert isinstance(dict_list_id, dict), "dict_list_id is not a dictionary"

@@ -1,5 +1,6 @@
 # Write tests for the functions in atlasapiclient.client
 import os
+from datetime import datetime, timedelta, timezone
 
 import pytest
 import requests
@@ -261,11 +262,36 @@ class TestRequestSingleSourceData:
     def test_nonint_id(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
         # TODO: This fails as it currently produces a ValueError, due to the int
-        # wrapping in the isinstance check. These a separate validation checks 
-        # (that we should definitely do!) but we should separate them. As above 
+        # wrapping in the isinstance check. These a separate validation checks
+        # (that we should definitely do!) but we should separate them. As above
         # we should raise an AtlasAPIClientError
         with pytest.raises(ATLASAPIClientError):
             RequestSingleSourceData(api_config_file=config_file, atlas_id='123456789012345678a')
+
+    def test_mjdthreshold_defaults_to_100_days_ago(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        atlas_id = '1234567890123456789'
+        client = RequestSingleSourceData(api_config_file=config_file,
+                                         atlas_id=atlas_id, get_response=False)
+        expected = atlasapiclient.utils.today_mjd() - 100
+        assert abs(client.mjdthreshold - expected) < 1e-6
+        assert client.payload['mjd'] == client.mjdthreshold
+
+    def test_mjdthreshold_explicit_value_respected(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        atlas_id = '1234567890123456789'
+        client = RequestSingleSourceData(api_config_file=config_file,
+                                         atlas_id=atlas_id, get_response=False,
+                                         mjdthreshold=59000.0)
+        assert client.mjdthreshold == 59000.0
+
+    def test_mjdthreshold_zero_opts_out_of_default(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        atlas_id = '1234567890123456789'
+        client = RequestSingleSourceData(api_config_file=config_file,
+                                         atlas_id=atlas_id, get_response=False,
+                                         mjdthreshold=0)
+        assert client.mjdthreshold == 0
 
 
 class TestRequestMultipleSourceData:
@@ -299,7 +325,28 @@ class TestRequestMultipleSourceData:
         # source
         with pytest.raises(AssertionError):
             RequestMultipleSourceData(api_config_file=config_file, array_ids=atlas_ids)
-    
+
+    def test_mjdthreshold_defaults_to_100_days_ago(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        atlas_ids = np.array(['0000000000000000001', '0000000000000000002'])
+        client = RequestMultipleSourceData(api_config_file=config_file, array_ids=atlas_ids)
+        expected = atlasapiclient.utils.today_mjd() - 100
+        assert abs(client.mjdthreshold - expected) < 1e-6
+
+    def test_mjdthreshold_explicit_value_respected(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        atlas_ids = np.array(['0000000000000000001', '0000000000000000002'])
+        client = RequestMultipleSourceData(api_config_file=config_file, array_ids=atlas_ids,
+                                            mjdthreshold=59000.0)
+        assert client.mjdthreshold == 59000.0
+
+    def test_mjdthreshold_zero_opts_out_of_default(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        atlas_ids = np.array(['0000000000000000001', '0000000000000000002'])
+        client = RequestMultipleSourceData(api_config_file=config_file, array_ids=atlas_ids,
+                                            mjdthreshold=0)
+        assert client.mjdthreshold == 0
+
     # TODO: write tests for the chunk_get_response methods and the
     # save_response_to_json method
 
@@ -357,7 +404,8 @@ class TestRequestATLASIDsFromWebServerList:
                                                     get_response=True
                                                     )
         assert client.payload == {'objectlistid': client.dict_list_id['eyeball'][0],
-                                   'getcustomlist': client.dict_list_id['eyeball'][1]}
+                                   'getcustomlist': client.dict_list_id['eyeball'][1],
+                                   'datethreshold': client.datethreshold}
 
     def test_payload_without_filters_omits_filter_keys(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
@@ -368,6 +416,35 @@ class TestRequestATLASIDsFromWebServerList:
         assert 'vra_gte' not in client.payload
         assert 'dec_lte' not in client.payload
         assert 'sherlock_class' not in client.payload
+
+    def test_datethreshold_defaults_to_100_days_ago(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        expected = (datetime.now(timezone.utc).date() - timedelta(days=100)).isoformat()
+        client = RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                                    list_name='eyeball',
+                                                    get_response=False
+                                                    )
+        assert client.datethreshold == expected
+        assert client.payload['datethreshold'] == expected
+
+    def test_datethreshold_explicit_value_respected(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        client = RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                                    list_name='eyeball',
+                                                    get_response=False,
+                                                    datethreshold='2020-01-01'
+                                                    )
+        assert client.datethreshold == '2020-01-01'
+        assert client.payload['datethreshold'] == '2020-01-01'
+
+    def test_datethreshold_epoch_opts_out_of_default(self, monkeypatch, config_file):
+        monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
+        client = RequestATLASIDsFromWebServerList(api_config_file=config_file,
+                                                    list_name='eyeball',
+                                                    get_response=False,
+                                                    datethreshold='1858-11-17'
+                                                    )
+        assert client.datethreshold == '1858-11-17'
 
     def test_payload_includes_only_provided_filters(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))
