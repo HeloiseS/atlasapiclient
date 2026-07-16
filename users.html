@@ -113,35 +113,6 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-  
-    
-  
-
-<a class="navbar-brand logo" href="index.html">
-  
-  
-  
-  
-  
-    
-    
-      
-    
-    
-    <img src="_static/logo.png" class="logo__image only-light" alt="ATLAS API Client 1.2.0 documentation - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="ATLAS API Client 1.2.0 documentation - Home"/>
-  
-  
-</a></div>
-        <div class="sidebar-primary-item">
-
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">For Users</span></p>
@@ -320,11 +291,16 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-the-lightcurve-from-the-json">Extract the Lightcurve from the JSON</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-neat-plot">Make a Neat Plot</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-data-for-multiple-objects">Get Data for Multiple objects</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-ids-from-a-custom-or-followup-list">Get IDs from a Custom or Followup List</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-and-other-bits-of-data">Data Structure and other bits of data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-and-other-bits-of-data">Data Structure and other bits of data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-sherlock-crossmatches">Getting the Sherlock crossmatches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-that-atlas-id-object-in-tns">Is that ATLAS_ID object in TNS?</a></li>
+</ul>
+</li>
 </ul>
 
             </nav>
@@ -519,6 +495,47 @@ To handle this, there is a class to chunk stuff for you:</p>
 </div>
 <p>You can then get the data just as you would for a single object.</p>
 </section>
+<section id="get-ids-from-a-custom-or-followup-list">
+<h3>Get IDs from a Custom or Followup List<a class="headerlink" href="#get-ids-from-a-custom-or-followup-list" title="Link to this heading">#</a></h3>
+<p>To get all the ATLAS IDs currently on one of the web server’s lists (e.g. <code class="docutils literal notranslate"><span class="pre">eyeball</span></code>, <code class="docutils literal notranslate"><span class="pre">good</span></code>, <code class="docutils literal notranslate"><span class="pre">attic</span></code>,
+your own custom list, …) use <cite>RequestATLASIDsFromWebServerList</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atlasapiclient</span> <span class="kn">import</span> <span class="n">client</span> <span class="k">as</span> <span class="n">atlasapi</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">RequestATLASIDsFromWebServerList</span><span class="p">(</span><span class="n">list_name</span><span class="o">=</span><span class="s1">&#39;eyeball&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">atlas_id_list_str</span>  <span class="c1"># list of ATLAS IDs as strings</span>
+</pre></div>
+</div>
+<p>See <cite>atlasapiclient.utils.dict_list_id</cite> for the full set of valid <code class="docutils literal notranslate"><span class="pre">list_name</span></code> values.</p>
+<p><strong>Filtering the list server-side</strong></p>
+<p>If you only need a subset of a list, you can narrow the request at the API level instead of fetching
+everything and filtering client-side. This is both faster and lighter on the server, especially for
+large lists like <code class="docutils literal notranslate"><span class="pre">eyeball</span></code>. The optional filter arguments are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vra_gte</span></code> / <code class="docutils literal notranslate"><span class="pre">vra_lte</span></code> – lower/upper bound on VRA score</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rb_pix_gte</span></code> / <code class="docutils literal notranslate"><span class="pre">rb_pix_lte</span></code> – lower/upper bound on RB Pix score</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ra_gte</span></code> / <code class="docutils literal notranslate"><span class="pre">ra_lte</span></code> – lower/upper bound on RA</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dec_gte</span></code> / <code class="docutils literal notranslate"><span class="pre">dec_lte</span></code> – lower/upper bound on Dec</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sherlock_class</span></code> – exact match on Sherlock classification. Valid values are
+<code class="docutils literal notranslate"><span class="pre">ORPHAN</span></code>, <code class="docutils literal notranslate"><span class="pre">SN</span></code>, <code class="docutils literal notranslate"><span class="pre">NT</span></code>, <code class="docutils literal notranslate"><span class="pre">VS</span></code>, <code class="docutils literal notranslate"><span class="pre">CV</span></code>, <code class="docutils literal notranslate"><span class="pre">BS</span></code>, <code class="docutils literal notranslate"><span class="pre">UNCLEAR</span></code>, <code class="docutils literal notranslate"><span class="pre">HPM</span></code> – anything
+else raises an <cite>ATLASAPIClientArgumentWarning</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spec_type</span></code> – exact match on spectroscopic classification</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">RequestATLASIDsFromWebServerList</span><span class="p">(</span>
+    <span class="n">list_name</span><span class="o">=</span><span class="s1">&#39;eyeball&#39;</span><span class="p">,</span>
+    <span class="n">vra_gte</span><span class="o">=</span><span class="mf">9.0</span><span class="p">,</span>
+    <span class="n">dec_lte</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>Can I exclude a value instead of matching it?</strong> No – <code class="docutils literal notranslate"><span class="pre">sherlock_class</span></code> and <code class="docutils literal notranslate"><span class="pre">spec_type</span></code> are
+exact-match filters only, there is no “not equal to” option server-side. If your logic needs to
+<em>exclude</em> one particular class (e.g. everything except <code class="docutils literal notranslate"><span class="pre">'ORPHAN'</span></code>) rather than match one, you’ll
+still need to fetch the (now smaller, thanks to the other filters) candidate set and do that check
+client-side.</p>
+</div>
+</section>
 </section>
 </section>
 <section id="data-structure-and-other-bits-of-data">
@@ -527,15 +544,21 @@ To handle this, there is a class to chunk stuff for you:</p>
 You can check out the json <a class="reference external" href="https://psweb.mp.qub.ac.uk/misc/api/atlas/">schema</a>  if you want to navigate
 the key structure and what they mean. <strong>If anything is not clear please add an issue to the GH</strong>.
 Here is a couple of handy recipes…</p>
+<section id="getting-the-sherlock-crossmatches">
+<h2>Getting the Sherlock crossmatches<a class="headerlink" href="#getting-the-sherlock-crossmatches" title="Link to this heading">#</a></h2>
 <p>The first crossmatch (if any) is a merged entry which cherry picks the best information from all catalogues (so if a galaxy has info in 3 catalogues it will be cross matched 3 times and the info from these catalogues will appear as separate entries in our list of dictionaries - the first entry in the list will be the combination of all the best info in those 3 entries)
 The following entries are the individual crossmatches.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary_crossmatch</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">response_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;sherlock_crossmatches&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
+</section>
+<section id="is-that-atlas-id-object-in-tns">
+<h2>Is that ATLAS_ID object in TNS?<a class="headerlink" href="#is-that-atlas-id-object-in-tns" title="Link to this heading">#</a></h2>
 <p>You can check the crossmatches using:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">response_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tns_crossmatches&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
+</section>
 </section>
 
 
@@ -601,11 +624,16 @@ The following entries are the individual crossmatches.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-the-lightcurve-from-the-json">Extract the Lightcurve from the JSON</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-neat-plot">Make a Neat Plot</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-data-for-multiple-objects">Get Data for Multiple objects</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-ids-from-a-custom-or-followup-list">Get IDs from a Custom or Followup List</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-and-other-bits-of-data">Data Structure and other bits of data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-and-other-bits-of-data">Data Structure and other bits of data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-sherlock-crossmatches">Getting the Sherlock crossmatches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-that-atlas-id-object-in-tns">Is that ATLAS_ID object in TNS?</a></li>
+</ul>
+</li>
 </ul>
 
   </nav></div>

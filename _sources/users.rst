@@ -183,7 +183,7 @@ Make a Neat Plot
    AT 2018 cow lightcurve
 
 Get Data for Multiple objects
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want to query the ATLAS API for multiple objects you're going to encounter the rate limit, which is 100 per query.
 To handle this, there is a class to chunk stuff for you:
@@ -198,6 +198,52 @@ To handle this, there is a class to chunk stuff for you:
 You can then get the data just as you would for a single object.
 
 
+Get IDs from a Custom or Followup List
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To get all the ATLAS IDs currently on one of the web server's lists (e.g. ``eyeball``, ``good``, ``attic``,
+your own custom list, ...) use `RequestATLASIDsFromWebServerList`:
+
+.. code-block:: python
+
+   from atlasapiclient import client as atlasapi
+
+   client = atlasapi.RequestATLASIDsFromWebServerList(list_name='eyeball')
+   client.atlas_id_list_str  # list of ATLAS IDs as strings
+
+See `atlasapiclient.utils.dict_list_id` for the full set of valid ``list_name`` values.
+
+**Filtering the list server-side**
+
+If you only need a subset of a list, you can narrow the request at the API level instead of fetching
+everything and filtering client-side. This is both faster and lighter on the server, especially for
+large lists like ``eyeball``. The optional filter arguments are:
+
+* ``vra_gte`` / ``vra_lte`` -- lower/upper bound on VRA score
+* ``rb_pix_gte`` / ``rb_pix_lte`` -- lower/upper bound on RB Pix score
+* ``ra_gte`` / ``ra_lte`` -- lower/upper bound on RA
+* ``dec_gte`` / ``dec_lte`` -- lower/upper bound on Dec
+* ``sherlock_class`` -- exact match on Sherlock classification. Valid values are
+  ``ORPHAN``, ``SN``, ``NT``, ``VS``, ``CV``, ``BS``, ``UNCLEAR``, ``HPM`` -- anything
+  else raises an `ATLASAPIClientArgumentWarning`
+* ``spec_type`` -- exact match on spectroscopic classification
+
+.. code-block:: python
+
+   client = atlasapi.RequestATLASIDsFromWebServerList(
+       list_name='eyeball',
+       vra_gte=9.0,
+       dec_lte=10.0,
+   )
+
+.. tip::
+   **Can I exclude a value instead of matching it?** No -- ``sherlock_class`` and ``spec_type`` are
+   exact-match filters only, there is no "not equal to" option server-side. If your logic needs to
+   *exclude* one particular class (e.g. everything except ``'ORPHAN'``) rather than match one, you'll
+   still need to fetch the (now smaller, thanks to the other filters) candidate set and do that check
+   client-side.
+
+
 Data Structure and other bits of data
 =======================================
 
@@ -209,7 +255,7 @@ Here is a couple of handy recipes...
 
 
 Getting the Sherlock crossmatches
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------
 The first crossmatch (if any) is a merged entry which cherry picks the best information from all catalogues (so if a galaxy has info in 3 catalogues it will be cross matched 3 times and the info from these catalogues will appear as separate entries in our list of dictionaries - the first entry in the list will be the combination of all the best info in those 3 entries)
 The following entries are the individual crossmatches.
 
@@ -219,7 +265,7 @@ The following entries are the individual crossmatches.
 
 
 Is that ATLAS\_ID object in TNS?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------
 You can check the crossmatches using:
 
 .. code-block:: python
