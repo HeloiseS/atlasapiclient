@@ -422,6 +422,12 @@ you can get the response by calling the <cite>get_response()</cite> method. If y
 payload then it’s just easier to do it all in one swoop, but when debugging you don’t necessarily want
 to make API calls so we made it an <strong>opt-in</strong> situation.</p>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>What is the default `mjdthreshold`?</strong> If you don’t pass <cite>mjdthreshold</cite>, it defaults to today’s
+MJD minus 100 days, so you only get recent data by default. To fetch the full history with no lower
+bound, pass <code class="docutils literal notranslate"><span class="pre">mjdthreshold=0</span></code> explicitly.</p>
+</div>
 </section>
 <section id="extract-the-lightcurve-from-the-json">
 <h3>Extract the Lightcurve from the JSON<a class="headerlink" href="#extract-the-lightcurve-from-the-json" title="Link to this heading">#</a></h3>
@@ -494,6 +500,11 @@ To handle this, there is a class to chunk stuff for you:</p>
 </pre></div>
 </div>
 <p>You can then get the data just as you would for a single object.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>As with <cite>RequestSingleSourceData</cite>, if you don’t pass <cite>mjdthreshold</cite> it defaults to today’s MJD
+minus 100 days. Pass <code class="docutils literal notranslate"><span class="pre">mjdthreshold=0</span></code> explicitly to fetch full history with no lower bound.</p>
+</div>
 </section>
 <section id="get-ids-from-a-custom-or-followup-list">
 <h3>Get IDs from a Custom or Followup List<a class="headerlink" href="#get-ids-from-a-custom-or-followup-list" title="Link to this heading">#</a></h3>
@@ -519,6 +530,10 @@ large lists like <code class="docutils literal notranslate"><span class="pre">ey
 <code class="docutils literal notranslate"><span class="pre">ORPHAN</span></code>, <code class="docutils literal notranslate"><span class="pre">SN</span></code>, <code class="docutils literal notranslate"><span class="pre">NT</span></code>, <code class="docutils literal notranslate"><span class="pre">VS</span></code>, <code class="docutils literal notranslate"><span class="pre">CV</span></code>, <code class="docutils literal notranslate"><span class="pre">BS</span></code>, <code class="docutils literal notranslate"><span class="pre">UNCLEAR</span></code>, <code class="docutils literal notranslate"><span class="pre">HPM</span></code> – anything
 else raises an <cite>ATLASAPIClientArgumentWarning</cite></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">spec_type</span></code> – exact match on spectroscopic classification</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">datethreshold</span></code> – lower bound (ISO date string, e.g. <code class="docutils literal notranslate"><span class="pre">'2026-04-07'</span></code>) on when objects were
+added to the list. If not provided, defaults to today’s date minus 100 days. To fetch the full
+list with no lower bound, pass <code class="docutils literal notranslate"><span class="pre">datethreshold='1858-11-17'</span></code> explicitly (the MJD epoch, i.e.
+before any ATLAS data exists).</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">atlasapi</span><span class="o">.</span><span class="n">RequestATLASIDsFromWebServerList</span><span class="p">(</span>
     <span class="n">list_name</span><span class="o">=</span><span class="s1">&#39;eyeball&#39;</span><span class="p">,</span>

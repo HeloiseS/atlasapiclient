@@ -109,11 +109,16 @@ Get the data for a specific ATLAS ID
 
 .. tip::
    **What is `get_response`?** This argument just tells the function whether you want to make the request
-   right away as soon as the `RequestSingleSourceData` object has been instanciated. Not doing this 
+   right away as soon as the `RequestSingleSourceData` object has been instanciated. Not doing this
    allows you to set up the object, check the payload that was created on instanciation, and then
-   you can get the response by calling the `get_response()` method. If you don't need to check the 
+   you can get the response by calling the `get_response()` method. If you don't need to check the
    payload then it's just easier to do it all in one swoop, but when debugging you don't necessarily want
-   to make API calls so we made it an **opt-in** situation.  
+   to make API calls so we made it an **opt-in** situation.
+
+.. tip::
+   **What is the default `mjdthreshold`?** If you don't pass `mjdthreshold`, it defaults to today's
+   MJD minus 100 days, so you only get recent data by default. To fetch the full history with no lower
+   bound, pass ``mjdthreshold=0`` explicitly.
 
 
 Extract the Lightcurve from the JSON
@@ -197,6 +202,10 @@ To handle this, there is a class to chunk stuff for you:
 
 You can then get the data just as you would for a single object.
 
+.. tip::
+   As with `RequestSingleSourceData`, if you don't pass `mjdthreshold` it defaults to today's MJD
+   minus 100 days. Pass ``mjdthreshold=0`` explicitly to fetch full history with no lower bound.
+
 
 Get IDs from a Custom or Followup List
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -227,6 +236,10 @@ large lists like ``eyeball``. The optional filter arguments are:
   ``ORPHAN``, ``SN``, ``NT``, ``VS``, ``CV``, ``BS``, ``UNCLEAR``, ``HPM`` -- anything
   else raises an `ATLASAPIClientArgumentWarning`
 * ``spec_type`` -- exact match on spectroscopic classification
+* ``datethreshold`` -- lower bound (ISO date string, e.g. ``'2026-04-07'``) on when objects were
+  added to the list. If not provided, defaults to today's date minus 100 days. To fetch the full
+  list with no lower bound, pass ``datethreshold='1858-11-17'`` explicitly (the MJD epoch, i.e.
+  before any ATLAS data exists).
 
 .. code-block:: python
 
