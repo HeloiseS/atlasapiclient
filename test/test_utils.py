@@ -5,7 +5,7 @@ import pytest
 
 from atlasapiclient.utils import (
     LIST_NAMES, API_CONFIG_FILE, dict_list_id, validate_url, today_mjd,
-    DEFAULT_MJD_LOOKBACK_DAYS,
+    DEFAULT_MJD_LOOKBACK_DAYS, MJD_EPOCH_DATE,
 )
 from atlasapiclient.exceptions import ATLASAPIClientError
 
@@ -32,6 +32,9 @@ class TestTodayMjd:
 
     def test_default_mjd_lookback_days_is_100(self):
         assert DEFAULT_MJD_LOOKBACK_DAYS == 100
+
+    def test_mjd_epoch_date_is_mjd_zero(self):
+        assert MJD_EPOCH_DATE == '1858-11-17'
         
     def test_dict_list_id(self):
         assert isinstance(dict_list_id, dict), "dict_list_id is not a dictionary"

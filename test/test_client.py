@@ -442,9 +442,9 @@ class TestRequestATLASIDsFromWebServerList:
         client = RequestATLASIDsFromWebServerList(api_config_file=config_file,
                                                     list_name='eyeball',
                                                     get_response=False,
-                                                    datethreshold='1858-11-17'
+                                                    datethreshold=atlasapiclient.utils.MJD_EPOCH_DATE
                                                     )
-        assert client.datethreshold == '1858-11-17'
+        assert client.datethreshold == atlasapiclient.utils.MJD_EPOCH_DATE
 
     def test_payload_includes_only_provided_filters(self, monkeypatch, config_file):
         monkeypatch.setattr(requests, 'post', lambda *args, **kwargs: MockResponse(200))

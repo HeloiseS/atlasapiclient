@@ -12,6 +12,7 @@ DEFAULT_MJD_LOOKBACK_DAYS = 100
 
 # MJD epoch: 1858-11-17 00:00 UTC
 _MJD_EPOCH = datetime(1858, 11, 17, tzinfo=timezone.utc)
+MJD_EPOCH_DATE = '1858-11-17'
 
 
 def today_mjd() -> float:

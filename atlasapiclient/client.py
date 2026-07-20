@@ -448,8 +448,8 @@ class RequestATLASIDsFromWebServerList(APIClient):
             Lower date bound (ISO format, e.g. '2026-04-07') on when objects were
             added to the list. If not provided, defaults to today's date minus 100
             days. To fetch the full list with no lower bound, pass
-            datethreshold='1858-11-17' explicitly (the MJD epoch, i.e. before any
-            ATLAS data exists).
+            datethreshold=atlasapiclient.utils.MJD_EPOCH_DATE explicitly (the MJD
+            epoch, i.e. before any ATLAS data exists).
 
         Notes
         -------
