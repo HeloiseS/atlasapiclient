@@ -35,14 +35,14 @@ dict_list_id = {'garbage': [0, False],
                 'pm_stars': [11, False],
                 'galcand': [12, False],
                 'duplicates': [13, False],
-                'mookodi':[2,True], 
+                'south_transients_100mpc':[2,True], 
                 'cv': [40, True],
                 'mdwarf': [56, True],
                 'heloise': [72, True],
                 'vra': [73, True],
-                'mookodi_live': [16, True],
+                'bright_south_transients_100mpc': [16, True],
                 'salt': [14, True],
-                'mookodi_peak': [17, True],
+                'south_transients_peak': [17, True],
                 'dummy': [999, True]
                 }
 

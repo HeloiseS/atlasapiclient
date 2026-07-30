@@ -48,12 +48,10 @@ class TestAPIClient():
         assert hasattr(client, 'headers')   
         assert hasattr(client, 'apiURL')
 
-    def test_constructor_config_file_with_directory(self):
-        # NOTE: Using the word test in the constructor will raise an 
-        # IsADirectoryError because we're in the test directory. Should fail 
-        # with a more useful error?
+    def test_constructor_config_file_with_directory(self, tmp_path):
+        # NOTE: Should fail with a more useful error?
         with pytest.raises(IsADirectoryError):
-            APIClient('test')
+            APIClient(str(tmp_path))
     
     def test_constructor_config_file_with_missing_file(self):
         with pytest.raises(ATLASAPIClientConfigError):
@@ -358,7 +356,7 @@ class TestWriteToCustomList:
         atlas_ids = np.array([str(i) for i in range(150)])  # >100 -> triggers chunking
 
         client = WriteToCustomList(api_config_file=config_file, array_ids=atlas_ids,
-                                    list_name='mookodi')
+                                    list_name='south_transients_100mpc')
 
         assert isinstance(client.response_data, list)
 
@@ -373,7 +371,7 @@ class TestWriteToCustomList:
         atlas_ids = np.array([str(i) for i in range(150)])
 
         WriteToCustomList(api_config_file=config_file, array_ids=atlas_ids,
-                           list_name='mookodi', get_response=True)
+                           list_name='south_transients_100mpc', get_response=True)
 
         # Server objectgroups/ only accepts a single integer — one POST per ID
         assert call_count['n'] == 150
@@ -390,7 +388,7 @@ class TestRemoveFromCustomList:
         monkeypatch.setattr(requests, 'post', fake_post)
         atlas_ids = np.array([str(i) for i in range(5)])
 
-        RemoveFromCustomList(api_config_file=config_file, array_ids=atlas_ids, list_name='mookodi')
+        RemoveFromCustomList(api_config_file=config_file, array_ids=atlas_ids, list_name='south_transients_100mpc')
 
         # Server objectgroupsdelete/ only accepts a single integer — one POST per ID
         assert call_count['n'] == 5

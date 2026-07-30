@@ -22,10 +22,10 @@ class TestAPIConfigFile():
         with pytest.raises(ATLASAPIClientConfigError):
             ATLASConfigFile('')
             
-    def test_constructor_directory(self):
+    def test_constructor_directory(self, tmp_path):
         # NOTE: again, this is not necessarily the best error to be raised
         with pytest.raises(IsADirectoryError):
-            ATLASConfigFile('test/')
+            ATLASConfigFile(str(tmp_path))
             
     def test_read(self, config_file):
         config = ATLASConfigFile(config_file)
