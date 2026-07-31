@@ -421,7 +421,7 @@ class RequestATLASIDsFromWebServerList(APIClient):
         ------------
         list_name: str
            The name of the list you want (NOT THE NUMBER). Common options are:
-           'follow_up', 'good', 'possible', 'eyeball', 'attic', 'cv', 'mdwarf', 'pm_stars', 'mookodi'.
+           'follow_up', 'good', 'possible', 'eyeball', 'attic', 'cv', 'mdwarf', 'pm_stars', 'south_transients_100mpc'.
            To check the full list of options you can do:
            ```
            from atlasapiclient.utils import dict_list_id
@@ -794,7 +794,7 @@ class WriteToCustomList(APIClient):
         array_ids: np.array, list, tuple
             The ATLAS IDs. Can be an array a list or a tuple.
         list_name: str
-            The name of the list you want (NOT THE NUMBER). e.g.  'mookodi'.
+            The name of the list you want (NOT THE NUMBER). e.g.  'south_transients_100mpc'.
         get_response: bool
             If True, will get the response on instanciation
         api_config_file: str
@@ -836,7 +836,7 @@ class RemoveFromCustomList(APIClient):
         array_ids: np.array, list, tuple
             The ATLAS IDs. Can be an array a list or a tuple.
         list_name: str
-            The name of the list you want (NOT THE NUMBER). e.g. 'mookodi'.
+            The name of the list you want (NOT THE NUMBER). e.g. 'south_transients_100mpc'.
         api_config_file: str
             Optional path to your API config file.
         chunk_size: int
