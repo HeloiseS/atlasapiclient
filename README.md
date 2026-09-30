@@ -42,7 +42,7 @@ For example:
 ```python   
 from atlasapiclient import client as atlasapi
 
-client = atlasapiclient.APIClient()
+client = atlasapi.APIClient()
 client.refresh_token()
 ```
 
@@ -104,9 +104,9 @@ This will generate a token for you and save it in the config file.
 For example:
 
 ```python   
-from atlasapiclient import client as atlasapiclient
+from atlasapiclient import client as atlasapi
 
-client = atlasapiclient.APIClient()
+client = atlasapi.APIClient()
 client.refresh_token()
 ```
 
