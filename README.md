@@ -96,7 +96,12 @@ cd atlasapiclient/config_files
 cp api_config_template.yaml api_config_MINE.yaml
 ```
 
-2) Update the url to "https://psweb.mp.qub.ac.uk/sne/atlas4/api/".  
+2) Update the url line to:
+
+```yaml
+base_url: https://psweb.mp.qub.ac.uk/sne/atlas4/api/
+```
+
 3) Update your token (if you don't have a token see below).  
 You can get a token for API access by using the 
 ``APIClient.refresh_token() method``.  

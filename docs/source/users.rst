@@ -40,7 +40,11 @@ In the directory `atlasapiclient/config_files` you will find the `api_config_tem
 
 
 * 2) Update your token (if you don't have a token see below)
-* 3) Update the url to "https://psweb.mp.qub.ac.uk/sne/atlas4/api/"
+* 3) Update the url line to:
+
+.. code-block:: yaml
+
+   base_url: https://psweb.mp.qub.ac.uk/sne/atlas4/api/
 
 
 
