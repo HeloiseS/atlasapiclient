@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
                                                                                                                              
 [project]                                                                                                                    
 name = "atlasapiclient"                                                                                                             
-version = "v1.2.0"
+dynamic = ["version"]   
 authors = [                                                                                                                  
     {name = "Heloise Stevance", email = "hfstevance@gmail.com"},
     {name = "Jack Leland", email= "jack.leland@dtc.ox.ac.uk"},
@@ -22,8 +22,7 @@ dependencies = [
     "tqdm",                                                                                                                  
     "pyyaml",                                                                                                                  
     'importlib-metadata; python_version<"3.9"',                                                                              
-]                                                                                                                            
-# dynamic = ["version"]                                                                                                        
+]                                                                                                                                                                                                                                 
                                                                                                                              
 # See some of the stuff I have in the hoki .toml file                                                                        
                                                                                                                              
@@ -44,6 +43,14 @@ docs = ["sphinx==7.4.7", "sphinx_rtd_theme==3.0.2"]
 
 [tool.setuptools]
 packages = ["atlasapiclient", ]
+
+[tool.setuptools_scm]
+# If we don't have this line we can have version numbers that include the 
+# granularity of the local changes so e.g. 1.2.1.dev27+g28d5a55a2.d20261124
+# but pypi would reject that. We only want the 1.2.1.dev27 part
+# and ignores everything after the +
+
+local_scheme = "no-local-version"
                                                                                                                              
 # ... other project metadata fields as specified in:                                                                         
 #     https://packaging.python.org/en/latest/specifications/declaring-project-metadata/         
